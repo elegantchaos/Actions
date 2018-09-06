@@ -10,12 +10,10 @@ let ActionChannel = Logger("Actions")
 
 
 
-
-
 @objc public class ActionManager: NSResponder {
     var actions = [String:Action]()
-    
-    public func register(action: Action) {
+
+    public func register(_ action: Action) {
         actions[action.identifier] = action
     }
 
@@ -42,15 +40,7 @@ let ActionChannel = Logger("Actions")
         }
     }
 
-    func perform(_ sender: Any) {
-    }
-
-    @IBAction func performAction(_ sender: Any) {
-        guard let identifier = (sender as? NSUserInterfaceItemIdentification)?.identifier?.rawValue else {
-            ActionChannel.log("couldn't identify action")
-            return
-        }
-        
+    func perform(identifier: String, sender: Any) {
         var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
         while let actionID = components.popFirst() {
             if let action = actions[actionID] {
@@ -61,8 +51,17 @@ let ActionChannel = Logger("Actions")
                 return
             }
         }
-        
+
         ActionChannel.log("no registered actions for: \(identifier)")
     }
-    
+
+    @IBAction func performAction(_ sender: Any) {
+        guard let identifier = (sender as? NSUserInterfaceItemIdentification)?.identifier?.rawValue else {
+            ActionChannel.log("couldn't identify action")
+            return
+        }
+
+        perform(identifier: identifier, sender: sender)
+    }
+
 }
