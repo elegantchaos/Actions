@@ -1,21 +1,9 @@
-env:
-  global:
-    - SWIFT_BRANCH=swift-4.2-branch
-    - SWIFT_VERSION=swift-4.2-DEVELOPMENT-SNAPSHOT-2018-05-30-a
-matrix:
-  include:
-    - os: osx
-      osx_image: xcode9.3
-      language: swift
-      sudo: required
-      install:
-        - wget https://swift.org/builds/$SWIFT_BRANCH/xcode/$SWIFT_VERSION/$SWIFT_VERSION-osx.pkg
-        - sudo installer -pkg $SWIFT_VERSION-osx.pkg -target /
-        - export PATH="/Library/Developer/Toolchains/$SWIFT_VERSION.xctoolchain/usr/bin:$PATH"
-        - swift package update
-
-      script:
-        - swift test -Xswiftc -target -Xswiftc x86_64-apple-macosx10.12
+os: osx
+osx_image: xcode10
+language: swift
+sudo: required
+install: swift package update
+script: swift test -Xswiftc -target -Xswiftc x86_64-apple-macosx10.13
 
 notifications:
   email: false
