@@ -8,40 +8,9 @@ import Logger
 
 let ActionChannel = Logger("Actions")
 
-open class Action {
-    let identifier: String
-    
-    public init(identifier: String) {
-        self.identifier = identifier
-    }
 
-    open func perform(context: ActionContext) {
-        print("generic action \(context)")
-    }
-    
-}
 
-public class ActionContext: NSObject {
-    public static let SelectionKey = "selection"
-    public static let TargetKey = "target"
-    public static let SenderKey = "sender"
-    public static let ModelObjectContextKey = "moc"
-    public static let ActionKey = "action"
-    public static let ActionComponentsKey = "components"
 
-    public let sender: Any
-    public var parameters: [String]
-    public var info = [String:Any]()
-
-    init(sender: Any, parameters: [String]) {
-        self.sender = sender
-        self.parameters = parameters
-    }
-}
-
-public protocol ActionContextProvider {
-    func provide(context: ActionContext)
-}
 
 @objc public class ActionManager: NSResponder {
     var actions = [String:Action]()
