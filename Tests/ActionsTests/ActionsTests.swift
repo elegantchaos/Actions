@@ -14,7 +14,7 @@ final class ActionsTests: XCTestCase {
 
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
-        manager.register(action)
+        manager.register([action])
         manager.perform(identifier: "test", sender: self)
         XCTAssertTrue(action.performed)
     }
