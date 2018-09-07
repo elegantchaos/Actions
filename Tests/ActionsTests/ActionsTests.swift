@@ -10,7 +10,7 @@ final class ActionsTests: XCTestCase {
     }
 
     func testBasics() {
-        ActionChannel.enabled = true
+        actionChannel.enabled = true
 
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
