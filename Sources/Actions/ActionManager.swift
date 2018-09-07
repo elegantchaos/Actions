@@ -61,7 +61,7 @@ let ActionChannel = Logger("Actions")
         ActionChannel.log("no registered actions for: \(identifier)")
     }
     
-    @IBAction func performAction(_ sender: Any) {
+    @IBAction public func performAction(_ sender: Any) {
         guard let identifier = (sender as? NSUserInterfaceItemIdentification)?.identifier?.rawValue else {
             ActionChannel.log("couldn't identify action")
             return
@@ -70,4 +70,7 @@ let ActionChannel = Logger("Actions")
         perform(identifier: identifier, sender: sender)
     }
     
+    public static func performActionSelector() -> Selector {
+        return #selector(performAction(_:))
+    }
 }
