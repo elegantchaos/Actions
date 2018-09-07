@@ -76,6 +76,10 @@ Implement your protocol in the user interface controllers that want to observe. 
 
 ```swift
 
+protocol MyActionObserver {
+  func myMethod(myArgument: String)
+}
+
 extension MyViewController: ActionContextProvider, MyActionObserver {
 
 func provide(context: ActionContext) {
@@ -92,7 +96,7 @@ class MyAction: PersonAction {
         
         // notify observers
         context.forEach(key: "MyActionObserver") { (observer: MyActionObserver) in
-            observer.myMethod(myArgument: myValue)
+            observer.myMethod(myArgument: "myValue")
         }
     }
 }
