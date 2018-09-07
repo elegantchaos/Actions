@@ -8,15 +8,21 @@ import Logger
 
 let ActionChannel = Logger("Actions")
 
-
-
 @objc public class ActionManager: NSResponder {
     var actions = [String:Action]()
-
-    public func register(_ action: Action) {
-        actions[action.identifier] = action
+    
+    /**
+            Register a bunch of actions.
+     
+            Typically called early on, from somewhere like applicationWillFinishLaunching.
+        */
+    
+    public func register(_ actionsToRegister: [Action]) {
+        actionsToRegister.forEach {
+            actions[$0.identifier] = $0
+        }
     }
-
+    
     func gather(context: ActionContext) {
         let app = NSApplication.shared
         let keyWindow = app.keyWindow
@@ -29,7 +35,7 @@ let ActionChannel = Logger("Actions")
             appProvider.provide(context: context)
         }
     }
-
+    
     func gather(context: ActionContext, from: NSResponder?) {
         var responder = from
         while (responder != nil) {
@@ -39,7 +45,7 @@ let ActionChannel = Logger("Actions")
             responder = responder?.nextResponder
         }
     }
-
+    
     func perform(identifier: String, sender: Any) {
         var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
         while let actionID = components.popFirst() {
@@ -51,17 +57,17 @@ let ActionChannel = Logger("Actions")
                 return
             }
         }
-
+        
         ActionChannel.log("no registered actions for: \(identifier)")
     }
-
+    
     @IBAction func performAction(_ sender: Any) {
         guard let identifier = (sender as? NSUserInterfaceItemIdentification)?.identifier?.rawValue else {
             ActionChannel.log("couldn't identify action")
             return
         }
-
+        
         perform(identifier: identifier, sender: sender)
     }
-
+    
 }

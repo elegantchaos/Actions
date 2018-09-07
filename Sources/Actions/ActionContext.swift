@@ -13,10 +13,10 @@ public class ActionContext {
     public static let SelectionKey = "selection"
     public static let TargetKey = "target"
     public static let SenderKey = "sender"
-    public static let ModelObjectContextKey = "moc"
     public static let ActionKey = "action"
     public static let ActionComponentsKey = "components"
-    
+    public static let ModelKey = "model"
+
     public let sender: Any
     public var parameters: [String]
     public var info = [String:Any]()
@@ -24,5 +24,19 @@ public class ActionContext {
     init(sender: Any, parameters: [String]) {
         self.sender = sender
         self.parameters = parameters
+    }
+    
+    public func append(key: String, value: Any) {
+        if var items = info[key] as? [Any] {
+            items.append(value)
+        } else {
+            info[key] = [value]
+        }
+    }
+    
+    public func forEach<T>(key: String, action: (T) throws -> Void) {
+        if let items = info[key] as? [T] {
+            try? items.forEach(action)
+        }
     }
 }
