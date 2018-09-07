@@ -85,7 +85,7 @@ func provide(context: ActionContext) {
 
 In the action, as well as perfoming the actual work, enumerate the observer key. For each observer, call a method from your protocol, passing any arguments or context that is relevant:
 
-```
+```swift
 class MyAction: PersonAction {
     override func perform(context: ActionContext) {
         // do some stuff here
