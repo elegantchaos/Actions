@@ -80,6 +80,16 @@ let actionChannel = Logger("Actions")
         }
     }
     
+    func identifier(from item: Any) -> String? {
+        if let identifier = (item as? NSUserInterfaceItemIdentification)?.identifier?.rawValue {
+            return identifier
+        } else if let identifier = (item as? NSToolbarItem)?.itemIdentifier.rawValue {
+            return identifier
+        } else {
+            return nil
+        }
+    }
+    
     /**
      Perform an action.
      
@@ -108,9 +118,7 @@ let actionChannel = Logger("Actions")
      */
     
     @IBAction func performAction(_ sender: Any) {
-        if let identifier = (sender as? NSUserInterfaceItemIdentification)?.identifier?.rawValue {
-            perform(identifier: identifier, sender: sender)
-        } else if let identifier = (sender as? NSToolbarItem)?.itemIdentifier.rawValue {
+        if let identifier = identifier(from: sender) {
             perform(identifier: identifier, sender: sender)
         } else {
             actionChannel.log("couldn't identify action")
@@ -125,18 +133,17 @@ let actionChannel = Logger("Actions")
     Typically an action just needs to check the context for the presence of
     keys in order to decide whether it's valid.
      
-     // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
     */
     
     public func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
         if item.action == #selector(performAction(_:)) {
-            if let sender = item as? NSUserInterfaceItemIdentification, let identifier = sender.identifier?.rawValue {
+            if let identifier = identifier(from: item) {
                 var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
                 while let actionID = components.popFirst() {
                     if let action = actions[actionID] {
                         actionChannel.log("validating \(action)")
-                        let context = ActionContext(sender: sender, parameters: Array(components))
-                        gather(context: context)
+                        let context = ActionContext(sender: item, parameters: Array(components))
+                        gather(context: context) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
                         return action.validate(context: context)
                     }
                 }
