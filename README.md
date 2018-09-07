@@ -10,7 +10,7 @@ Make an ActionManager, attach it to something global (eg your app delegate), and
 
 If you're going to bind UI items to it, hook it into the responder chain:
 
-```
+```swift
 class Application: NSObject, NSApplicationDelegate {
 let actionManager = ActionManager()
 
@@ -34,7 +34,7 @@ Alternatively, invoke an action directly with `actionManager.perform("MyAction")
 
 Inherit from `Action`, and implement `perform`:
 
-```
+```swift
 class MyAction: PersonAction {
     override func perform(context: ActionContext) {
         // do stuff here
