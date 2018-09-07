@@ -22,11 +22,12 @@ func applicationWillFinishLaunching(_ notification: Notification) {
 
     actionManager.nextResponder = NSApp.nextResponder
     NSApp.nextResponder = actionManager
+}
 ```
 
 ### Invocation
 
-Bind user interface objects to `performAction(_ sender: Any)`. Set the identifier of the UI item to the identifier of the action you want to invoke.
+Set the action of user interface objects to `performAction(_ sender: Any)`, and the target to the first responder. Set the identifier of the UI item to the identifier of the action you want to invoke.
 
 Alternatively, invoke an action directly with `actionManager.perform("MyAction")`.
 
@@ -65,4 +66,35 @@ For example you can set a button's identifier to `button.MyAction` and a menu it
 In another example, you could set two button identifiers to `MyAction.red` and `MyAction.blue`. Both will invoke `MyAction`, but the `context.parameters` array will contain `["red"]` for the first one, and `["blue"]` for the second. The action can read this parameter and behave differently in either case. 
 
 
+### Action Observers
+
+If your user interface wants to know when certain actions have been performed, this pattern may be useful.
+
+Define a protocol for observers of your action(s). This can contain anything you need.
+
+Implement your protocol in the user interface controllers that want to observe. Also implement the `ActionContextProvider` protocol, and append the controller to a key that the action(s) will read:
+
+```swift
+
+extension MyViewController: ActionContextProvider, MyActionObserver {
+
+func provide(context: ActionContext) {
+    context.append(key: "MyActionObserver", value: self)
+}
+```
+
+In the action, as well as perfoming the actual work, enumerate the observer key. For each observer, call a method from your protocol, passing any arguments or context that is relevant:
+
+```
+class MyAction: PersonAction {
+    override func perform(context: ActionContext) {
+        // do some stuff here
+        
+        // notify observers
+        context.forEach(key: "MyActionObserver") { (observer: MyActionObserver) in
+            observer.myMethod(myArgument: myValue)
+        }
+    }
+}
+```
 
