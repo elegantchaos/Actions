@@ -2,6 +2,12 @@
 
 An abstraction for action-handling, for Swift/AppKit-based applications.
 
+### Stability
+
+Note that the API is in flux currently. 
+
+Although I'm using semantic version numbers, I will abuse them until things settle down - so new maintenance releases are likely to contain breaking changes for a while. This is simply to avoid prematurely ending up at version 10.x!
+
 ## Usage
 
 ### Setup
