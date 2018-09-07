@@ -39,7 +39,9 @@ Alternatively, invoke an action directly with `actionManager.perform("MyAction")
 
 ### Actions
 
-Inherit from `Action`, and implement `perform`:
+Actions are classes.
+
+To define an action, inherit from `Action`, and implement `perform`:
 
 ```swift
 class MyAction: PersonAction {
@@ -71,6 +73,11 @@ For example you can set a button's identifier to `button.MyAction` and a menu it
 
 In another example, you could set two button identifiers to `MyAction.red` and `MyAction.blue`. Both will invoke `MyAction`, but the `context.parameters` array will contain `["red"]` for the first one, and `["blue"]` for the second. The action can read this parameter and behave differently in either case. 
 
+### Validation
+
+Actions are often only valid in certain situations - for example when some text is selected.
+
+To perform validation, override the `validate(context: ActionContext) -> Bool` and examine the context that's passed in.
 
 ### Action Observers
 
