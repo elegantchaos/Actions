@@ -12,6 +12,10 @@ open class Action {
         self.identifier = identifier
     }
     
+    open func validate(context: ActionContext) -> Bool {
+        return true
+    }
+    
     open func perform(context: ActionContext) {
         ActionChannel.log("generic action fired - perfom needs to be overridden")
     }

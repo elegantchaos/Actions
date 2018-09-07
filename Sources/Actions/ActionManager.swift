@@ -8,7 +8,8 @@ import Logger
 
 let ActionChannel = Logger("Actions")
 
-@objc public class ActionManager: NSResponder {
+@objc public class ActionManager: NSResponder, NSUserInterfaceValidations {
+    
     var actions = [String:Action]()
     
     /**
@@ -68,6 +69,24 @@ let ActionChannel = Logger("Actions")
         }
         
         perform(identifier: identifier, sender: sender)
+    }
+    
+    public func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
+        if item.action == #selector(performAction(_:)) {
+            if let sender = item as? NSUserInterfaceItemIdentification, let identifier = sender.identifier?.rawValue {
+                var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
+                while let actionID = components.popFirst() {
+                    if let action = actions[actionID] {
+                        ActionChannel.log("validating \(action)")
+                        let context = ActionContext(sender: sender, parameters: Array(components))
+                        gather(context: context)
+                        return action.validate(context: context)
+                    }
+                }
+            }
+        }
+        
+        return true
     }
     
     public static func performActionSelector() -> Selector {
