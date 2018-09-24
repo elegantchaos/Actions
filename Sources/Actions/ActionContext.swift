@@ -32,6 +32,11 @@ public class ActionContext {
     public let sender: Any
     
     /**
+    The action manager handling the action.
+ */
+    public let manager: ActionManager
+    
+    /**
     Any unused components of the identifier that triggered the action.
  */
     
@@ -55,7 +60,8 @@ public class ActionContext {
      Create a context for a given sender and parameters.
      */
     
-    init(sender: Any, parameters: [String]) {
+    init(manager: ActionManager, sender: Any, parameters: [String]) {
+        self.manager = manager
         self.sender = sender
         self.parameters = parameters
     }
