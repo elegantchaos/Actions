@@ -39,7 +39,7 @@ class DelegatedAction: Action {
     let determiner: ActionDeterminer
     
     init(identifier: String, determiner: @escaping ActionDeterminer) {
-        self.determiner = condition
+        self.determiner = determiner
         super.init(identifier: identifier)
     }
     
