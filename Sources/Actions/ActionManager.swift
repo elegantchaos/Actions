@@ -102,7 +102,7 @@ let actionChannel = Logger("Actions")
         while let actionID = components.popFirst() {
             if let action = actions[actionID] {
                 actionChannel.log("performing \(action)")
-                let context = ActionContext(sender: sender, parameters: Array(components))
+                let context = ActionContext(manager: self, sender: sender, parameters: Array(components))
                 gather(context: context)
                 action.perform(context: context)
                 return
@@ -126,6 +126,30 @@ let actionChannel = Logger("Actions")
     }
     
     /**
+     Validate an action to see if it should be enabled.
+     We follow essentially the same path as when performing the action,
+     building up a context first, but then call `validate` instead of `perform`.
+     
+     Typically an action just needs to check the context for the presence of
+     keys in order to decide whether it's valid.
+     
+     */
+    
+    public func validate(identifier: String, item: Any) -> Bool {
+        var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
+        while let actionID = components.popFirst() {
+            if let action = actions[actionID] {
+                actionChannel.log("validating \(action)")
+                let context = ActionContext(manager: self, sender: item, parameters: Array(components))
+                gather(context: context) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
+                return action.validate(context: context)
+            }
+        }
+        
+        return true
+    }
+    
+    /**
     Validate an action to see if it should be enabled.
     We follow essentially the same path as when performing the action,
     building up a context first, but then call `validate` instead of `perform`.
@@ -138,15 +162,7 @@ let actionChannel = Logger("Actions")
     public func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
         if item.action == #selector(performAction(_:)) {
             if let identifier = identifier(from: item) {
-                var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
-                while let actionID = components.popFirst() {
-                    if let action = actions[actionID] {
-                        actionChannel.log("validating \(action)")
-                        let context = ActionContext(sender: item, parameters: Array(components))
-                        gather(context: context) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
-                        return action.validate(context: context)
-                    }
-                }
+                return validate(identifier: identifier, item: item)
             }
         }
         
