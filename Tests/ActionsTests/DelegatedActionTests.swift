@@ -21,6 +21,8 @@ final class DelegatedActionTests: XCTestCase {
         let action2 = TestAction(identifier: "test2", perform: .action2, test:self)
         manager = ActionManager()
         manager.register([action1, action2])
+        actionChannel.enabled = true
+        XCTAssertTrue(performed == .nothing)
     }
     
     class TestAction: Action {
@@ -39,17 +41,24 @@ final class DelegatedActionTests: XCTestCase {
     }
 
     func testAction1() {
-        actionChannel.enabled = true
         manager.perform(identifier: "test1", sender: self)
         XCTAssertTrue(performed == .action1)
     }
 
     func testAction2() {
-        actionChannel.enabled = true
-        manager.perform(identifier: "test1", sender: self)
-        XCTAssertTrue(performed == .action1)
+        manager.perform(identifier: "test2", sender: self)
+        XCTAssertTrue(performed == .action2)
     }
 
+    func testDelegated() {
+        let delegated = DelegatedAction(identifier: "delegated") { (context) in
+            return "test1"
+        }
+        manager.register([delegated])
+        manager.perform(identifier: "delegated", sender: self)
+        XCTAssertTrue(performed == .action1)
+    }
+    
     static var allTests = [
         ("testAction1", testAction1),
         ("testAction2", testAction2),
