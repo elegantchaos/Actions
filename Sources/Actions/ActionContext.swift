@@ -49,12 +49,13 @@ public class ActionContext {
     public var info = [String:Any]()
 
     // Some standard info keys, provided for convenience.
-    public static let selectionKey = "selection"
-    public static let targetKey = "target"
-    public static let senderKey = "sender"
     public static let actionKey = "action"
     public static let actionComponentsKey = "components"
     public static let modelKey = "model"
+    public static let selectionKey = "selection"
+    public static let senderKey = "sender"
+    public static let targetKey = "target"
+    public static let windowKey = "window"
     
     /**
      Create a context for a given sender and parameters.
