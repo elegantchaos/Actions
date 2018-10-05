@@ -3,7 +3,12 @@
 //  All code (c) 2018 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if os(macOS)
 import AppKit
+#else
+import UIKit
+#endif
+
 import Logger
 
 /**
@@ -27,8 +32,19 @@ let actionChannel = Logger("Actions")
  the context in which they were invoked.
  */
 
-@objc public class ActionManager: NSResponder, NSUserInterfaceValidations {
-    
+
+#if os(macOS)
+    public typealias OSResponder = NSResponder
+    public typealias OSApplication = NSApplication
+#else
+    public typealias OSResponder = UIResponder
+    public typealias OSApplication = UIApplication
+#endif
+
+#if os(macOS)
+
+@objc public class ActionManager: OSResponder {
+
     var actions = [String:Action]()
     
     /**
@@ -54,7 +70,7 @@ let actionChannel = Logger("Actions")
      */
     
     func gather(context: ActionContext) {
-        let app = NSApplication.shared
+        let app = OSApplication.shared
         let keyWindow = app.keyWindow
         gather(context: context, from: keyWindow?.firstResponder)
         let mainWindow = app.mainWindow
@@ -70,7 +86,7 @@ let actionChannel = Logger("Actions")
      Gather context, starting at a given responder and working down the chain.
      */
     
-    func gather(context: ActionContext, from: NSResponder?) {
+    func gather(context: ActionContext, from: OSResponder?) {
         var responder = from
         while (responder != nil) {
             if let provider = responder as? ActionContextProvider {
@@ -150,14 +166,27 @@ let actionChannel = Logger("Actions")
     }
     
     /**
-    Validate an action to see if it should be enabled.
-    We follow essentially the same path as when performing the action,
-    building up a context first, but then call `validate` instead of `perform`.
- 
-    Typically an action just needs to check the context for the presence of
-    keys in order to decide whether it's valid.
+     Return the selector that items should set as their action in order to trigger actions.
      
-    */
+     Useful for code in client modules that wants to set up UI items programmatically.
+     */
+    
+    public static var performActionSelector: Selector { get { return #selector(performAction(_:)) } }
+}
+
+#if os(macOS)
+
+extension ActionManager: NSUserInterfaceValidations {
+
+    /**
+     Validate an action to see if it should be enabled.
+     We follow essentially the same path as when performing the action,
+     building up a context first, but then call `validate` instead of `perform`.
+     
+     Typically an action just needs to check the context for the presence of
+     keys in order to decide whether it's valid.
+     
+     */
     
     public func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
         if item.action == #selector(performAction(_:)) {
@@ -169,11 +198,22 @@ let actionChannel = Logger("Actions")
         return true
     }
     
-    /**
-     Return the selector that items should set as their action in order to trigger actions.
-     
-     Useful for code in client modules that wants to set up UI items programmatically.
-     */
-    
-    public static var performActionSelector: Selector { get { return #selector(performAction(_:)) } }
+
 }
+
+#endif
+
+#else
+
+@objc public class ActionManager: OSResponder {
+    
+    public func validate(identifier: String, item: Any) -> Bool {
+        return false
+    }
+    
+    public func perform(identifier: String, sender: Any) {
+    }
+
+}
+
+#endif
