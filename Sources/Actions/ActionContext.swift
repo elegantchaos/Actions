@@ -55,6 +55,7 @@ public class ActionContext {
     public static let selectionKey = "selection"
     public static let senderKey = "sender"
     public static let targetKey = "target"
+    public static let viewModelKey = "viewModel"
     public static let windowKey = "window"
     
     /**
