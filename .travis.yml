@@ -4,6 +4,11 @@ language: swift
 install: swift package update
 script:
 - swift test -Xswiftc -target -Xswiftc x86_64-apple-macosx10.13
+- swift package edit Actions
+- cd Packages/Actions
+- swift package generate-xcodeproj
+- xcodebuild test -scheme Actions-Package -destination='platform=iOS Simulator,name=iPhone 6,OS=12.0'
+
 notifications:
   email: false
   slack:
