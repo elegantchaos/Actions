@@ -7,14 +7,8 @@
 
 import UIKit
 
-@objc protocol ActionID {
-    @objc var actionID: String { get set }
-}
-
 public class ActionManagerMobile: ActionManager {
-    public typealias OSResponder = UIResponder
-
-    public class ActionManagerAdapter: UIResponder {
+    public class Responder: UIResponder {
         weak var manager: ActionManager! = nil
         
 //        /**
@@ -55,18 +49,10 @@ public class ActionManagerMobile: ActionManager {
         
     }
 
-    public let adapter = ActionManagerAdapter()
+    public let responder = Responder()
     
-    func firstResponder() -> OSResponder? {
-        return UIApplication.shared.target(forAction: ActionManagerAdapter.performActionSelector, withSender: self) as? OSResponder
-    }
-    
-    func alternateResponder() -> OSResponder? {
-        return nil
-    }
-    
-    func next(for responder: OSResponder?) -> OSResponder? {
-        return responder?.next
+    override func firstResponder() -> ActionResponder? {
+        return UIApplication.shared.target(forAction: Responder.performActionSelector, withSender: self) as? ActionResponder
     }
 
     override func applicationProvider() -> ActionContextProvider? {
@@ -74,7 +60,7 @@ public class ActionManagerMobile: ActionManager {
     }
 
     override func identifier(from item: Any) -> String? {
-        if let identifier = (item as? ActionID)?.actionID {
+        if let identifier = (item as? ActionIdentification)?.actionID {
             return identifier
         } else {
             return nil
@@ -82,35 +68,20 @@ public class ActionManagerMobile: ActionManager {
     }
     
     public func install() {
-        adapter.manager = self
+        responder.manager = self
     }
 }
 
-private var actionIDKey: UInt8 = 0
 
-extension ActionID {
-    
-    
-    func retrieveID() -> String {
-        let value = objc_getAssociatedObject(self, &actionIDKey)
-        guard let result = value as? String else {
-            return ""
-        }
-        return result
-    }
-    
-    func storeID(_ value: String) {
-        objc_setAssociatedObject(self, &actionIDKey, value, objc_AssociationPolicy.OBJC_ASSOCIATION_COPY)
-    }
-}
-extension UIView: ActionID {
+
+extension UIView: ActionIdentification {
     @objc var actionID: String {
         get { return retrieveID() }
         set(value) { storeID(value) }
     }
 }
 
-extension UIBarItem: ActionID {
+extension UIBarItem: ActionIdentification {
     @objc var actionID: String {
         get { return retrieveID() }
         set(value) { storeID(value) }

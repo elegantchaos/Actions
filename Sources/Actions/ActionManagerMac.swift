@@ -14,7 +14,12 @@ extension NSResponder: ActionResponder {
 }
 
 public class ActionManagerMac: ActionManager {
-    public class ActionManagerAdapter: NSResponder {
+    
+    /**
+     Proxy object which stands in for the action manager in the responder chain.
+    */
+    
+    public class Responder: NSResponder, NSUserInterfaceValidations {
         weak var manager: ActionManager! = nil
         
         /**
@@ -27,7 +32,7 @@ public class ActionManagerMac: ActionManager {
          
          */
         
-        func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
+        public func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
             if item.action == #selector(performAction(_:)) {
                 return manager.validate(item)
             }
@@ -55,7 +60,7 @@ public class ActionManagerMac: ActionManager {
 
     }
     
-    public let adapter = ActionManagerAdapter()
+    public let responder = Responder()
 
     override func firstResponder() -> ActionResponder? {
         return NSApplication.shared.keyWindow?.firstResponder
@@ -83,9 +88,9 @@ public class ActionManagerMac: ActionManager {
     }
 
     public func install() {
-        adapter.manager = self
-        adapter.nextResponder = NSApp.nextResponder
-        NSApp.nextResponder = adapter
+        responder.manager = self
+        responder.nextResponder = NSApp.nextResponder
+        NSApp.nextResponder = responder
     }
 }
 
