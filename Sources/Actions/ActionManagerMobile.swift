@@ -58,14 +58,6 @@ public class ActionManagerMobile: ActionManager {
     override func applicationProvider() -> ActionContextProvider? {
         return UIApplication.shared.delegate as? ActionContextProvider
     }
-
-    override func identifier(from item: Any) -> String? {
-        if let identifier = (item as? ActionIdentification)?.actionID {
-            return identifier
-        } else {
-            return nil
-        }
-    }
     
     public func install() {
         responder.manager = self

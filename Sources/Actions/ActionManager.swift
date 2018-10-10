@@ -52,22 +52,46 @@ public class ActionManager {
         }
     }
     
-    func firstResponder() -> ActionResponder? {
-        return nil
+    /**
+     Responder chains to gather context from.
+    */
+    
+    func responderChains() -> [ActionResponder] {
+        return []
     }
     
-    func alternateResponder() -> ActionResponder? {
-        return nil
+    /**
+     Providers to gather context from.
+     */
+    
+    func providers() -> [ActionContextProvider] {
+        var result = [ActionContextProvider]()
+        
+        for chain in responderChains() {
+            var responder: ActionResponder? = chain
+            while (responder != nil) {
+                if let provider = responder as? ActionContextProvider {
+                    result.append(provider)
+                }
+                responder = responder?.next()
+            }
+        }
+
+        return result
     }
     
-    func applicationProvider() -> ActionContextProvider? {
-        return nil
-    }
+    /**
+     Get an action identifier from an arbitrary object.
+    */
     
     func identifier(from item: Any) -> String? {
-        return nil
+        if let identifier = (item as? ActionIdentification)?.actionID {
+            return identifier
+        } else {
+            return nil
+        }
     }
-    
+
     /**
      Gather context from the responder chain.
      We attempt to follow the same path that the system would:
@@ -79,30 +103,8 @@ public class ActionManager {
      */
     
     func gather(context: ActionContext) {
-        if let responder = firstResponder() {
-            gather(context: context, from: responder)
-        }
-
-        if let responder = alternateResponder() {
-            gather(context: context, from: responder)
-        }
-
-        if let appProvider = applicationProvider() {
-            appProvider.provide(context: context)
-        }
-    }
-    
-    /**
-     Gather context, starting at a given responder and working down the chain.
-     */
-    
-    func gather(context: ActionContext, from: ActionResponder?) {
-        var responder = from
-        while (responder != nil) {
-            if let provider = responder as? ActionContextProvider {
-                provider.provide(context: context)
-            }
-            responder = responder?.next()
+        for provider in providers() {
+            provider.provide(context: context)
         }
     }
 
@@ -138,7 +140,7 @@ public class ActionManager {
         if let identifier = identifier(from: sender) {
             perform(identifier: identifier, sender: sender)
         } else {
-            actionChannel.log("couldn't identify action")
+            actionChannel.log("couldn't identify action for \(sender)")
         }
     }
     
@@ -156,6 +158,8 @@ public class ActionManager {
     public func validate(_ item: Any) -> Bool {
         if let identifier = identifier(from: item) {
             return validate(identifier: identifier, item: item)
+        } else {
+            actionChannel.log("couldn't identify action for \(item)")
         }
         
         return true

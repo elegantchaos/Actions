@@ -62,35 +62,70 @@ public class ActionManagerMac: ActionManager {
     
     public let responder = Responder()
 
-    override func firstResponder() -> ActionResponder? {
-        return NSApplication.shared.keyWindow?.firstResponder
-    }
+    /**
+     We want to look for providers in the key window's responder chain,
+     and also the main window (if it's different).
+     */
     
-    override func alternateResponder() -> ActionResponder? {
+    override func responderChains() -> [ActionResponder] {
         let app = NSApplication.shared
         let keyWindow = app.keyWindow
         let mainWindow = app.mainWindow
-        return (keyWindow != mainWindow) ? mainWindow?.firstResponder : nil
-    }
-    
-    override func applicationProvider() -> ActionContextProvider? {
-        return NSApplication.shared.delegate as? ActionContextProvider
-    }
-    
-    override func identifier(from item: Any) -> String? {
-        if let identifier = (item as? NSUserInterfaceItemIdentification)?.identifier?.rawValue {
-            return identifier
-        } else if let identifier = (item as? NSToolbarItem)?.itemIdentifier.rawValue {
-            return identifier
-        } else {
-            return nil
+        var responders = [ActionResponder]()
+        if let responder = keyWindow?.firstResponder {
+            responders.append(responder)
         }
+        if keyWindow != mainWindow, let responder = mainWindow?.firstResponder {
+            responders.append(responder)
+        }
+        
+        return responders
     }
-
+    
+    /**
+     The application delegate may also be a context provider,
+     so we add it to the default list if so.
+    */
+    
+    override func providers() -> [ActionContextProvider] {
+        var result = super.providers()
+        if let provider = NSApplication.shared.delegate as? ActionContextProvider {
+            result.append(provider)
+        }
+        
+        return result
+    }
+    
+    /**
+     Hook the action manager into the responder chain.
+     */
+    
     public func install() {
         responder.manager = self
         responder.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = responder
+    }
+}
+
+/**
+ Views and controls use their identifier for the actionID.
+ */
+
+extension NSView: ActionIdentification {
+    @objc var actionID: String {
+        get { return identifier?.rawValue ?? "" }
+        set(value) { identifier = NSUserInterfaceItemIdentifier(rawValue: value) }
+    }
+}
+
+/**
+ Toolbar items use their itemIdentifier for the actionID.
+ */
+
+extension NSToolbarItem: ActionIdentification {
+    @objc var actionID: String {
+        get { return itemIdentifier.rawValue }
+        set(value) { fatalError("can't change toolbar item action id") }
     }
 }
 
