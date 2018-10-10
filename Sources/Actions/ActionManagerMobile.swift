@@ -51,15 +51,23 @@ public class ActionManagerMobile: ActionManager {
 
     public let responder = Responder()
     
-    override func firstResponder() -> ActionResponder? {
-        return UIApplication.shared.target(forAction: Responder.performActionSelector, withSender: self) as? ActionResponder
+    override func responderChains() -> [ActionResponder] {
+        guard let chain = UIApplication.shared.target(forAction: Responder.performActionSelector, withSender: self) as? ActionResponder else {
+            return []
+        }
+
+        return [chain]
     }
 
-    override func applicationProvider() -> ActionContextProvider? {
-        return UIApplication.shared.delegate as? ActionContextProvider
+    override func providers() -> [ActionContextProvider] {
+        var result = super.providers()
+        if let provider = UIApplication.shared.delegate as? ActionContextProvider {
+            result.append(provider)
+        }
+        return result
     }
     
-    public func install() {
+    public func installResponder() {
         responder.manager = self
     }
 }

@@ -100,7 +100,7 @@ public class ActionManagerMac: ActionManager {
      Hook the action manager into the responder chain.
      */
     
-    public func install() {
+    public func installResponder() {
         responder.manager = self
         responder.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = responder
