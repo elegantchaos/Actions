@@ -7,6 +7,7 @@
 
 import UIKit
 import Logger
+import Actions
 
 let viewControllerChannel = Logger("ViewController")
 
@@ -89,7 +90,7 @@ public class ActionManagerMobile: ActionManager {
      on macOS.
      */
 
-    override func responderChains(for item: Any) -> [ActionResponder] {
+    public override func responderChains(for item: Any) -> [ActionResponder] {
         var result = super.responderChains(for: item)
         
         // if there's a first responder set (eg text is being edited)
@@ -119,7 +120,7 @@ public class ActionManagerMobile: ActionManager {
      so we add it to the default list if so.
      */
 
-    override func providers(for item: Any) -> [ActionContextProvider] {
+    public override func providers(for item: Any) -> [ActionContextProvider] {
         var result = super.providers(for: item)
         if let provider = UIApplication.shared.delegate as? ActionContextProvider {
             result.append(provider)
@@ -148,20 +149,20 @@ public class ActionManagerMobile: ActionManager {
  */
 
 extension UIResponder: ActionResponder {
-    func next() -> ActionResponder? {
+    public func next() -> ActionResponder? {
         return next
     }
 }
 
 extension UIView: ActionIdentification {
-    @objc var actionID: String {
+    @objc public var actionID: String {
         get { return retrieveID() }
         set(value) { storeID(value) }
     }
 }
 
 extension UIBarItem: ActionIdentification {
-    @objc var actionID: String {
+    @objc public var actionID: String {
         get { return retrieveID() }
         set(value) { storeID(value) }
     }

@@ -6,6 +6,7 @@
 
 #if os(macOS)
 import AppKit
+import Actions
 
 public class ActionManagerMac: ActionManager {
     
@@ -64,7 +65,7 @@ public class ActionManagerMac: ActionManager {
      and also the main window (if it's different).
      */
     
-    override func responderChains(for item: Any) -> [ActionResponder] {
+    public override func responderChains(for item: Any) -> [ActionResponder] {
         let app = NSApplication.shared
         let keyWindow = app.keyWindow
         let mainWindow = app.mainWindow
@@ -89,7 +90,7 @@ public class ActionManagerMac: ActionManager {
      - the app delegate
     */
     
-    override func providers(for item: Any) -> [ActionContextProvider] {
+    public override func providers(for item: Any) -> [ActionContextProvider] {
         var result = super.providers(for: item)
         if let provider = NSApplication.shared.delegate as? ActionContextProvider {
             result.append(provider)
@@ -116,7 +117,7 @@ public class ActionManagerMac: ActionManager {
  */
 
 extension NSResponder: ActionResponder {
-    func next() -> ActionResponder? {
+    public func next() -> ActionResponder? {
         return nextResponder
     }
 }
@@ -126,7 +127,7 @@ extension NSResponder: ActionResponder {
  */
 
 extension NSView: ActionIdentification {
-    @objc var actionID: String {
+    @objc public var actionID: String {
         get { return identifier?.rawValue ?? "" }
         set(value) { identifier = NSUserInterfaceItemIdentifier(rawValue: value) }
     }
@@ -137,7 +138,7 @@ extension NSView: ActionIdentification {
  */
 
 extension NSToolbarItem: ActionIdentification {
-    @objc var actionID: String {
+    @objc public var actionID: String {
         get { return itemIdentifier.rawValue }
         set(value) { fatalError("can't change toolbar item action id") }
     }

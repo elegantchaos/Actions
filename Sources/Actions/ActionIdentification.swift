@@ -5,7 +5,7 @@
 
 import Foundation
 
-@objc protocol ActionIdentification {
+@objc public protocol ActionIdentification {
     @objc var actionID: String { get set }
 }
 
@@ -13,7 +13,7 @@ private var actionIDKey: UInt8 = 0
 
 extension ActionIdentification {
     
-    func retrieveID() -> String {
+    public func retrieveID() -> String {
         let value = objc_getAssociatedObject(self, &actionIDKey)
         guard let result = value as? String else {
             return ""
@@ -21,7 +21,7 @@ extension ActionIdentification {
         return result
     }
     
-    func storeID(_ value: String) {
+    public func storeID(_ value: String) {
         objc_setAssociatedObject(self, &actionIDKey, value, objc_AssociationPolicy.OBJC_ASSOCIATION_COPY)
     }
 }

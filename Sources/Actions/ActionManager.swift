@@ -12,7 +12,7 @@ import Logger
 
 let actionChannel = Logger("Actions")
 
-protocol ActionResponder {
+public protocol ActionResponder {
     func next() -> ActionResponder?
 }
 
@@ -32,7 +32,7 @@ protocol ActionResponder {
  */
 
 
-public class ActionManager {
+open class ActionManager {
     
     var actions = [String:Action]()
     
@@ -56,7 +56,7 @@ public class ActionManager {
      Responder chains to gather context from.
     */
     
-    func responderChains(for item: Any) -> [ActionResponder] {
+    open func responderChains(for item: Any) -> [ActionResponder] {
         if let responder = item as? ActionResponder {
             return [responder]
         }
@@ -68,7 +68,7 @@ public class ActionManager {
      Providers to gather context from.
      */
     
-    func providers(for item: Any) -> [ActionContextProvider] {
+    open func providers(for item: Any) -> [ActionContextProvider] {
         var result = [ActionContextProvider]()
         
         for chain in responderChains(for: item) {
@@ -141,7 +141,7 @@ public class ActionManager {
      We attempt to extract the identifier from the item, and use that as the action to perform.
      */
     
-    @IBAction func perform(_ sender: Any) {
+    public func perform(_ sender: Any) {
         if let identifier = identifier(for: sender) {
             perform(identifier: identifier, sender: sender)
         } else {
