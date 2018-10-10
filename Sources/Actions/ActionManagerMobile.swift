@@ -35,64 +35,49 @@ public class ActionManagerMobile: ActionManager {
     
     public let responder = Responder()
 
-    func firstResponder(for view: UIViewController) -> ActionResponder? {
-        print(view)
-        if view.isFirstResponder {
-            return responder
-        }
-
-        for subview in view.children {
-            if let nav = subview as? UINavigationController {
-                return nav.visibleViewController
+    
+    func topResponder(for view: UIViewController) -> ActionResponder? {
+        if let nav = view as? UINavigationController, let visible = nav.visibleViewController {
+            if let sub = topResponder(for: visible) {
+                return sub
             }
             
-            if let responder = firstResponder(for: subview) {
-                return responder
+            return visible
+        }
+        
+        for subview in view.children {
+            if let top = topResponder(for: subview) {
+                return top
             }
         }
         
         return nil
     }
     
-    func firstResponder() -> ActionResponder? {
-        if let keyWindow = UIApplication.shared.keyWindow {
-            if let view = keyWindow.screen.focusedView {
-                return view
-            }
-            
-            if let responder = firstResponder(for: keyWindow.rootViewController!) {
-                return responder
-            }
-            
-            if let view = keyWindow.rootViewController?.navigationController {
-                return view
-            }
-            
-            if let view = keyWindow.rootViewController {
-                return view
-            }
-//
-//            for view in keyWindow.subviews {
-//                if view.isFirstResponder {
-//                    return view
-//                }
-//            }
-        }
+    func topResponder() -> ActionResponder? {
         
         return nil
     }
+
     /**
      On iOS, we use the default responder chain.
      */
 
     override func responderChains(for item: Any) -> [ActionResponder] {
         var result = super.responderChains(for: item)
+        
+        // if there's a first responder set (eg text is being edited)
+        // include its responder chain
+        if let responder = UIResponder.currentFirstResponder {
+            result.append(responder)
+        }
 
-//        if let toolbarItem = item as? UIBarItem {
-//            result.append(item.)
-//        }
-        if let chain = firstResponder() {
-            result.append(chain)
+        // if there's a navigation controller showing something,
+        // include its chain
+        if let keyWindow = UIApplication.shared.keyWindow, let root = keyWindow.rootViewController {
+            if let top = topResponder(for: root) {
+                result.append(top)
+            }
         }
         
         return result
@@ -147,4 +132,19 @@ extension UIBarItem: ActionIdentification {
     }
 }
 
+extension UIResponder {
+    
+    private static weak var _currentFirstResponder: UIResponder?
+    
+    static var currentFirstResponder: UIResponder? {
+        _currentFirstResponder = nil
+        UIApplication.shared.sendAction(#selector(UIResponder.findFirstResponder(_:)), to: nil, from: nil, for: nil)
+        
+        return _currentFirstResponder
+    }
+    
+    @objc func findFirstResponder(_ sender: Any) {
+        UIResponder._currentFirstResponder = self
+    }
+}
 #endif
