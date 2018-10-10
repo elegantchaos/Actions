@@ -1,14 +1,9 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Sam Deane on 06/09/2018.
+//  Created by Sam Deane on 08/10/2018.
 //  All code (c) 2018 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#if os(macOS)
-import AppKit
-#else
-import UIKit
-#endif
-
+import Foundation
 import Logger
 
 /**
@@ -16,6 +11,10 @@ import Logger
  */
 
 let actionChannel = Logger("Actions")
+
+protocol ActionResponder {
+    func next() -> ActionResponder?
+}
 
 /**
  Handles registering and triggering actions.
@@ -33,19 +32,13 @@ let actionChannel = Logger("Actions")
  */
 
 
-#if os(macOS)
-    public typealias OSResponder = NSResponder
-    public typealias OSApplication = NSApplication
-#else
-    public typealias OSResponder = UIResponder
-    public typealias OSApplication = UIApplication
-#endif
-
-#if os(macOS)
-
-@objc public class ActionManager: OSResponder {
-
+public class ActionManager {
+    
     var actions = [String:Action]()
+    
+    public init() {
+        
+    }
     
     /**
      Register a bunch of actions.
@@ -59,6 +52,22 @@ let actionChannel = Logger("Actions")
         }
     }
     
+    func firstResponder() -> ActionResponder? {
+        return nil
+    }
+    
+    func alternateResponder() -> ActionResponder? {
+        return nil
+    }
+    
+    func applicationProvider() -> ActionContextProvider? {
+        return nil
+    }
+    
+    func identifier(from item: Any) -> String? {
+        return nil
+    }
+    
     /**
      Gather context from the responder chain.
      We attempt to follow the same path that the system would:
@@ -70,14 +79,15 @@ let actionChannel = Logger("Actions")
      */
     
     func gather(context: ActionContext) {
-        let app = OSApplication.shared
-        let keyWindow = app.keyWindow
-        gather(context: context, from: keyWindow?.firstResponder)
-        let mainWindow = app.mainWindow
-        if keyWindow != mainWindow {
-            gather(context: context, from: mainWindow?.firstResponder)
+        if let responder = firstResponder() {
+            gather(context: context, from: responder)
         }
-        if let appProvider = app.delegate as? ActionContextProvider {
+
+        if let responder = alternateResponder() {
+            gather(context: context, from: responder)
+        }
+
+        if let appProvider = applicationProvider() {
             appProvider.provide(context: context)
         }
     }
@@ -86,25 +96,16 @@ let actionChannel = Logger("Actions")
      Gather context, starting at a given responder and working down the chain.
      */
     
-    func gather(context: ActionContext, from: OSResponder?) {
+    func gather(context: ActionContext, from: ActionResponder?) {
         var responder = from
         while (responder != nil) {
             if let provider = responder as? ActionContextProvider {
                 provider.provide(context: context)
             }
-            responder = responder?.nextResponder
+            responder = responder?.next()
         }
     }
-    
-    func identifier(from item: Any) -> String? {
-        if let identifier = (item as? NSUserInterfaceItemIdentification)?.identifier?.rawValue {
-            return identifier
-        } else if let identifier = (item as? NSToolbarItem)?.itemIdentifier.rawValue {
-            return identifier
-        } else {
-            return nil
-        }
-    }
+
     
     /**
      Perform an action.
@@ -133,12 +134,31 @@ let actionChannel = Logger("Actions")
      We attempt to extract the identifier from the item, and use that as the action to perform.
      */
     
-    @IBAction func performAction(_ sender: Any) {
+    @IBAction func perform(_ sender: Any) {
         if let identifier = identifier(from: sender) {
             perform(identifier: identifier, sender: sender)
         } else {
             actionChannel.log("couldn't identify action")
         }
+    }
+    
+    
+    /**
+     Validate an item representing an action to see if it should be enabled.
+     We follow essentially the same path as when performing the action,
+     building up a context first, but then call `validate` instead of `perform`.
+     
+     Typically an action just needs to check the context for the presence of
+     keys in order to decide whether it's valid.
+     
+     */
+
+    public func validate(_ item: Any) -> Bool {
+        if let identifier = identifier(from: item) {
+            return validate(identifier: identifier, item: item)
+        }
+        
+        return true
     }
     
     /**
@@ -165,55 +185,4 @@ let actionChannel = Logger("Actions")
         return true
     }
     
-    /**
-     Return the selector that items should set as their action in order to trigger actions.
-     
-     Useful for code in client modules that wants to set up UI items programmatically.
-     */
-    
-    public static var performActionSelector: Selector { get { return #selector(performAction(_:)) } }
 }
-
-#if os(macOS)
-
-extension ActionManager: NSUserInterfaceValidations {
-
-    /**
-     Validate an action to see if it should be enabled.
-     We follow essentially the same path as when performing the action,
-     building up a context first, but then call `validate` instead of `perform`.
-     
-     Typically an action just needs to check the context for the presence of
-     keys in order to decide whether it's valid.
-     
-     */
-    
-    public func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
-        if item.action == #selector(performAction(_:)) {
-            if let identifier = identifier(from: item) {
-                return validate(identifier: identifier, item: item)
-            }
-        }
-        
-        return true
-    }
-    
-
-}
-
-#endif
-
-#else
-
-@objc public class ActionManager: OSResponder {
-    
-    public func validate(identifier: String, item: Any) -> Bool {
-        return false
-    }
-    
-    public func perform(identifier: String, sender: Any) {
-    }
-
-}
-
-#endif
