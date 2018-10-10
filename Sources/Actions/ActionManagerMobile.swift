@@ -6,6 +6,9 @@
 #if os(iOS)
 
 import UIKit
+import Logger
+
+let viewControllerChannel = Logger("ViewController")
 
 public class ActionManagerMobile: ActionManager {
     public class Responder: UIResponder {
@@ -36,31 +39,54 @@ public class ActionManagerMobile: ActionManager {
     public let responder = Responder()
 
     
-    func topResponder(for view: UIViewController) -> ActionResponder? {
+    /**
+     Find the "top" view controller for a given view controller.
+     
+     We check first to see if we've been given a navigation controller and if
+     it has a visible controller. If so, we recursively call ourselves for it, in case
+     there are nested navigation controllers (is that relevant?).
+     
+     If we get a result back from the recursive call, we return that.
+     
+     Otherwise if we had a visible controller, we return that.
+     
+     Finally we recurse for any child view controllers.
+     
+     This should result in us finding the view controller for the "top" view
+     in the navigation stack.
+     */
+    
+    func topController(for view: UIViewController) -> UIViewController? {
+        viewControllerChannel.log("searching \(view)")
         if let nav = view as? UINavigationController, let visible = nav.visibleViewController {
-            if let sub = topResponder(for: visible) {
+            viewControllerChannel.log("found visible \(visible)")
+            if let sub = topController(for: visible) {
                 return sub
             }
             
+            viewControllerChannel.log("returning visible \(visible)")
             return visible
         }
         
         for subview in view.children {
-            if let top = topResponder(for: subview) {
+            if let top = topController(for: subview) {
+                viewControllerChannel.log("returning child \(top)")
                 return top
             }
         }
         
         return nil
     }
-    
-    func topResponder() -> ActionResponder? {
-        
-        return nil
-    }
 
     /**
-     On iOS, we use the default responder chain.
+     On iOS, if there's a navigation controller presenting something,
+     we want to allow the chain from it to contribute to the context.
+     
+     If there's some text being edited, we also want to allow the chain
+     from the editing view to contribute.
+     
+     This is loosely equivalent to the keyResponder and mainResponder
+     on macOS.
      */
 
     override func responderChains(for item: Any) -> [ActionResponder] {
@@ -68,16 +94,21 @@ public class ActionManagerMobile: ActionManager {
         
         // if there's a first responder set (eg text is being edited)
         // include its responder chain
-        if let responder = UIResponder.currentFirstResponder {
-            result.append(responder)
+        if let chain = UIResponder.currentFirstResponder {
+            result.append(chain)
         }
 
         // if there's a navigation controller showing something,
         // include its chain
         if let keyWindow = UIApplication.shared.keyWindow, let root = keyWindow.rootViewController {
-            if let top = topResponder(for: root) {
-                result.append(top)
+            let chain: ActionResponder
+            if let top = topController(for: root) {
+                chain = top
+            } else {
+                chain = root
             }
+            
+            result.append(chain) // TODO: check for duplicates?
         }
         
         return result
@@ -98,6 +129,10 @@ public class ActionManagerMobile: ActionManager {
     
     /**
      Hook the action manager into the responder chain.
+     
+     Annoyingly, the responder chain on iOS is determined at compile time.
+     So in addition to calling this method, you need to override the next() method
+     for your application delegate, and have it return the action manager's responder instance.
      */
 
     public func installResponder() {
