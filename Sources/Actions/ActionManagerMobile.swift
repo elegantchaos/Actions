@@ -86,27 +86,34 @@ public class ActionManagerMobile: ActionManager {
     }
 }
 
+private var actionIDKey: UInt8 = 0
+
+extension ActionID {
+    
+    
+    func retrieveID() -> String {
+        let value = objc_getAssociatedObject(self, &actionIDKey)
+        guard let result = value as? String else {
+            return ""
+        }
+        return result
+    }
+    
+    func storeID(_ value: String) {
+        objc_setAssociatedObject(self, &actionIDKey, value, objc_AssociationPolicy.OBJC_ASSOCIATION_COPY)
+    }
+}
 extension UIView: ActionID {
     @objc var actionID: String {
-        get {
-            return "blah"
-        }
-        
-        set(value) {
-            
-        }
+        get { return retrieveID() }
+        set(value) { storeID(value) }
     }
 }
 
 extension UIBarItem: ActionID {
     @objc var actionID: String {
-        get {
-            return "blah"
-        }
-        
-        set(value) {
-            
-        }
+        get { return retrieveID() }
+        set(value) { storeID(value) }
     }
 }
 
