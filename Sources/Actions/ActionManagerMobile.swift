@@ -11,28 +11,8 @@ public class ActionManagerMobile: ActionManager {
     public class Responder: UIResponder {
         weak var manager: ActionManager! = nil
         
-//        /**
-//         Validate an action to see if it should be enabled.
-//         We follow essentially the same path as when performing the action,
-//         building up a context first, but then call `validate` instead of `perform`.
-//
-//         Typically an action just needs to check the context for the presence of
-//         keys in order to decide whether it's valid.
-//
-//         */
-//
-//        public func validateUserInterfaceItem(_ item: UIControl) -> Bool {
-//
-//            if item.action == #selector(performAction(_:)) {
-//                return manager.validateUI(item)
-//            }
-//
-//            return true
-//        }
-        
         /**
          Perform an action sent by a user interface item.
-         We attempt to extract the identifier from the item, and use that as the action to perform.
          */
         
         @IBAction func performAction(_ sender: Any) {
@@ -49,30 +29,109 @@ public class ActionManagerMobile: ActionManager {
         
     }
 
-    public let responder = Responder()
+    /**
+     Embedded support for the responder chain.
+    */
     
-    override func responderChains() -> [ActionResponder] {
-        guard let chain = UIApplication.shared.target(forAction: Responder.performActionSelector, withSender: self) as? ActionResponder else {
-            return []
+    public let responder = Responder()
+
+    func firstResponder(for view: UIViewController) -> ActionResponder? {
+        print(view)
+        if view.isFirstResponder {
+            return responder
         }
 
-        return [chain]
+        for subview in view.children {
+            if let nav = subview as? UINavigationController {
+                return nav.visibleViewController
+            }
+            
+            if let responder = firstResponder(for: subview) {
+                return responder
+            }
+        }
+        
+        return nil
+    }
+    
+    func firstResponder() -> ActionResponder? {
+        if let keyWindow = UIApplication.shared.keyWindow {
+            if let view = keyWindow.screen.focusedView {
+                return view
+            }
+            
+            if let responder = firstResponder(for: keyWindow.rootViewController!) {
+                return responder
+            }
+            
+            if let view = keyWindow.rootViewController?.navigationController {
+                return view
+            }
+            
+            if let view = keyWindow.rootViewController {
+                return view
+            }
+//
+//            for view in keyWindow.subviews {
+//                if view.isFirstResponder {
+//                    return view
+//                }
+//            }
+        }
+        
+        return nil
+    }
+    /**
+     On iOS, we use the default responder chain.
+     */
+
+    override func responderChains(for item: Any) -> [ActionResponder] {
+        var result = super.responderChains(for: item)
+
+//        if let toolbarItem = item as? UIBarItem {
+//            result.append(item.)
+//        }
+        if let chain = firstResponder() {
+            result.append(chain)
+        }
+        
+        return result
     }
 
-    override func providers() -> [ActionContextProvider] {
-        var result = super.providers()
+    /**
+     The application delegate may also be a context provider,
+     so we add it to the default list if so.
+     */
+
+    override func providers(for item: Any) -> [ActionContextProvider] {
+        var result = super.providers(for: item)
         if let provider = UIApplication.shared.delegate as? ActionContextProvider {
             result.append(provider)
         }
         return result
     }
     
+    /**
+     Hook the action manager into the responder chain.
+     */
+
     public func installResponder() {
         responder.manager = self
     }
 }
 
 
+/**
+ We want UIResponder to conform to ActionResponder, so
+ that our generic code knows how to walk the iOS
+ responder chain.
+ */
+
+extension UIResponder: ActionResponder {
+    func next() -> ActionResponder? {
+        return next
+    }
+}
 
 extension UIView: ActionIdentification {
     @objc var actionID: String {
