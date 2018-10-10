@@ -7,12 +7,6 @@
 #if os(macOS)
 import AppKit
 
-extension NSResponder: ActionResponder {
-    func next() -> ActionResponder? {
-        return nextResponder
-    }
-}
-
 public class ActionManagerMac: ActionManager {
     
     /**
@@ -42,7 +36,6 @@ public class ActionManagerMac: ActionManager {
         
         /**
          Perform an action sent by a user interface item.
-         We attempt to extract the identifier from the item, and use that as the action to perform.
          */
         
         @IBAction func performAction(_ sender: Any) {
@@ -60,10 +53,14 @@ public class ActionManagerMac: ActionManager {
 
     }
     
+    /**
+     Embedded support for the responder chain.
+     */
+
     public let responder = Responder()
 
     /**
-     We want to look for providers in the key window's responder chain,
+     On the Mac, we want to look for providers in the key window's responder chain,
      and also the main window (if it's different).
      */
     
@@ -85,6 +82,11 @@ public class ActionManagerMac: ActionManager {
     /**
      The application delegate may also be a context provider,
      so we add it to the default list if so.
+
+     We attempt to follow the same path that the system would:
+     - the key window, from first responder to root
+     - the main window (if different), from first responder to root
+     - the app delegate
     */
     
     override func providers() -> [ActionContextProvider] {
@@ -104,6 +106,18 @@ public class ActionManagerMac: ActionManager {
         responder.manager = self
         responder.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = responder
+    }
+}
+
+/**
+ We want NSResponder to conform to ActionResponder, so
+ that our generic code knows how to walk the Mac
+ responder chain.
+ */
+
+extension NSResponder: ActionResponder {
+    func next() -> ActionResponder? {
+        return nextResponder
     }
 }
 
