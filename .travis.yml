@@ -2,7 +2,8 @@ os: osx
 osx_image: xcode10
 language: swift
 install: swift package update
-script: swift test -Xswiftc -target -Xswiftc x86_64-apple-macosx10.13
+script:
+- swift test -Xswiftc -target -Xswiftc x86_64-apple-macosx10.13
 notifications:
   email: false
   slack:

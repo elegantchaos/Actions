@@ -64,11 +64,11 @@ public class ActionManagerMac: ActionManager {
      and also the main window (if it's different).
      */
     
-    override func responderChains() -> [ActionResponder] {
+    override func responderChains(for item: Any) -> [ActionResponder] {
         let app = NSApplication.shared
         let keyWindow = app.keyWindow
         let mainWindow = app.mainWindow
-        var responders = [ActionResponder]()
+        var responders = super.responderChains(for: item)
         if let responder = keyWindow?.firstResponder {
             responders.append(responder)
         }
@@ -89,8 +89,8 @@ public class ActionManagerMac: ActionManager {
      - the app delegate
     */
     
-    override func providers() -> [ActionContextProvider] {
-        var result = super.providers()
+    override func providers(for item: Any) -> [ActionContextProvider] {
+        var result = super.providers(for: item)
         if let provider = NSApplication.shared.delegate as? ActionContextProvider {
             result.append(provider)
         }
