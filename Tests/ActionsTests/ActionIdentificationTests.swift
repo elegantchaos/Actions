@@ -17,12 +17,14 @@ class BasicIdentifiable: ActionIdentification {
     var actionID: String = ""
 }
 
+#if os(macOS) || os(iOS)
 @objc class AssociatedIdentifiable: NSObject, ActionIdentification {
     @objc public var actionID: String {
         get { return retrieveID() }
         set(value) { storeID(value) }
     }
 }
+#endif
 
 class ActionIdentificationTests: XCTestCase {
     func testBasics() {
@@ -31,11 +33,13 @@ class ActionIdentificationTests: XCTestCase {
         XCTAssertEqual(thing.actionID, "testID")
     }
     
+    #if os(macOS) || os(iOS)
     func testAssociated() {
         let thing = AssociatedIdentifiable()
         thing.actionID = "testID"
         XCTAssertEqual(thing.actionID, "testID")
     }
+    #endif
 
     func testFixed() {
         let thing = FixedIdentifiable()
