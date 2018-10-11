@@ -38,8 +38,20 @@ final class ActionsTests: XCTestCase {
         XCTAssertEqual(action.performedContext!.parameters[0], "param1")
         XCTAssertEqual(action.performedContext!.parameters[1], "param2")
     }
+
+    func testPrefix() {
+        actionChannel.enabled = true
+        
+        let action = TestAction(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        manager.perform(identifier: "prefix.test", sender: self)
+        XCTAssertTrue(action.performed)
+    }
+    
     static var allTests = [
         ("testBasics", testBasics),
         ("testArguments", testArguments),
+        ("testPrefix", testPrefix),
     ]
 }
