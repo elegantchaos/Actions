@@ -9,8 +9,11 @@ import XCTest
 final class ActionsTests: XCTestCase {
     class TestAction: Action {
         var performed = false
+        var performedContext: ActionContext?
+        
         override func perform(context: ActionContext) {
             performed = true
+            performedContext = context
         }
     }
 
@@ -24,7 +27,19 @@ final class ActionsTests: XCTestCase {
         XCTAssertTrue(action.performed)
     }
 
+    func testArguments() {
+        actionChannel.enabled = true
+        
+        let action = TestAction(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        manager.perform(identifier: "test.param1.param2", sender: self)
+        XCTAssertEqual(action.performedContext!.parameters.count, 2)
+        XCTAssertEqual(action.performedContext!.parameters[0], "param1")
+        XCTAssertEqual(action.performedContext!.parameters[1], "param2")
+    }
     static var allTests = [
         ("testBasics", testBasics),
+        ("testArguments", testArguments),
     ]
 }
