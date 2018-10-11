@@ -9,17 +9,30 @@ import XCTest
 final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
     class TestAction: Action {
         var performed = false
+        var validated = false
         var performedContext: ActionContext?
         
         override func perform(context: ActionContext) {
             performed = true
             performedContext = context
         }
+        
+        override func validate(context: ActionContext) -> Bool {
+            validated = true
+            return true
+        }
     }
 
     class NormalSender {
     }
-    
+
+    class IdentifiableSender: ActionIdentification {
+        var actionID: String {
+            get { return "test" }
+            set {}
+        }
+    }
+
     class ResponderSender: ActionResponder, ActionContextProvider {
         let test: ActionsTests
         
@@ -83,6 +96,15 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         manager.register([action])
         manager.perform(identifier: "test", sender: NormalSender())
         XCTAssertTrue(action.performed)
+    }
+
+    func testValidate() {
+        // test that an action gets validated
+        let action = TestAction(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        XCTAssertTrue(manager.validate(identifier: "test", item:NormalSender()))
+        XCTAssertTrue(action.validated)
     }
 
     func testUnregistered() {
@@ -156,10 +178,63 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         XCTAssertEqual(action.performedContext!.info["valueProvidedByTest"] as? String, "valueProvidedByTest")
         XCTAssertEqual(action.performedContext!.info["valueProvidedBySender"] as? String, "valueProvidedBySender")
     }
-    
+
+    func testGetIdentifierFromSender() {
+        // test getting the action identifier from the sender
+        let action = TestAction(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        manager.perform(IdentifiableSender())
+        XCTAssertTrue(action.performed)
+    }
+
+    func testCantGetIdentifierFromSender() {
+        // test trying to get the action identifier from the sender,
+        // in a situation where the sender can't provide an ActionIdentifier
+        // (the action won't get performed)
+        let action = TestAction(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        manager.perform(NormalSender())
+        XCTAssertFalse(action.performed)
+    }
+
+    func testValidateGettingIdentifierFromSender() {
+        // test validating an arbitrary object,
+        // getting the action identifier from it
+        let action = TestAction(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        XCTAssertTrue(manager.validate(IdentifiableSender()))
+        XCTAssertTrue(action.validated)
+    }
+
+    func testValidateCantGetIdentifierFromSender() {
+        // test validating an arbitrary object,
+        // getting the action identifier from it
+        // in a situation where the sender can't provide an ActionIdentifier
+        // (the action won't get performed)
+        let action = TestAction(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        XCTAssertTrue(manager.validate(NormalSender()))
+        XCTAssertFalse(action.validated)
+    }
+
     static var allTests = [
-        ("testBasics", testBasics),
+        ("testPerform", testPerform),
+        ("testUnregistered", testUnregistered),
+        ("testDefaultAction", testDefaultAction),
         ("testArguments", testArguments),
         ("testPrefix", testPrefix),
+        ("testCustomResponderChain", testCustomResponderChain),
+        ("testCustomProvider", testCustomProvider),
+        ("testSenderIsResponder", testSenderIsResponder),
+        ("testGetIdentifierFromSender", testGetIdentifierFromSender),
+        ("testCantGetIdentifierFromSender", testCantGetIdentifierFromSender),
+        ("testValidate", testValidate),
+        ("testValidateGettingIdentifierFromSender", testCantGetIdentifierFromSender),
+        ("testValidateCantGetIdentifierFromSender", testCantGetIdentifierFromSender),
     ]
+        
 }

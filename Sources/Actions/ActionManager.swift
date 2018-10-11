@@ -91,9 +91,9 @@ open class ActionManager {
     func identifier(for item: Any) -> String? {
         if let identifier = (item as? ActionIdentification)?.actionID {
             return identifier
-        } else {
-            return nil
         }
+        
+        return nil
     }
 
     /**
@@ -113,6 +113,25 @@ open class ActionManager {
         }
     }
 
+    /**
+     Look up an action. If we find it, build a context and execute a block with the action and context.
+ 
+     Returns true if the action was found and the block performed.
+    */
+    
+    func resolving(identifier: String, sender: Any, do block: (_ action: Action, _ context: ActionContext) -> Void) -> Bool {
+        var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
+        while let actionID = components.popFirst() {
+            if let action = actions[actionID] {
+                let context = ActionContext(manager: self, sender: sender, parameters: Array(components)) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
+                gather(context: context, for:sender)
+                block(action, context)
+                return true
+            }
+        }
+        
+        return false
+    }
     
     /**
      Perform an action.
@@ -122,18 +141,14 @@ open class ActionManager {
      */
     
     public func perform(identifier: String, sender: Any) {
-        var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
-        while let actionID = components.popFirst() {
-            if let action = actions[actionID] {
-                actionChannel.log("performing \(action)")
-                let context = ActionContext(manager: self, sender: sender, parameters: Array(components))
-                gather(context: context, for:sender)
-                action.perform(context: context)
-                return
-            }
+        let performed = resolving(identifier: identifier, sender: sender) { (action, context) in
+            actionChannel.log("performing \(action)")
+            action.perform(context: context)
         }
         
-        actionChannel.log("no registered actions for: \(identifier)")
+        if !performed {
+            actionChannel.log("no registered actions for: \(identifier)")
+        }
     }
     
     /**
@@ -181,17 +196,13 @@ open class ActionManager {
      */
     
     public func validate(identifier: String, item: Any) -> Bool {
-        var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
-        while let actionID = components.popFirst() {
-            if let action = actions[actionID] {
-                actionChannel.log("validating \(action)")
-                let context = ActionContext(manager: self, sender: item, parameters: Array(components))
-                gather(context: context, for: item) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
-                return action.validate(context: context)
-            }
+        var valid = false
+        let _ = resolving(identifier: identifier, sender: item) { (action, context) in
+            actionChannel.log("validating \(action)")
+            valid = action.validate(context: context)
         }
         
-        return true
+        return valid
     }
     
 }
