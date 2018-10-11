@@ -77,11 +77,15 @@ public class ActionContext {
      */
     
     public func append(key: String, value: Any) {
-        if var items = info[key] as? [Any] {
-            items.append(value)
+        var list: [Any]
+        if let items = info[key] as? [Any] {
+            list = items
+            list.append(value)
         } else {
-            info[key] = [value]
+            list = [value]
         }
+        
+        info[key] = list
     }
     
     /**
