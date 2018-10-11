@@ -220,21 +220,4 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         XCTAssertTrue(manager.validate(NormalSender()))
         XCTAssertFalse(action.validated)
     }
-
-    static var allTests = [
-        ("testPerform", testPerform),
-        ("testUnregistered", testUnregistered),
-        ("testDefaultAction", testDefaultAction),
-        ("testArguments", testArguments),
-        ("testPrefix", testPrefix),
-        ("testCustomResponderChain", testCustomResponderChain),
-        ("testCustomProvider", testCustomProvider),
-        ("testSenderIsResponder", testSenderIsResponder),
-        ("testGetIdentifierFromSender", testGetIdentifierFromSender),
-        ("testCantGetIdentifierFromSender", testCantGetIdentifierFromSender),
-        ("testValidate", testValidate),
-        ("testValidateGettingIdentifierFromSender", testCantGetIdentifierFromSender),
-        ("testValidateCantGetIdentifierFromSender", testCantGetIdentifierFromSender),
-    ]
-        
 }

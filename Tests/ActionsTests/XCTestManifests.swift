@@ -18,13 +18,18 @@ extension ActionIdentificationTests {
 extension ActionsTests {
     static let __allTests = [
         ("testArguments", testArguments),
+        ("testCantGetIdentifierFromSender", testCantGetIdentifierFromSender),
         ("testCustomProvider", testCustomProvider),
         ("testCustomResponderChain", testCustomResponderChain),
         ("testDefaultAction", testDefaultAction),
+        ("testGetIdentifierFromSender", testGetIdentifierFromSender),
         ("testPerform", testPerform),
         ("testPrefix", testPrefix),
         ("testSenderIsResponder", testSenderIsResponder),
         ("testUnregistered", testUnregistered),
+        ("testValidate", testValidate),
+        ("testValidateCantGetIdentifierFromSender", testValidateCantGetIdentifierFromSender),
+        ("testValidateGettingIdentifierFromSender", testValidateGettingIdentifierFromSender),
     ]
 }
 

@@ -66,9 +66,4 @@ final class DelegatedActionTests: XCTestCase {
         XCTAssertTrue(manager.validate(identifier: "delegated", item: self))
         XCTAssertTrue(validated)
     }
-    
-    static var allTests = [
-        ("testAction1", testAction1),
-        ("testAction2", testAction2),
-        ]
 }
