@@ -13,6 +13,7 @@ final class DelegatedActionTests: XCTestCase {
         case action2
     }
     
+    var validated = false
     var performed: Performed = .nothing
     var manager: ActionManager!
     
@@ -38,6 +39,11 @@ final class DelegatedActionTests: XCTestCase {
         override func perform(context: ActionContext) {
             test.performed = perform
         }
+        
+        override func validate(context: ActionContext) -> Bool {
+            test.validated = true
+            return true
+        }
     }
 
     func testAction1() {
@@ -57,6 +63,8 @@ final class DelegatedActionTests: XCTestCase {
         manager.register([delegated])
         manager.perform(identifier: "delegated", sender: self)
         XCTAssertTrue(performed == .action1)
+        XCTAssertTrue(manager.validate(identifier: "delegated", item: self))
+        XCTAssertTrue(validated)
     }
     
     static var allTests = [
