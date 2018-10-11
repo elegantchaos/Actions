@@ -1,12 +1,26 @@
 # Actions
 
-An abstraction for action-handling, for Swift/AppKit-based applications.
+An abstraction for action-handling, for Swift applications.
 
 ### Stability
 
 Note that the API is in flux currently. 
 
 Although I'm using semantic version numbers, I will abuse them until things settle down - so new maintenance releases are likely to contain breaking changes for a while. This is simply to avoid prematurely ending up at version 10.x!
+
+## Concepts
+
+Actions are discrete pieces of work that do something. This may be modifying the model, or performing a user interface action, it doesn't really matter.
+
+Actions are registered with the ActionManager, using an identifier. They are then invoked via the ActionManager, using the same identifier.
+
+Actions are decoupled from each other, and from everything that they don't need to perform their specific task.
+
+The ActionManager has no dependencies on AppKit/UIKit, but has support to integrate it into the normal responder chain on both platforms, and to allow the action for an item to be specified in interface builder.
+
+When an action is performed, it is passed a context. This contains all the information that it needs to perform its action, and is the main mechanism for ensuring that coupling is loose and dynamic.
+
+The context supplied to the action is filled in by items in the responder chain. In this way, it is literally dependent on the user interface context - which window is at the front, which item is selected, and so on. The same action can be invoked in many different situations, as long as something in the responder chain supplies the correct context. Swift's type safety helps here, making it easy to extract the relevant parameters from the context ensuring that they are of the right type. 
 
 ## Usage
 
@@ -18,16 +32,14 @@ If you're going to bind UI items to it, hook it into the responder chain:
 
 ```swift
 class Application: NSObject, NSApplicationDelegate {
-let actionManager = ActionManager()
+let actionManager = ActionManagerMac()
 
 func applicationWillFinishLaunching(_ notification: Notification) {
     actionManager.register([
         MyAction(identifier: "MyAction"),
         AnotherAction(identifier: "AnotherAction")
     ])
-
-    actionManager.nextResponder = NSApp.nextResponder
-    NSApp.nextResponder = actionManager
+    actionManager.installResponder()
 }
 ```
 

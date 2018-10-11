@@ -1,9 +1,9 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Sam Deane on 06/09/2018.
+//  Created by Sam Deane on 08/10/2018.
 //  All code (c) 2018 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import AppKit
+import Foundation
 import Logger
 
 /**
@@ -11,6 +11,10 @@ import Logger
  */
 
 let actionChannel = Logger("Actions")
+
+public protocol ActionResponder {
+    func next() -> ActionResponder?
+}
 
 /**
  Handles registering and triggering actions.
@@ -27,9 +31,14 @@ let actionChannel = Logger("Actions")
  the context in which they were invoked.
  */
 
-@objc public class ActionManager: NSResponder, NSUserInterfaceValidations {
+
+open class ActionManager {
     
     var actions = [String:Action]()
+    
+    public init() {
+        
+    }
     
     /**
      Register a bunch of actions.
@@ -44,50 +53,84 @@ let actionChannel = Logger("Actions")
     }
     
     /**
-     Gather context from the responder chain.
-     We attempt to follow the same path that the system would:
-     - the key window, from first responder to root
-     - the main window (if different), from first responder to root
-     - the app delegate
+     Responder chains to gather context from.
+    */
+    
+    open func responderChains(for item: Any) -> [ActionResponder] {
+        if let responder = item as? ActionResponder {
+            return [responder]
+        }
+        
+        return []
+    }
+    
+    /**
+     Providers to gather context from.
+     */
+    
+    open func providers(for item: Any) -> [ActionContextProvider] {
+        var result = [ActionContextProvider]()
+        
+        for chain in responderChains(for: item) {
+            var responder: ActionResponder? = chain
+            while (responder != nil) {
+                if let provider = responder as? ActionContextProvider {
+                    result.append(provider)
+                }
+                responder = responder?.next()
+            }
+        }
+
+        return result
+    }
+    
+    /**
+     Get an action identifier from an arbitrary object.
+    */
+    
+    func identifier(for item: Any) -> String? {
+        if let identifier = (item as? ActionIdentification)?.actionID {
+            return identifier
+        }
+        
+        return nil
+    }
+
+    /**
+     Gather context.
+     The exact places to gather context from are determined by the
+     implementation of `providers()` and `responderChains()`, which
+     can vary according to the platform.
+     
+     See `ActionManagerMac` and `ActionManagerMobile` for examples.
      
      All items along this chain have the opportunity to contribute to the context.
      */
     
-    func gather(context: ActionContext) {
-        let app = NSApplication.shared
-        let keyWindow = app.keyWindow
-        gather(context: context, from: keyWindow?.firstResponder)
-        let mainWindow = app.mainWindow
-        if keyWindow != mainWindow {
-            gather(context: context, from: mainWindow?.firstResponder)
-        }
-        if let appProvider = app.delegate as? ActionContextProvider {
-            appProvider.provide(context: context)
+    func gather(context: ActionContext, for item: Any) {
+        for provider in providers(for: item) {
+            provider.provide(context: context)
         }
     }
-    
+
     /**
-     Gather context, starting at a given responder and working down the chain.
-     */
+     Look up an action. If we find it, build a context and execute a block with the action and context.
+ 
+     Returns true if the action was found and the block performed.
+    */
     
-    func gather(context: ActionContext, from: NSResponder?) {
-        var responder = from
-        while (responder != nil) {
-            if let provider = responder as? ActionContextProvider {
-                provider.provide(context: context)
+    func resolving(identifier: String, sender: Any, do block: (_ action: Action, _ context: ActionContext) -> Void) -> Bool {
+        var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
+        while let actionID = components.popFirst() {
+            if let action = actions[actionID] {
+                let context = ActionContext(manager: self, sender: sender, parameters: Array(components)) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
+                gather(context: context, for:sender)
+                block(action, context)
+                return true
             }
-            responder = responder?.nextResponder
         }
-    }
-    
-    func identifier(from item: Any) -> String? {
-        if let identifier = (item as? NSUserInterfaceItemIdentification)?.identifier?.rawValue {
-            return identifier
-        } else if let identifier = (item as? NSToolbarItem)?.itemIdentifier.rawValue {
-            return identifier
-        } else {
-            return nil
-        }
+        
+        return false
     }
     
     /**
@@ -98,18 +141,14 @@ let actionChannel = Logger("Actions")
      */
     
     public func perform(identifier: String, sender: Any) {
-        var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
-        while let actionID = components.popFirst() {
-            if let action = actions[actionID] {
-                actionChannel.log("performing \(action)")
-                let context = ActionContext(manager: self, sender: sender, parameters: Array(components))
-                gather(context: context)
-                action.perform(context: context)
-                return
-            }
+        let performed = resolving(identifier: identifier, sender: sender) { (action, context) in
+            actionChannel.log("performing \(action)")
+            action.perform(context: context)
         }
         
-        actionChannel.log("no registered actions for: \(identifier)")
+        if !performed {
+            actionChannel.log("no registered actions for: \(identifier)")
+        }
     }
     
     /**
@@ -117,12 +156,33 @@ let actionChannel = Logger("Actions")
      We attempt to extract the identifier from the item, and use that as the action to perform.
      */
     
-    @IBAction func performAction(_ sender: Any) {
-        if let identifier = identifier(from: sender) {
+    public func perform(_ sender: Any) {
+        if let identifier = identifier(for: sender) {
             perform(identifier: identifier, sender: sender)
         } else {
-            actionChannel.log("couldn't identify action")
+            actionChannel.log("couldn't identify action for \(sender)")
         }
+    }
+    
+    
+    /**
+     Validate an item representing an action to see if it should be enabled.
+     We follow essentially the same path as when performing the action,
+     building up a context first, but then call `validate` instead of `perform`.
+     
+     Typically an action just needs to check the context for the presence of
+     keys in order to decide whether it's valid.
+     
+     */
+
+    public func validate(_ item: Any) -> Bool {
+        if let identifier = identifier(for: item) {
+            return validate(identifier: identifier, item: item)
+        } else {
+            actionChannel.log("couldn't identify action for \(item)")
+        }
+        
+        return true
     }
     
     /**
@@ -136,44 +196,13 @@ let actionChannel = Logger("Actions")
      */
     
     public func validate(identifier: String, item: Any) -> Bool {
-        var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
-        while let actionID = components.popFirst() {
-            if let action = actions[actionID] {
-                actionChannel.log("validating \(action)")
-                let context = ActionContext(manager: self, sender: item, parameters: Array(components))
-                gather(context: context) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
-                return action.validate(context: context)
-            }
+        var valid = false
+        let _ = resolving(identifier: identifier, sender: item) { (action, context) in
+            actionChannel.log("validating \(action)")
+            valid = action.validate(context: context)
         }
         
-        return true
+        return valid
     }
     
-    /**
-    Validate an action to see if it should be enabled.
-    We follow essentially the same path as when performing the action,
-    building up a context first, but then call `validate` instead of `perform`.
- 
-    Typically an action just needs to check the context for the presence of
-    keys in order to decide whether it's valid.
-     
-    */
-    
-    public func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
-        if item.action == #selector(performAction(_:)) {
-            if let identifier = identifier(from: item) {
-                return validate(identifier: identifier, item: item)
-            }
-        }
-        
-        return true
-    }
-    
-    /**
-     Return the selector that items should set as their action in order to trigger actions.
-     
-     Useful for code in client modules that wants to set up UI items programmatically.
-     */
-    
-    public static var performActionSelector: Selector { get { return #selector(performAction(_:)) } }
 }

@@ -49,12 +49,14 @@ public class ActionContext {
     public var info = [String:Any]()
 
     // Some standard info keys, provided for convenience.
-    public static let selectionKey = "selection"
-    public static let targetKey = "target"
-    public static let senderKey = "sender"
     public static let actionKey = "action"
     public static let actionComponentsKey = "components"
     public static let modelKey = "model"
+    public static let selectionKey = "selection"
+    public static let senderKey = "sender"
+    public static let targetKey = "target"
+    public static let viewModelKey = "viewModel"
+    public static let windowKey = "window"
     
     /**
      Create a context for a given sender and parameters.
@@ -75,11 +77,15 @@ public class ActionContext {
      */
     
     public func append(key: String, value: Any) {
-        if var items = info[key] as? [Any] {
-            items.append(value)
+        var list: [Any]
+        if let items = info[key] as? [Any] {
+            list = items
+            list.append(value)
         } else {
-            info[key] = [value]
+            list = [value]
         }
+        
+        info[key] = list
     }
     
     /**
