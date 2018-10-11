@@ -27,6 +27,16 @@ final class ActionsTests: XCTestCase {
         XCTAssertTrue(action.performed)
     }
 
+    func testDefaultAction() {
+        actionChannel.enabled = true
+        
+        let action = Action(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        manager.perform(identifier: "test", sender: self)
+        XCTAssertTrue(manager.validate(identifier: "test", item: self))
+    }
+    
     func testArguments() {
         actionChannel.enabled = true
         

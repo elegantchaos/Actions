@@ -39,6 +39,12 @@ class ActionIdentificationTests: XCTestCase {
         thing.actionID = "testID"
         XCTAssertEqual(thing.actionID, "testID")
     }
+
+    func testAssociatedNotSet() {
+        let thing = AssociatedIdentifiable()
+        XCTAssertEqual(thing.actionID, "")
+    }
+
     #endif
 
     func testFixed() {
