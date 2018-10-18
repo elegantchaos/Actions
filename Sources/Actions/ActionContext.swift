@@ -25,6 +25,8 @@ public protocol ActionContextProvider {
  */
 
 public class ActionContext {
+    public typealias Info = [String:Any]
+    
     /**
     The item that triggered the action.
  */
@@ -46,12 +48,13 @@ public class ActionContext {
  Additional information set by the context providers.
  */
     
-    public var info = [String:Any]()
+    public var info: Info
 
     // Some standard info keys, provided for convenience.
     public static let actionKey = "action"
     public static let actionComponentsKey = "components"
     public static let modelKey = "model"
+    public static let observerKey = "observer"
     public static let selectionKey = "selection"
     public static let senderKey = "sender"
     public static let targetKey = "target"
@@ -62,10 +65,11 @@ public class ActionContext {
      Create a context for a given sender and parameters.
      */
     
-    init(manager: ActionManager, sender: Any, parameters: [String]) {
+    init(manager: ActionManager, sender: Any, parameters: [String], info: Info) {
         self.manager = manager
         self.sender = sender
         self.parameters = parameters
+        self.info = info
     }
     
     /**
@@ -87,7 +91,8 @@ public class ActionContext {
         
         info[key] = list
     }
-    
+
+
     /**
      Treat the given context info key as a list, and enumerate it performing an action.
      
