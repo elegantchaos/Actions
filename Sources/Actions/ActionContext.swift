@@ -65,7 +65,7 @@ public class ActionContext {
      Create a context for a given sender and parameters.
      */
     
-    init(manager: ActionManager, sender: Any, parameters: [String], info: Info) {
+    init(manager: ActionManager, sender: Any, parameters: [String] = [], info: Info = [:]) {
         self.manager = manager
         self.sender = sender
         self.parameters = parameters
