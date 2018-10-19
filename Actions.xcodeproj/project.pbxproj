@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		22B1DB432178F5B80067E795 /* ActionObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B1DB422178F5B80067E795 /* ActionObserverTests.swift */; };
 		22F35478216F6F6100443C0B /* ActionIdentificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F35477216F6F6100443C0B /* ActionIdentificationTests.swift */; };
 		22F3547A216F713F00443C0B /* ActionContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F35479216F713F00443C0B /* ActionContextTests.swift */; };
 		OBJ_106 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* Package.swift */; };
@@ -95,6 +96,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		22B1DB422178F5B80067E795 /* ActionObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionObserverTests.swift; sourceTree = "<group>"; };
 		22F35477216F6F6100443C0B /* ActionIdentificationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionIdentificationTests.swift; sourceTree = "<group>"; };
 		22F35479216F713F00443C0B /* ActionContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionContextTests.swift; sourceTree = "<group>"; };
 		"Actions::Actions::Product" /* Actions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Actions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_19 /* ActionsTests.swift */,
+				22B1DB422178F5B80067E795 /* ActionObserverTests.swift */,
 				22F35479216F713F00443C0B /* ActionContextTests.swift */,
 				22F35477216F6F6100443C0B /* ActionIdentificationTests.swift */,
 				OBJ_20 /* DelegatedActionTests.swift */,
@@ -245,7 +248,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -254,7 +257,6 @@
 				OBJ_22 /* Dependencies */,
 				OBJ_34 /* Products */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -391,7 +393,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_34 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -452,6 +454,7 @@
 				22F3547A216F713F00443C0B /* ActionContextTests.swift in Sources */,
 				OBJ_81 /* ActionsTests.swift in Sources */,
 				22F35478216F6F6100443C0B /* ActionIdentificationTests.swift in Sources */,
+				22B1DB432178F5B80067E795 /* ActionObserverTests.swift in Sources */,
 				OBJ_82 /* DelegatedActionTests.swift in Sources */,
 				OBJ_83 /* XCTestManifests.swift in Sources */,
 			);

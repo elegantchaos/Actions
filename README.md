@@ -16,19 +16,28 @@ Actions are registered with the ActionManager, using an identifier. They are the
 
 Actions are decoupled from each other, and from everything that they don't need to perform their specific task.
 
-The ActionManager has no dependencies on AppKit/UIKit, but has support to integrate it into the normal responder chain on both platforms, and to allow the action for an item to be specified in interface builder.
 
 When an action is performed, it is passed a context. This contains all the information that it needs to perform its action, and is the main mechanism for ensuring that coupling is loose and dynamic.
 
 The context supplied to the action is filled in by items in the responder chain. In this way, it is literally dependent on the user interface context - which window is at the front, which item is selected, and so on. The same action can be invoked in many different situations, as long as something in the responder chain supplies the correct context. Swift's type safety helps here, making it easy to extract the relevant parameters from the context ensuring that they are of the right type. 
 
+## UI Integration
+
+The Actions module has no dependencies on AppKit/UIKit. It could be used to implement actions for a command line application, or on a non-Apple platform.
+
+The ActionsKit module, on the other hand, builds on top of Actions and integrates it into the responder chain for AppKit or UIKit.
+
+This allows you to bind UI buttons, menus etc to send `performAction` selector to the responder chain, and have the action manager pick them up, infer the action to execute, and perform is. It also implements some validation support.
+
+Undo support is not there yet, but will be added.
+
 ## Usage
 
 ### Setup
 
-Make an ActionManager, attach it to something global (eg your app delegate), and register some actions with it.
+Make an `ActionManager`, attach it to something global (eg your app delegate), and register some actions with it.
 
-If you're going to bind UI items to it, hook it into the responder chain:
+If you're going to bind UI items to it, use one of the `ActionManagerMac` or `ActionManagerMobile` subclasses, and hook it into the responder chain by calling `installResponder`.
 
 ```swift
 class Application: NSObject, NSApplicationDelegate {
