@@ -55,6 +55,7 @@ public class ActionContext {
     public static let actionComponentsKey = "components"
     public static let modelKey = "model"
     public static let observerKey = "observer"
+    public static let rootKey = "root"
     public static let selectionKey = "selection"
     public static let senderKey = "sender"
     public static let targetKey = "target"
