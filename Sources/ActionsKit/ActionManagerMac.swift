@@ -144,4 +144,11 @@ extension NSToolbarItem: ActionIdentification {
     }
 }
 
+extension NSMenuItem: ActionIdentification {
+    @objc public var actionID: String {
+        get { return identifier?.rawValue ?? "" }
+        set(value) { identifier = NSUserInterfaceItemIdentifier(rawValue: value) }
+    }
+}
+
 #endif
