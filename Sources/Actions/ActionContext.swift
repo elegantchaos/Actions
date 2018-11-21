@@ -53,6 +53,7 @@ public class ActionContext {
     // Some standard info keys, provided for convenience.
     public static let actionKey = "action"
     public static let actionComponentsKey = "components"
+    public static let documentKey = "document"
     public static let modelKey = "model"
     public static let observerKey = "observer"
     public static let rootKey = "root"
