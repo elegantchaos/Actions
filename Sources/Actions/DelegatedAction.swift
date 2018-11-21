@@ -34,24 +34,26 @@
  
  */
 
-class DelegatedAction: Action {
-    typealias ActionDeterminer = (ActionContext) -> String
+open class DelegatedAction: Action {
+    public typealias ActionDeterminer = (ActionContext) -> String
     let determiner: ActionDeterminer
     
-    init(identifier: String, determiner: @escaping ActionDeterminer) {
+    public init(identifier: String, determiner: @escaping ActionDeterminer) {
         self.determiner = determiner
         super.init(identifier: identifier)
     }
     
-    override func validate(context: ActionContext) -> Bool {
+    open override func validate(context: ActionContext) -> Bool {
         let manager = context.manager
         let identifier = determiner(context)
-        return manager.validate(identifier: identifier, item: context.sender)
+        return identifier != "" ? manager.validate(identifier: identifier, item: context.sender) : false
     }
     
-    override func perform(context: ActionContext) {
+    open override func perform(context: ActionContext) {
         let manager = context.manager
         let identifier = determiner(context)
-        manager.perform(identifier: identifier, sender: context.sender)
+        if identifier != "" {
+            manager.perform(identifier: identifier, sender: context.sender)
+        }
     }
 }

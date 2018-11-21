@@ -130,6 +130,7 @@ open class ActionManager {
             }
         }
         
+        actionChannel.log("couldn't resolve \(identifier)")
         return false
     }
     
