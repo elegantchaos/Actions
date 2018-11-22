@@ -145,7 +145,9 @@ open class ActionManager {
         let performed = resolving(identifier: identifier, sender: sender, info: info) { (context) in
             actionChannel.log("performing \(context.action)")
             context.notify(stage: .willPerform)
-            context.action.perform(context: context, completion: { context.notify(stage: .didPerform) })
+            context.action.perform(context: context, completed: {
+                context.notify(stage: .didPerform)
+            })
         }
         
         if !performed {

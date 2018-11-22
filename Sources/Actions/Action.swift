@@ -54,9 +54,9 @@ open class Action {
      getting sent.
      */
     
-    open func perform(context: ActionContext, completion: @escaping Completion) {
+    open func perform(context: ActionContext, completed: @escaping Completion) {
         perform(context: context)
-        completion()
+        completed()
     }
 
 }
