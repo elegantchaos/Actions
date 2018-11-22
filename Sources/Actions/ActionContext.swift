@@ -89,8 +89,11 @@ public class ActionContext {
         self.parameters = parameters
         self.info = info
     }
-    
-    
+
+    public subscript(key: String) -> Any? {
+        get { return info[key] }
+        set (value) { info[key] = value }
+    }
 }
 
 /**

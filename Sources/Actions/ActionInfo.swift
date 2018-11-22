@@ -11,12 +11,9 @@ public class ActionInfo {
     public init() {
     }
     
-    public func get(_ key: String) -> Any? {
-        return values[key]
-    }
-    
-    public func set(_ key: String, value: Any) {
-        values[key] = value
+    public subscript(key: String) -> Any? {
+        get { return values[key] }
+        set (value) { values[key] = value }
     }
     
     /**
