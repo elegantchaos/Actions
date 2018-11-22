@@ -144,7 +144,9 @@ open class ActionManager {
     public func perform(identifier: String, sender: Any, info: ActionInfo = ActionInfo()) {
         let performed = resolving(identifier: identifier, sender: sender, info: info) { (action, context) in
             actionChannel.log("performing \(action)")
+            context.notify(for: identifier, stage: .willPerform)
             action.perform(context: context)
+            context.notify(for: identifier, stage: .didPerform)
         }
         
         if !performed {

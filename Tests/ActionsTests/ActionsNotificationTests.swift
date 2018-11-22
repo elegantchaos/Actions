@@ -18,7 +18,6 @@ final class ActionsNotificationTests: XCTestCase {
         let info = ActionInfo()
         info.registerNotification(for: "TestAction") { (stage, context) in
             notified = stage
-            print("notified \(stage)")
         }
 
         let context = ActionContext(manager: manager, sender: manager, identifier: "Test", info: info)
@@ -45,7 +44,6 @@ final class ActionsNotificationTests: XCTestCase {
         let info = ActionInfo()
         info.registerNotification() { (stage, context) in
             notified = stage
-            print("notified \(stage)")
         }
         
         let context = ActionContext(manager: manager, sender: manager, identifier: "Test", info: info)
@@ -56,6 +54,22 @@ final class ActionsNotificationTests: XCTestCase {
         
         // should get notified for any action
         context.notify(for: "AnotherAction", stage: .didPerform)
+        XCTAssertEqual(notified, .didPerform)
+    }
+    
+    func testRegistrationSending() {
+        var notified: ActionNotificationStage? = nil
+        
+        let manager = ActionManager()
+        manager.register([Action(identifier: "TestAction")])
+
+        let info = ActionInfo()
+        info.registerNotification(for: "TestAction") { (stage, context) in
+            notified = stage
+        }
+        
+        // should get notified
+        manager.perform(identifier: "TestAction", sender: self, info: info)
         XCTAssertEqual(notified, .didPerform)
     }
 }
