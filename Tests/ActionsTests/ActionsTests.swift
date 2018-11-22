@@ -125,7 +125,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         XCTAssertTrue(manager.validate(identifier: "test", item: self))
     }
     
-    func testArguments() {
+    func testOldStyleArguments() {
         // test parsing of arguments from the identifier in a perform call
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
@@ -134,6 +134,17 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         XCTAssertEqual(action.performedContext!.parameters.count, 2)
         XCTAssertEqual(action.performedContext!.parameters[0], "param1")
         XCTAssertEqual(action.performedContext!.parameters[1], "param2")
+    }
+
+    func testArguments() {
+        // test parsing of key value arguments after the identifier in a perform call
+        let action = TestAction(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        manager.perform(identifier: "test(\"key1\": \"value1\", \"key2\": \"value2\")", sender: NormalSender())
+        XCTAssertEqual(action.performedContext!.parameters.count, 0)
+        XCTAssertEqual(action.performedContext!["key1"] as? String, "value1")
+        XCTAssertEqual(action.performedContext!["key2"] as? String, "value2")
     }
 
     func testPrefix() {

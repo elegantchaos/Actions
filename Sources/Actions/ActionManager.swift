@@ -120,10 +120,27 @@ open class ActionManager {
     */
     
     func resolving(identifier: String, sender: Any, info: ActionInfo = ActionInfo(), do block: (_ context: ActionContext) -> Void) -> Bool {
-        var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
+        var prefix = identifier
+        var params: [String:Any] = [:]
+        let items = identifier.split(separator: "(", maxSplits: 1, omittingEmptySubsequences: true)
+        if items.count == 2 {
+            prefix = String(items[0])
+            let suffix = items[1].split(separator: ")")[0]
+            let json = "{\(suffix)}"
+            if let parsed = try? JSONSerialization.jsonObject(with: json.data(using: String.Encoding.utf8)!, options: []) {
+                if let dict = parsed as? [String:Any] {
+                    params = dict
+                }
+            }
+        }
+        
+        var components = ArraySlice(prefix.split(separator: ".").map { String($0) })
         while let actionID = components.popFirst() {
             if let action = actions[actionID] {
                 let context = ActionContext(manager: self, action: action, sender: sender, identifier: identifier, parameters: Array(components), info: info) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
+                for param in params {
+                    context[param.key] = param.value
+                }
                 gather(context: context, for:sender)
                 block(context)
                 return true
