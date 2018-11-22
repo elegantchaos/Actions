@@ -119,11 +119,11 @@ open class ActionManager {
      Returns true if the action was found and the block performed.
     */
     
-    func resolving(identifier: String, sender: Any, info: ActionContext.Info = [:], do block: (_ action: Action, _ context: ActionContext) -> Void) -> Bool {
+    func resolving(identifier: String, sender: Any, info: ActionInfo = ActionInfo(), do block: (_ action: Action, _ context: ActionContext) -> Void) -> Bool {
         var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
         while let actionID = components.popFirst() {
             if let action = actions[actionID] {
-                let context = ActionContext(manager: self, sender: sender, parameters: Array(components), info: info) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
+                let context = ActionContext(manager: self, sender: sender, identifier: identifier, parameters: Array(components), info: info) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
                 gather(context: context, for:sender)
                 block(action, context)
                 return true
@@ -141,7 +141,7 @@ open class ActionManager {
      any remaining components to it as parameters.
      */
     
-    public func perform(identifier: String, sender: Any, info: ActionContext.Info = [:]) {
+    public func perform(identifier: String, sender: Any, info: ActionInfo = ActionInfo()) {
         let performed = resolving(identifier: identifier, sender: sender, info: info) { (action, context) in
             actionChannel.log("performing \(action)")
             action.perform(context: context)

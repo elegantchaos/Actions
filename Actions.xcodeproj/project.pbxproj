@@ -9,11 +9,11 @@
 /* Begin PBXAggregateTarget section */
 		"Actions::ActionsPackageTests::ProductTarget" /* ActionsPackageTests */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = OBJ_72 /* Build configuration list for PBXAggregateTarget "ActionsPackageTests" */;
+			buildConfigurationList = OBJ_77 /* Build configuration list for PBXAggregateTarget "ActionsPackageTests" */;
 			buildPhases = (
 			);
 			dependencies = (
-				OBJ_75 /* PBXTargetDependency */,
+				OBJ_80 /* PBXTargetDependency */,
 			);
 			name = ActionsPackageTests;
 			productName = ActionsPackageTests;
@@ -21,72 +21,74 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		22B1DB432178F5B80067E795 /* ActionObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B1DB422178F5B80067E795 /* ActionObserverTests.swift */; };
-		22F35478216F6F6100443C0B /* ActionIdentificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F35477216F6F6100443C0B /* ActionIdentificationTests.swift */; };
-		22F3547A216F713F00443C0B /* ActionContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F35479216F713F00443C0B /* ActionContextTests.swift */; };
-		OBJ_106 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* Package.swift */; };
-		OBJ_44 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Action.swift */; };
-		OBJ_45 /* ActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* ActionContext.swift */; };
-		OBJ_46 /* ActionIdentification.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* ActionIdentification.swift */; };
-		OBJ_47 /* ActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* ActionManager.swift */; };
-		OBJ_48 /* DelegatedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* DelegatedAction.swift */; };
-		OBJ_50 /* Logger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Logger::Logger::Product" /* Logger.framework */; };
-		OBJ_58 /* ActionManagerMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* ActionManagerMac.swift */; };
-		OBJ_59 /* ActionManagerMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* ActionManagerMobile.swift */; };
-		OBJ_61 /* Actions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Actions::Actions::Product" /* Actions.framework */; };
-		OBJ_62 /* Logger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Logger::Logger::Product" /* Logger.framework */; };
-		OBJ_70 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_81 /* ActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* ActionsTests.swift */; };
-		OBJ_82 /* DelegatedActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* DelegatedActionTests.swift */; };
-		OBJ_83 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* XCTestManifests.swift */; };
-		OBJ_85 /* Actions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Actions::Actions::Product" /* Actions.framework */; };
-		OBJ_86 /* Logger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Logger::Logger::Product" /* Logger.framework */; };
-		OBJ_93 /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Context.swift */; };
-		OBJ_94 /* Handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* Handler.swift */; };
-		OBJ_95 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* Logger.swift */; };
-		OBJ_96 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* Manager.swift */; };
-		OBJ_97 /* NSLogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* NSLogHandler.swift */; };
-		OBJ_98 /* OSLogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* OSLogHandler.swift */; };
-		OBJ_99 /* PrintHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* PrintHandler.swift */; };
+		22EEF70F21A70E4D007FAD10 /* ActionsNotificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EEF70E21A70E4D007FAD10 /* ActionsNotificationTests.swift */; };
+		22EEF71121A71472007FAD10 /* ActionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EEF71021A71472007FAD10 /* ActionInfo.swift */; };
+		OBJ_101 /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* Context.swift */; };
+		OBJ_102 /* Handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* Handler.swift */; };
+		OBJ_103 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* Logger.swift */; };
+		OBJ_104 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* Manager.swift */; };
+		OBJ_105 /* NSLogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* NSLogHandler.swift */; };
+		OBJ_106 /* OSLogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* OSLogHandler.swift */; };
+		OBJ_107 /* PrintHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* PrintHandler.swift */; };
+		OBJ_114 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* Package.swift */; };
+		OBJ_49 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Action.swift */; };
+		OBJ_50 /* ActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* ActionContext.swift */; };
+		OBJ_51 /* ActionIdentification.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* ActionIdentification.swift */; };
+		OBJ_52 /* ActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* ActionManager.swift */; };
+		OBJ_53 /* DelegatedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* DelegatedAction.swift */; };
+		OBJ_55 /* Logger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Logger::Logger::Product" /* Logger.framework */; };
+		OBJ_63 /* ActionManagerMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* ActionManagerMac.swift */; };
+		OBJ_64 /* ActionManagerMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* ActionManagerMobile.swift */; };
+		OBJ_66 /* Actions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Actions::Actions::Product" /* Actions.framework */; };
+		OBJ_67 /* Logger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Logger::Logger::Product" /* Logger.framework */; };
+		OBJ_75 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_86 /* ActionContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* ActionContextTests.swift */; };
+		OBJ_87 /* ActionIdentificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* ActionIdentificationTests.swift */; };
+		OBJ_88 /* ActionObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* ActionObserverTests.swift */; };
+		OBJ_89 /* ActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* ActionsTests.swift */; };
+		OBJ_90 /* DelegatedActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* DelegatedActionTests.swift */; };
+		OBJ_91 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* XCTestManifests.swift */; };
+		OBJ_93 /* Actions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Actions::Actions::Product" /* Actions.framework */; };
+		OBJ_94 /* Logger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Logger::Logger::Product" /* Logger.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		22F35471216F6F3400443C0B /* PBXContainerItemProxy */ = {
+		22EEF70721A7098E007FAD10 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Logger::Logger";
+			remoteInfo = Logger;
+		};
+		22EEF70821A7098E007FAD10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Actions::Actions";
 			remoteInfo = Actions;
 		};
-		22F35472216F6F3400443C0B /* PBXContainerItemProxy */ = {
+		22EEF70921A7098E007FAD10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Logger::Logger";
 			remoteInfo = Logger;
 		};
-		22F35473216F6F3400443C0B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "Logger::Logger";
-			remoteInfo = Logger;
-		};
-		22F35474216F6F3400443C0B /* PBXContainerItemProxy */ = {
+		22EEF70A21A7098E007FAD10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Actions::Actions";
 			remoteInfo = Actions;
 		};
-		22F35475216F6F3400443C0B /* PBXContainerItemProxy */ = {
+		22EEF70B21A7098E007FAD10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Logger::Logger";
 			remoteInfo = Logger;
 		};
-		22F35476216F6F3500443C0B /* PBXContainerItemProxy */ = {
+		22EEF70C21A7098F007FAD10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
@@ -96,9 +98,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		22B1DB422178F5B80067E795 /* ActionObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionObserverTests.swift; sourceTree = "<group>"; };
-		22F35477216F6F6100443C0B /* ActionIdentificationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionIdentificationTests.swift; sourceTree = "<group>"; };
-		22F35479216F713F00443C0B /* ActionContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionContextTests.swift; sourceTree = "<group>"; };
+		22EEF70E21A70E4D007FAD10 /* ActionsNotificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsNotificationTests.swift; sourceTree = "<group>"; };
+		22EEF71021A71472007FAD10 /* ActionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionInfo.swift; sourceTree = "<group>"; };
 		"Actions::Actions::Product" /* Actions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Actions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Actions::ActionsKit::Product" /* ActionsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ActionsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Actions::ActionsTests::Product" /* ActionsTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ActionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,52 +110,57 @@
 		OBJ_14 /* ActionIdentification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionIdentification.swift; sourceTree = "<group>"; };
 		OBJ_15 /* ActionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionManager.swift; sourceTree = "<group>"; };
 		OBJ_16 /* DelegatedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatedAction.swift; sourceTree = "<group>"; };
-		OBJ_19 /* ActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsTests.swift; sourceTree = "<group>"; };
-		OBJ_20 /* DelegatedActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatedActionTests.swift; sourceTree = "<group>"; };
-		OBJ_21 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
-		OBJ_26 /* Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
-		OBJ_27 /* Handler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handler.swift; sourceTree = "<group>"; };
-		OBJ_28 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		OBJ_29 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
-		OBJ_30 /* NSLogHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLogHandler.swift; sourceTree = "<group>"; };
-		OBJ_31 /* OSLogHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLogHandler.swift; sourceTree = "<group>"; };
-		OBJ_32 /* PrintHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHandler.swift; sourceTree = "<group>"; };
-		OBJ_33 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/sam/Projects/Bookish/Packages/Actions/.build/checkouts/Logger-3324965537228721642/Package.swift"; sourceTree = "<group>"; };
+		OBJ_19 /* ActionContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionContextTests.swift; sourceTree = "<group>"; };
+		OBJ_20 /* ActionIdentificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionIdentificationTests.swift; sourceTree = "<group>"; };
+		OBJ_21 /* ActionObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionObserverTests.swift; sourceTree = "<group>"; };
+		OBJ_22 /* ActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsTests.swift; sourceTree = "<group>"; };
+		OBJ_23 /* DelegatedActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatedActionTests.swift; sourceTree = "<group>"; };
+		OBJ_24 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
+		OBJ_29 /* Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
+		OBJ_30 /* Handler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handler.swift; sourceTree = "<group>"; };
+		OBJ_31 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		OBJ_32 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
+		OBJ_33 /* NSLogHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLogHandler.swift; sourceTree = "<group>"; };
+		OBJ_34 /* OSLogHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLogHandler.swift; sourceTree = "<group>"; };
+		OBJ_35 /* PrintHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHandler.swift; sourceTree = "<group>"; };
+		OBJ_36 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/sam/Projects/BookishModel/Packages/Actions/.build/checkouts/Logger-163420cc/Package.swift"; sourceTree = "<group>"; };
+		OBJ_42 /* Actions.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = Actions.xcworkspace; sourceTree = SOURCE_ROOT; };
+		OBJ_43 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* ActionManagerMac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionManagerMac.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		OBJ_100 /* Frameworks */ = {
+		OBJ_108 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_49 /* Frameworks */ = {
+		OBJ_54 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_50 /* Logger.framework in Frameworks */,
+				OBJ_55 /* Logger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_60 /* Frameworks */ = {
+		OBJ_65 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_61 /* Actions.framework in Frameworks */,
-				OBJ_62 /* Logger.framework in Frameworks */,
+				OBJ_66 /* Actions.framework in Frameworks */,
+				OBJ_67 /* Logger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_84 /* Frameworks */ = {
+		OBJ_92 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_85 /* Actions.framework in Frameworks */,
-				OBJ_86 /* Logger.framework in Frameworks */,
+				OBJ_93 /* Actions.framework in Frameworks */,
+				OBJ_94 /* Logger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +172,7 @@
 			children = (
 				OBJ_12 /* Action.swift */,
 				OBJ_13 /* ActionContext.swift */,
+				22EEF71021A71472007FAD10 /* ActionInfo.swift */,
 				OBJ_14 /* ActionIdentification.swift */,
 				OBJ_15 /* ActionManager.swift */,
 				OBJ_16 /* DelegatedAction.swift */,
@@ -185,78 +192,82 @@
 		OBJ_18 /* ActionsTests */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_19 /* ActionsTests.swift */,
-				22B1DB422178F5B80067E795 /* ActionObserverTests.swift */,
-				22F35479216F713F00443C0B /* ActionContextTests.swift */,
-				22F35477216F6F6100443C0B /* ActionIdentificationTests.swift */,
-				OBJ_20 /* DelegatedActionTests.swift */,
-				OBJ_21 /* XCTestManifests.swift */,
+				OBJ_19 /* ActionContextTests.swift */,
+				OBJ_20 /* ActionIdentificationTests.swift */,
+				OBJ_21 /* ActionObserverTests.swift */,
+				OBJ_22 /* ActionsTests.swift */,
+				22EEF70E21A70E4D007FAD10 /* ActionsNotificationTests.swift */,
+				OBJ_23 /* DelegatedActionTests.swift */,
+				OBJ_24 /* XCTestManifests.swift */,
 			);
 			name = ActionsTests;
 			path = Tests/ActionsTests;
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_22 /* Dependencies */ = {
+		OBJ_25 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_23 /* Logger 1.0.11 */,
+				OBJ_26 /* Logger 1.0.11 */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
 		};
-		OBJ_23 /* Logger 1.0.11 */ = {
+		OBJ_26 /* Logger 1.0.11 */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_24 /* Example */,
-				OBJ_25 /* Logger */,
-				OBJ_33 /* Package.swift */,
+				OBJ_27 /* Example */,
+				OBJ_28 /* Logger */,
+				OBJ_36 /* Package.swift */,
 			);
 			name = "Logger 1.0.11";
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_24 /* Example */ = {
+		OBJ_27 /* Example */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Example;
-			path = ".build/checkouts/Logger-3324965537228721642/Sources/Example";
+			path = ".build/checkouts/Logger-163420cc/Sources/Example";
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_25 /* Logger */ = {
+		OBJ_28 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_26 /* Context.swift */,
-				OBJ_27 /* Handler.swift */,
-				OBJ_28 /* Logger.swift */,
-				OBJ_29 /* Manager.swift */,
-				OBJ_30 /* NSLogHandler.swift */,
-				OBJ_31 /* OSLogHandler.swift */,
-				OBJ_32 /* PrintHandler.swift */,
+				OBJ_29 /* Context.swift */,
+				OBJ_30 /* Handler.swift */,
+				OBJ_31 /* Logger.swift */,
+				OBJ_32 /* Manager.swift */,
+				OBJ_33 /* NSLogHandler.swift */,
+				OBJ_34 /* OSLogHandler.swift */,
+				OBJ_35 /* PrintHandler.swift */,
 			);
 			name = Logger;
-			path = ".build/checkouts/Logger-3324965537228721642/Sources/Logger";
+			path = ".build/checkouts/Logger-163420cc/Sources/Logger";
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_34 /* Products */ = {
+		OBJ_37 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				"Actions::ActionsTests::Product" /* ActionsTests.xctest */,
 				"Actions::Actions::Product" /* Actions.framework */,
 				"Logger::Logger::Product" /* Logger.framework */,
-				"Actions::ActionsTests::Product" /* ActionsTests.xctest */,
 				"Actions::ActionsKit::Product" /* ActionsKit.framework */,
 			);
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 = {
+		OBJ_5 /*  */ = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
 				OBJ_7 /* Sources */,
 				OBJ_17 /* Tests */,
-				OBJ_22 /* Dependencies */,
-				OBJ_34 /* Products */,
+				OBJ_25 /* Dependencies */,
+				OBJ_37 /* Products */,
+				OBJ_42 /* Actions.xcworkspace */,
+				OBJ_43 /* README.md */,
 			);
+			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -283,15 +294,15 @@
 /* Begin PBXNativeTarget section */
 		"Actions::Actions" /* Actions */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_40 /* Build configuration list for PBXNativeTarget "Actions" */;
+			buildConfigurationList = OBJ_45 /* Build configuration list for PBXNativeTarget "Actions" */;
 			buildPhases = (
-				OBJ_43 /* Sources */,
-				OBJ_49 /* Frameworks */,
+				OBJ_48 /* Sources */,
+				OBJ_54 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_51 /* PBXTargetDependency */,
+				OBJ_56 /* PBXTargetDependency */,
 			);
 			name = Actions;
 			productName = Actions;
@@ -300,16 +311,16 @@
 		};
 		"Actions::ActionsKit" /* ActionsKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_54 /* Build configuration list for PBXNativeTarget "ActionsKit" */;
+			buildConfigurationList = OBJ_59 /* Build configuration list for PBXNativeTarget "ActionsKit" */;
 			buildPhases = (
-				OBJ_57 /* Sources */,
-				OBJ_60 /* Frameworks */,
+				OBJ_62 /* Sources */,
+				OBJ_65 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_63 /* PBXTargetDependency */,
-				OBJ_64 /* PBXTargetDependency */,
+				OBJ_68 /* PBXTargetDependency */,
+				OBJ_69 /* PBXTargetDependency */,
 			);
 			name = ActionsKit;
 			productName = ActionsKit;
@@ -318,16 +329,16 @@
 		};
 		"Actions::ActionsTests" /* ActionsTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_77 /* Build configuration list for PBXNativeTarget "ActionsTests" */;
+			buildConfigurationList = OBJ_82 /* Build configuration list for PBXNativeTarget "ActionsTests" */;
 			buildPhases = (
-				OBJ_80 /* Sources */,
-				OBJ_84 /* Frameworks */,
+				OBJ_85 /* Sources */,
+				OBJ_92 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_87 /* PBXTargetDependency */,
-				OBJ_88 /* PBXTargetDependency */,
+				OBJ_95 /* PBXTargetDependency */,
+				OBJ_96 /* PBXTargetDependency */,
 			);
 			name = ActionsTests;
 			productName = ActionsTests;
@@ -336,9 +347,9 @@
 		};
 		"Actions::SwiftPMPackageDescription" /* ActionsPackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_66 /* Build configuration list for PBXNativeTarget "ActionsPackageDescription" */;
+			buildConfigurationList = OBJ_71 /* Build configuration list for PBXNativeTarget "ActionsPackageDescription" */;
 			buildPhases = (
-				OBJ_69 /* Sources */,
+				OBJ_74 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -350,10 +361,10 @@
 		};
 		"Logger::Logger" /* Logger */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_89 /* Build configuration list for PBXNativeTarget "Logger" */;
+			buildConfigurationList = OBJ_97 /* Build configuration list for PBXNativeTarget "Logger" */;
 			buildPhases = (
-				OBJ_92 /* Sources */,
-				OBJ_100 /* Frameworks */,
+				OBJ_100 /* Sources */,
+				OBJ_108 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -366,9 +377,9 @@
 		};
 		"Logger::SwiftPMPackageDescription" /* LoggerPackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_102 /* Build configuration list for PBXNativeTarget "LoggerPackageDescription" */;
+			buildConfigurationList = OBJ_110 /* Build configuration list for PBXNativeTarget "LoggerPackageDescription" */;
 			buildPhases = (
-				OBJ_105 /* Sources */,
+				OBJ_113 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -384,6 +395,7 @@
 		OBJ_1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 9999;
 				LastUpgradeCheck = 9999;
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "Actions" */;
@@ -393,8 +405,8 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5;
-			productRefGroup = OBJ_34 /* Products */;
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_37 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -410,120 +422,122 @@
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		OBJ_105 /* Sources */ = {
+		OBJ_100 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_106 /* Package.swift in Sources */,
+				OBJ_101 /* Context.swift in Sources */,
+				OBJ_102 /* Handler.swift in Sources */,
+				OBJ_103 /* Logger.swift in Sources */,
+				OBJ_104 /* Manager.swift in Sources */,
+				OBJ_105 /* NSLogHandler.swift in Sources */,
+				OBJ_106 /* OSLogHandler.swift in Sources */,
+				OBJ_107 /* PrintHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_43 /* Sources */ = {
+		OBJ_113 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_44 /* Action.swift in Sources */,
-				OBJ_45 /* ActionContext.swift in Sources */,
-				OBJ_46 /* ActionIdentification.swift in Sources */,
-				OBJ_47 /* ActionManager.swift in Sources */,
-				OBJ_48 /* DelegatedAction.swift in Sources */,
+				OBJ_114 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_57 /* Sources */ = {
+		OBJ_48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_58 /* ActionManagerMac.swift in Sources */,
-				OBJ_59 /* ActionManagerMobile.swift in Sources */,
+				OBJ_49 /* Action.swift in Sources */,
+				OBJ_50 /* ActionContext.swift in Sources */,
+				OBJ_51 /* ActionIdentification.swift in Sources */,
+				OBJ_52 /* ActionManager.swift in Sources */,
+				OBJ_53 /* DelegatedAction.swift in Sources */,
+				22EEF71121A71472007FAD10 /* ActionInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_69 /* Sources */ = {
+		OBJ_62 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_70 /* Package.swift in Sources */,
+				OBJ_63 /* ActionManagerMac.swift in Sources */,
+				OBJ_64 /* ActionManagerMobile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_80 /* Sources */ = {
+		OBJ_74 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				22F3547A216F713F00443C0B /* ActionContextTests.swift in Sources */,
-				OBJ_81 /* ActionsTests.swift in Sources */,
-				22F35478216F6F6100443C0B /* ActionIdentificationTests.swift in Sources */,
-				22B1DB432178F5B80067E795 /* ActionObserverTests.swift in Sources */,
-				OBJ_82 /* DelegatedActionTests.swift in Sources */,
-				OBJ_83 /* XCTestManifests.swift in Sources */,
+				OBJ_75 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_92 /* Sources */ = {
+		OBJ_85 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_93 /* Context.swift in Sources */,
-				OBJ_94 /* Handler.swift in Sources */,
-				OBJ_95 /* Logger.swift in Sources */,
-				OBJ_96 /* Manager.swift in Sources */,
-				OBJ_97 /* NSLogHandler.swift in Sources */,
-				OBJ_98 /* OSLogHandler.swift in Sources */,
-				OBJ_99 /* PrintHandler.swift in Sources */,
+				OBJ_86 /* ActionContextTests.swift in Sources */,
+				OBJ_87 /* ActionIdentificationTests.swift in Sources */,
+				OBJ_88 /* ActionObserverTests.swift in Sources */,
+				OBJ_89 /* ActionsTests.swift in Sources */,
+				OBJ_90 /* DelegatedActionTests.swift in Sources */,
+				22EEF70F21A70E4D007FAD10 /* ActionsNotificationTests.swift in Sources */,
+				OBJ_91 /* XCTestManifests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		OBJ_51 /* PBXTargetDependency */ = {
+		OBJ_56 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Logger::Logger" /* Logger */;
-			targetProxy = 22F35472216F6F3400443C0B /* PBXContainerItemProxy */;
+			targetProxy = 22EEF70721A7098E007FAD10 /* PBXContainerItemProxy */;
 		};
-		OBJ_63 /* PBXTargetDependency */ = {
+		OBJ_68 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Actions::Actions" /* Actions */;
-			targetProxy = 22F35471216F6F3400443C0B /* PBXContainerItemProxy */;
+			targetProxy = 22EEF70821A7098E007FAD10 /* PBXContainerItemProxy */;
 		};
-		OBJ_64 /* PBXTargetDependency */ = {
+		OBJ_69 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Logger::Logger" /* Logger */;
-			targetProxy = 22F35473216F6F3400443C0B /* PBXContainerItemProxy */;
+			targetProxy = 22EEF70921A7098E007FAD10 /* PBXContainerItemProxy */;
 		};
-		OBJ_75 /* PBXTargetDependency */ = {
+		OBJ_80 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Actions::ActionsTests" /* ActionsTests */;
-			targetProxy = 22F35476216F6F3500443C0B /* PBXContainerItemProxy */;
+			targetProxy = 22EEF70C21A7098F007FAD10 /* PBXContainerItemProxy */;
 		};
-		OBJ_87 /* PBXTargetDependency */ = {
+		OBJ_95 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Actions::Actions" /* Actions */;
-			targetProxy = 22F35474216F6F3400443C0B /* PBXContainerItemProxy */;
+			targetProxy = 22EEF70A21A7098E007FAD10 /* PBXContainerItemProxy */;
 		};
-		OBJ_88 /* PBXTargetDependency */ = {
+		OBJ_96 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Logger::Logger" /* Logger */;
-			targetProxy = 22F35475216F6F3400443C0B /* PBXContainerItemProxy */;
+			targetProxy = 22EEF70B21A7098E007FAD10 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		OBJ_103 /* Debug */ = {
+		OBJ_111 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode10b6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
+				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode10.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
-		OBJ_104 /* Release */ = {
+		OBJ_112 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode10b6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
+				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode10.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
@@ -574,7 +588,7 @@
 			};
 			name = Release;
 		};
-		OBJ_41 /* Debug */ = {
+		OBJ_46 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -598,7 +612,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_42 /* Release */ = {
+		OBJ_47 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -622,7 +636,7 @@
 			};
 			name = Release;
 		};
-		OBJ_55 /* Debug */ = {
+		OBJ_60 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -646,7 +660,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_56 /* Release */ = {
+		OBJ_61 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -670,39 +684,39 @@
 			};
 			name = Release;
 		};
-		OBJ_67 /* Debug */ = {
+		OBJ_72 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode10b6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
+				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode10.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
-		OBJ_68 /* Release */ = {
+		OBJ_73 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode10b6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
+				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode10.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
 				SWIFT_VERSION = 4.2;
-			};
-			name = Release;
-		};
-		OBJ_73 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		OBJ_74 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
 			};
 			name = Release;
 		};
 		OBJ_78 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+			};
+			name = Debug;
+		};
+		OBJ_79 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		OBJ_83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -721,7 +735,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_79 /* Release */ = {
+		OBJ_84 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -742,7 +756,7 @@
 			};
 			name = Release;
 		};
-		OBJ_90 /* Debug */ = {
+		OBJ_98 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -766,7 +780,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_91 /* Release */ = {
+		OBJ_99 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -793,11 +807,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		OBJ_102 /* Build configuration list for PBXNativeTarget "LoggerPackageDescription" */ = {
+		OBJ_110 /* Build configuration list for PBXNativeTarget "LoggerPackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_103 /* Debug */,
-				OBJ_104 /* Release */,
+				OBJ_111 /* Debug */,
+				OBJ_112 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -811,43 +825,34 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_40 /* Build configuration list for PBXNativeTarget "Actions" */ = {
+		OBJ_45 /* Build configuration list for PBXNativeTarget "Actions" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_41 /* Debug */,
-				OBJ_42 /* Release */,
+				OBJ_46 /* Debug */,
+				OBJ_47 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_54 /* Build configuration list for PBXNativeTarget "ActionsKit" */ = {
+		OBJ_59 /* Build configuration list for PBXNativeTarget "ActionsKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_55 /* Debug */,
-				OBJ_56 /* Release */,
+				OBJ_60 /* Debug */,
+				OBJ_61 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_66 /* Build configuration list for PBXNativeTarget "ActionsPackageDescription" */ = {
+		OBJ_71 /* Build configuration list for PBXNativeTarget "ActionsPackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_67 /* Debug */,
-				OBJ_68 /* Release */,
+				OBJ_72 /* Debug */,
+				OBJ_73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_72 /* Build configuration list for PBXAggregateTarget "ActionsPackageTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_73 /* Debug */,
-				OBJ_74 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		OBJ_77 /* Build configuration list for PBXNativeTarget "ActionsTests" */ = {
+		OBJ_77 /* Build configuration list for PBXAggregateTarget "ActionsPackageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				OBJ_78 /* Debug */,
@@ -856,11 +861,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_89 /* Build configuration list for PBXNativeTarget "Logger" */ = {
+		OBJ_82 /* Build configuration list for PBXNativeTarget "ActionsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_90 /* Debug */,
-				OBJ_91 /* Release */,
+				OBJ_83 /* Debug */,
+				OBJ_84 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_97 /* Build configuration list for PBXNativeTarget "Logger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_98 /* Debug */,
+				OBJ_99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

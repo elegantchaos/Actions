@@ -45,7 +45,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         }
         
         func provide(context: ActionContext) {
-            context.info["valueProvidedBySender"] = "valueProvidedBySender"
+            context.info.set("valueProvidedBySender", value: "valueProvidedBySender")
         }
     }
 
@@ -86,7 +86,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
     }
     
     func provide(context: ActionContext) {
-        context.info["valueProvidedByTest"] = "valueProvidedByTest"
+        context.info.set("valueProvidedByTest", value:"valueProvidedByTest")
     }
     
     func testPerform() {
@@ -153,7 +153,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let manager = ActionManagerWithTestAsResponder(test: self)
         manager.register([action])
         manager.perform(identifier: "test", sender: NormalSender())
-        XCTAssertEqual(action.performedContext!.info["valueProvidedByTest"] as? String, "valueProvidedByTest")
+        XCTAssertEqual(action.performedContext!.info.get("valueProvidedByTest") as? String, "valueProvidedByTest")
     }
     
     func testCustomProvider() {
@@ -164,7 +164,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let manager = ActionManagerWithTestAsProvider(test: self)
         manager.register([action])
         manager.perform(identifier: "test", sender: NormalSender())
-        XCTAssertEqual(action.performedContext!.info["valueProvidedByTest"] as? String, "valueProvidedByTest")
+        XCTAssertEqual(action.performedContext!.info.get("valueProvidedByTest") as? String, "valueProvidedByTest")
     }
     
     func testSenderIsResponder() {
@@ -175,8 +175,8 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let manager = ActionManager()
         manager.register([action])
         manager.perform(identifier: "test", sender: sender)
-        XCTAssertEqual(action.performedContext!.info["valueProvidedByTest"] as? String, "valueProvidedByTest")
-        XCTAssertEqual(action.performedContext!.info["valueProvidedBySender"] as? String, "valueProvidedBySender")
+        XCTAssertEqual(action.performedContext!.info.get("valueProvidedByTest") as? String, "valueProvidedByTest")
+        XCTAssertEqual(action.performedContext!.info.get("valueProvidedBySender") as? String, "valueProvidedBySender")
     }
 
     func testGetIdentifierFromSender() {

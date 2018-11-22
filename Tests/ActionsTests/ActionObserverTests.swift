@@ -27,16 +27,15 @@ final class ActionObserverTests: XCTestCase {
     }
     
     func testBasics() {
-        let manager = ActionManager()
-        let context = ActionContext(manager: manager, sender: manager)
+        let info = ActionInfo()
         let obs1 = TestObserver("test1")
-        context.addObserver(obs1)
+        info.addObserver(obs1)
 
         let obs2 = TestObserver("test2")
-        context.addObserver(obs2)
+        info.addObserver(obs2)
 
         var observers = [TestObserver]()
-        context.forObservers {
+        info.forObservers {
             observers.append($0)
         }
         
@@ -46,14 +45,13 @@ final class ActionObserverTests: XCTestCase {
     }
 
     func testNoDuplication() {
-        let manager = ActionManager()
-        let context = ActionContext(manager: manager, sender: manager)
+        let info = ActionInfo()
         let obs1 = TestObserver("test1")
-        context.addObserver(obs1)
-        context.addObserver(obs1)
+        info.addObserver(obs1)
+        info.addObserver(obs1)
         
         var observers = [TestObserver]()
-        context.forObservers {
+        info.forObservers {
             observers.append($0)
         }
         
