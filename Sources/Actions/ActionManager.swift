@@ -119,13 +119,13 @@ open class ActionManager {
      Returns true if the action was found and the block performed.
     */
     
-    func resolving(identifier: String, sender: Any, info: ActionInfo = ActionInfo(), do block: (_ action: Action, _ context: ActionContext) -> Void) -> Bool {
+    func resolving(identifier: String, sender: Any, info: ActionInfo = ActionInfo(), do block: (_ context: ActionContext) -> Void) -> Bool {
         var components = ArraySlice(identifier.split(separator: ".").map { String($0) })
         while let actionID = components.popFirst() {
             if let action = actions[actionID] {
-                let context = ActionContext(manager: self, sender: sender, identifier: identifier, parameters: Array(components), info: info) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
+                let context = ActionContext(manager: self, action: action, sender: sender, identifier: identifier, parameters: Array(components), info: info) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
                 gather(context: context, for:sender)
-                block(action, context)
+                block(context)
                 return true
             }
         }
@@ -142,11 +142,11 @@ open class ActionManager {
      */
     
     public func perform(identifier: String, sender: Any, info: ActionInfo = ActionInfo()) {
-        let performed = resolving(identifier: identifier, sender: sender, info: info) { (action, context) in
-            actionChannel.log("performing \(action)")
-            context.notify(for: identifier, stage: .willPerform)
-            action.perform(context: context)
-            context.notify(for: identifier, stage: .didPerform)
+        let performed = resolving(identifier: identifier, sender: sender, info: info) { (context) in
+            actionChannel.log("performing \(context.action)")
+            context.notify(stage: .willPerform)
+            context.action.perform(context: context)
+            context.notify(stage: .didPerform)
         }
         
         if !performed {
@@ -200,9 +200,9 @@ open class ActionManager {
     
     public func validate(identifier: String, item: Any) -> Bool {
         var valid = false
-        let _ = resolving(identifier: identifier, sender: item) { (action, context) in
-            actionChannel.log("validating \(action)")
-            valid = action.validate(context: context)
+        let _ = resolving(identifier: identifier, sender: item) { (context) in
+            actionChannel.log("validating \(context.action)")
+            valid = context.action.validate(context: context)
         }
         
         return valid

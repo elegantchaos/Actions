@@ -9,7 +9,8 @@ import XCTest
 class ActionContextTests: XCTestCase {
     func testBasics() {
         let manager = ActionManager()
-        let context = ActionContext(manager: manager, sender: manager, identifier: "Test", parameters: ["p1", "p2"])
+        let action = Action(identifier: "Test")
+        let context = ActionContext(manager: manager, action:action, sender: manager, identifier: "Test", parameters: ["p1", "p2"])
         context.info.append(key: "test", value: "item1")
         context.info.append(key: "test", value: "item2")
         

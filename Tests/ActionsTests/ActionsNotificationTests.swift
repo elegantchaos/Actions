@@ -8,31 +8,31 @@ import XCTest
 
 
 final class ActionsNotificationTests: XCTestCase {
-    class TestAction: Action {
-    }
+    let manager = ActionManager()
+    let action = Action(identifier: "TestAction")
     
     func testRegistrationForSpecificAction() {
         var notified: ActionNotificationStage? = nil
         
-        let manager = ActionManager()
         let info = ActionInfo()
         info.registerNotification(for: "TestAction") { (stage, context) in
             notified = stage
         }
 
-        let context = ActionContext(manager: manager, sender: manager, identifier: "Test", info: info)
+        let context = ActionContext(manager: manager, action: action, sender: manager, identifier: "Test", info: info)
 
         // should get notified
-        context.notify(for: "TestAction", stage: .willPerform)
+        context.notify(stage: .willPerform)
         XCTAssertEqual(notified, .willPerform)
 
         // stage should have changed
-        context.notify(for: "TestAction", stage: .didPerform)
+        context.notify(stage: .didPerform)
         XCTAssertEqual(notified, .didPerform)
         
         // notifying about another action should have no effect
+        let otherContext = ActionContext(manager: manager, action: Action(identifier: "OtherAction"), sender: manager, identifier: "Test", info: info)
         notified = nil
-        context.notify(for: "AnotherAction", stage: .willPerform)
+        otherContext.notify(stage: .willPerform)
         XCTAssertEqual(notified, nil)
     }
     
@@ -40,20 +40,19 @@ final class ActionsNotificationTests: XCTestCase {
     func testRegistrationForAnyAction() {
         var notified: ActionNotificationStage? = nil
         
-        let manager = ActionManager()
         let info = ActionInfo()
         info.registerNotification() { (stage, context) in
             notified = stage
         }
         
-        let context = ActionContext(manager: manager, sender: manager, identifier: "Test", info: info)
+        let context = ActionContext(manager: manager, action: action, sender: manager, identifier: "Test", info: info)
 
         // should get notified
-        context.notify(for: "TestAction", stage: .willPerform)
+        context.notify(stage: .willPerform)
         XCTAssertEqual(notified, .willPerform)
         
         // should get notified for any action
-        context.notify(for: "AnotherAction", stage: .didPerform)
+        context.notify(stage: .didPerform)
         XCTAssertEqual(notified, .didPerform)
     }
     
