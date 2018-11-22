@@ -125,7 +125,7 @@ extension ActionInfo {
      value to it.
      */
     
-    public func register(for action: String = "", key: String = ActionContext.notificationKey, notification: @escaping ActionNotificationCallback) {
+    public func registerNotification(for action: String = "", key: String = ActionContext.notificationKey, notification: @escaping ActionNotificationCallback) {
         let notification = ActionNotification(action: action, callback: notification)
         append(key: key, value: notification)
     }

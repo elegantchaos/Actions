@@ -11,26 +11,51 @@ final class ActionsNotificationTests: XCTestCase {
     class TestAction: Action {
     }
     
-    func testBasics() {
+    func testRegistrationForSpecificAction() {
         var notified: ActionNotificationStage? = nil
         
         let manager = ActionManager()
-        manager.register([TestAction(identifier: "Test")])
         let info = ActionInfo()
-        info.register(for: "TestEvent") { (stage, context) in
+        info.registerNotification(for: "TestAction") { (stage, context) in
             notified = stage
             print("notified \(stage)")
         }
 
         let context = ActionContext(manager: manager, sender: manager, identifier: "Test", info: info)
 
-        context.notify(for: "TestEvent", stage: .willPerform)
+        // should get notified
+        context.notify(for: "TestAction", stage: .willPerform)
         XCTAssertEqual(notified, .willPerform)
 
-        context.notify(for: "TestEvent", stage: .didPerform)
+        // stage should have changed
+        context.notify(for: "TestAction", stage: .didPerform)
         XCTAssertEqual(notified, .didPerform)
+        
+        // notifying about another action should have no effect
+        notified = nil
+        context.notify(for: "AnotherAction", stage: .willPerform)
+        XCTAssertEqual(notified, nil)
     }
     
-    func testNoDuplication() {
+    
+    func testRegistrationForAnyAction() {
+        var notified: ActionNotificationStage? = nil
+        
+        let manager = ActionManager()
+        let info = ActionInfo()
+        info.registerNotification() { (stage, context) in
+            notified = stage
+            print("notified \(stage)")
+        }
+        
+        let context = ActionContext(manager: manager, sender: manager, identifier: "Test", info: info)
+
+        // should get notified
+        context.notify(for: "TestAction", stage: .willPerform)
+        XCTAssertEqual(notified, .willPerform)
+        
+        // should get notified for any action
+        context.notify(for: "AnotherAction", stage: .didPerform)
+        XCTAssertEqual(notified, .didPerform)
     }
 }
