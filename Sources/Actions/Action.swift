@@ -10,6 +10,7 @@ import Foundation
  */
 
 open class Action {
+    public typealias Completion = () -> Void
     
     /**
      Identifier used to locate this action.
@@ -35,10 +36,27 @@ open class Action {
     
     /**
      Perform the action in the given context.
+     
+     Synchronous actions should override this method.
      */
     
     open func perform(context: ActionContext) {
         actionChannel.log("generic action fired - perfom needs to be overridden")
     }
+
+    /**
+     Perform the action in the given context, then call the provided completion routine.
+     
+     Asynchronous actions should override this method, and ensure that they only call
+     the completion routine when they are completely finished.
+     
+     Failure to call the completion will result in the .didPerform notification not
+     getting sent.
+     */
     
+    open func perform(context: ActionContext, completed: @escaping Completion) {
+        perform(context: context)
+        completed()
+    }
+
 }

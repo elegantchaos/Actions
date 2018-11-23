@@ -46,14 +46,14 @@ open class DelegatedAction: Action {
     open override func validate(context: ActionContext) -> Bool {
         let manager = context.manager
         let identifier = determiner(context)
-        return identifier != "" ? manager.validate(identifier: identifier, item: context.sender) : false
+        return identifier != "" ? manager.validate(identifier: identifier, info: context.info) : false
     }
     
     open override func perform(context: ActionContext) {
         let manager = context.manager
         let identifier = determiner(context)
         if identifier != "" {
-            manager.perform(identifier: identifier, sender: context.sender)
+            manager.perform(identifier: identifier, info: context.info)
         }
     }
 }

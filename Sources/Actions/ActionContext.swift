@@ -25,36 +25,44 @@ public protocol ActionContextProvider {
  */
 
 public class ActionContext {
-    public typealias Info = [String:Any]
     
     /**
-    The item that triggered the action.
- */
-    
-    public let sender: Any
-    
-    /**
-    The action manager handling the action.
- */
+     The action manager handling the action.
+     */
     public let manager: ActionManager
     
     /**
-    Any unused components of the identifier that triggered the action.
- */
+    The action being invoked.
+    */
+    
+    public let action: Action
+    
+    /**
+     The full identifier that triggered the action.
+     Note that this is a full unparsed identifier which may contain prefixes and parameters.
+     It may be different from action.identifier.
+     */
+    
+    public let identifier: String
+    
+    /**
+     Any unused components of the identifier that triggered the action.
+     */
     
     public var parameters: [String]
     
     /**
- Additional information set by the context providers.
- */
+     Additional information set by the context providers.
+     */
     
-    public var info: Info
-
+    public var info: ActionInfo
+    
     // Some standard info keys, provided for convenience.
     public static let actionKey = "action"
     public static let actionComponentsKey = "components"
     public static let documentKey = "document"
     public static let modelKey = "model"
+    public static let notificationKey = "notification"
     public static let observerKey = "observer"
     public static let rootKey = "root"
     public static let selectionKey = "selection"
@@ -64,93 +72,52 @@ public class ActionContext {
     public static let windowKey = "window"
     
     /**
-     Create a context for a given sender and parameters.
+     Create a context for a given action, id, parameters and info.
      */
     
-    init(manager: ActionManager, sender: Any, parameters: [String] = [], info: Info = [:]) {
+    init(manager: ActionManager, action: Action, identifier: String, parameters: [String] = [], info: ActionInfo = ActionInfo()) {
         self.manager = manager
-        self.sender = sender
+        self.action = action
+        self.identifier = identifier
         self.parameters = parameters
         self.info = info
     }
     
     /**
-     Treat the given context info key as a list, and append a value to it.
-     
-     If the info didn't have a previous entry for the key, we create a single-item
-     list containing the value.
-     If the info already contains a list entry, we append the value to it.
-     */
+     Support subscripting directly into the info, by subscripting the context.
+    */
     
-    public func append(key: String, value: Any) {
-        var list: [Any]
-        if let items = info[key] as? [Any] {
-            list = items
-            list.append(value)
-        } else {
-            list = [value]
-        }
-        
-        info[key] = list
+    public subscript(key: String) -> Any? {
+        get { return info[key] }
+        set (value) { info[key] = value }
     }
-
-
+    
     /**
-     Treat the given context info key as a list, and enumerate it performing an action.
-     
-     Does nothing if the key is missing or didn't contain a list.
-     */
+     The sender can be stored in the info, but if it's not, then we
+     treat the action manager itself as the sender.
+    */
     
-    public func forEach<T>(key: String, action: (T) throws -> Void) {
-        if let items = info[key] as? [T] {
-            try? items.forEach(action)
-        }
-    }
-
-
+    var sender: Any { get { return info[ActionContext.senderKey] ?? manager } }
 }
 
 /**
- Observer support.
+ Notification support.
  */
 
-public protocol ActionObserver {
-}
-
 extension ActionContext {
-    
-    /**
-     Treat the given context info key as a set of observers, and insert a value into it.
-     
-     If the info didn't have a previous entry for the key, we create a single-item
-     set containing the value. If the info already contains a set entry, we add the
-     value to it.
-     */
-    
-    public func addObserver<T>(_ value: T, key: String = ActionContext.observerKey) where T: Hashable, T: ActionObserver {
-        var observers: Set<T>
-        if let items = info[key] as? Set<T> {
-            observers = items
-            observers.insert(value)
-        } else {
-            observers = Set<T>([value])
-        }
-        
-        info[key] = observers
-    }
-
     /**
      Treat the given context info key as an observer set, and enumerate it performing an action.
      
      Does nothing if the key is missing or didn't contain a list.
      */
     
-    public func forObservers<T>(key: String = ActionContext.observerKey, action: (T) throws -> Void) {
-        if let items = info[key] as? Set<AnyHashable> {
-            for item in items {
-                try? action(item as! T)
+    public func notify(stage: ActionNotificationStage, key: String = ActionContext.notificationKey) {
+        info.forEach(key: key) { (notification: ActionNotification) in
+            if (notification.action == "") || (notification.action == action.identifier) {
+                notification.callback(stage, self)
             }
         }
     }
-
+    
+    
 }

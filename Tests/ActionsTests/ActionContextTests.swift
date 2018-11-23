@@ -9,12 +9,13 @@ import XCTest
 class ActionContextTests: XCTestCase {
     func testBasics() {
         let manager = ActionManager()
-        let context = ActionContext(manager: manager, sender: manager, parameters: ["p1", "p2"])
-        context.append(key: "test", value: "item1")
-        context.append(key: "test", value: "item2")
+        let action = Action(identifier: "Test")
+        let context = ActionContext(manager: manager, action:action, identifier: "Test", parameters: ["p1", "p2"])
+        context.info.append(key: "test", value: "item1")
+        context.info.append(key: "test", value: "item2")
         
         var items = [String]()
-        context.forEach(key: "test") {
+        context.info.forEach(key: "test") {
             items.append($0)
         }
         
@@ -25,4 +26,17 @@ class ActionContextTests: XCTestCase {
         XCTAssertEqual(items[1], "item2")
     }
     
+    func testExplicitSender() {
+        let manager = ActionManager()
+        let action = Action(identifier: "Test")
+        let context = ActionContext(manager: manager, action:action, identifier: "Test", info: ActionInfo(sender: self))
+        XCTAssertTrue(context.sender as? ActionContextTests === self)
+    }
+    
+    func testDefaultSender() {
+        let manager = ActionManager()
+        let action = Action(identifier: "Test")
+        let context = ActionContext(manager: manager, action:action, identifier: "Test")
+        XCTAssertTrue(context.sender as! ActionManager === manager)
+    }
 }
