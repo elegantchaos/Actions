@@ -30,7 +30,7 @@ class ActionContextTests: XCTestCase {
         let manager = ActionManager()
         let action = Action(identifier: "Test")
         let context = ActionContext(manager: manager, action:action, identifier: "Test", info: ActionInfo(sender: self))
-        XCTAssertEqual(context.sender as? ActionContextTests, self)
+        XCTAssertTrue(context.sender as? ActionContextTests === self)
     }
     
     func testDefaultSender() {
