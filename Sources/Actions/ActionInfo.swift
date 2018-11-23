@@ -8,7 +8,10 @@ import Foundation
 public class ActionInfo {
     private var values: [String:Any] = [:]
     
-    public init() {
+    public init(sender: Any? = nil) {
+        if sender != nil {
+            values[ActionContext.senderKey] = sender
+        }
     }
     
     public subscript(key: String) -> Any? {

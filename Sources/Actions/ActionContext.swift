@@ -27,12 +27,6 @@ public protocol ActionContextProvider {
 public class ActionContext {
     
     /**
-     The item that triggered the action.
-     */
-    
-    public let sender: Any
-    
-    /**
      The action manager handling the action.
      */
     public let manager: ActionManager
@@ -78,22 +72,32 @@ public class ActionContext {
     public static let windowKey = "window"
     
     /**
-     Create a context for a given sender and parameters.
+     Create a context for a given action, id, parameters and info.
      */
     
-    init(manager: ActionManager, action: Action, sender: Any, identifier: String, parameters: [String] = [], info: ActionInfo = ActionInfo()) {
+    init(manager: ActionManager, action: Action, identifier: String, parameters: [String] = [], info: ActionInfo = ActionInfo()) {
         self.manager = manager
         self.action = action
-        self.sender = sender
         self.identifier = identifier
         self.parameters = parameters
         self.info = info
     }
-
+    
+    /**
+     Support subscripting directly into the info, by subscripting the context.
+    */
+    
     public subscript(key: String) -> Any? {
         get { return info[key] }
         set (value) { info[key] = value }
     }
+    
+    /**
+     The sender can be stored in the info, but if it's not, then we
+     treat the action manager itself as the sender.
+    */
+    
+    var sender: Any { get { return info[ActionContext.senderKey] ?? manager } }
 }
 
 /**

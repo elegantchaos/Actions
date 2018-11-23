@@ -19,7 +19,7 @@ final class ActionsNotificationTests: XCTestCase {
             notified = stage
         }
 
-        let context = ActionContext(manager: manager, action: action, sender: manager, identifier: "Test", info: info)
+        let context = ActionContext(manager: manager, action: action, identifier: "Test", info: info)
 
         // should get notified
         context.notify(stage: .willPerform)
@@ -30,7 +30,7 @@ final class ActionsNotificationTests: XCTestCase {
         XCTAssertEqual(notified, .didPerform)
         
         // notifying about another action should have no effect
-        let otherContext = ActionContext(manager: manager, action: Action(identifier: "OtherAction"), sender: manager, identifier: "Test", info: info)
+        let otherContext = ActionContext(manager: manager, action: Action(identifier: "OtherAction"), identifier: "Test", info: info)
         notified = nil
         otherContext.notify(stage: .willPerform)
         XCTAssertEqual(notified, nil)
@@ -45,7 +45,7 @@ final class ActionsNotificationTests: XCTestCase {
             notified = stage
         }
         
-        let context = ActionContext(manager: manager, action: action, sender: manager, identifier: "Test", info: info)
+        let context = ActionContext(manager: manager, action: action, identifier: "Test", info: info)
 
         // should get notified
         context.notify(stage: .willPerform)
@@ -68,7 +68,7 @@ final class ActionsNotificationTests: XCTestCase {
         }
         
         // should get notified
-        manager.perform(identifier: "TestAction", sender: self, info: info)
+        manager.perform(identifier: "TestAction", info: info)
         XCTAssertEqual(notified, .didPerform)
     }
 }

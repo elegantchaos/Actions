@@ -47,12 +47,12 @@ final class DelegatedActionTests: XCTestCase {
     }
 
     func testAction1() {
-        manager.perform(identifier: "test1", sender: self)
+        manager.perform(identifier: "test1")
         XCTAssertTrue(performed == .action1)
     }
 
     func testAction2() {
-        manager.perform(identifier: "test2", sender: self)
+        manager.perform(identifier: "test2")
         XCTAssertTrue(performed == .action2)
     }
 
@@ -61,9 +61,9 @@ final class DelegatedActionTests: XCTestCase {
             return "test1"
         }
         manager.register([delegated])
-        manager.perform(identifier: "delegated", sender: self)
+        manager.perform(identifier: "delegated")
         XCTAssertTrue(performed == .action1)
-        XCTAssertTrue(manager.validate(identifier: "delegated", item: self))
+        XCTAssertTrue(manager.validate(identifier: "delegated"))
         XCTAssertTrue(validated)
     }
 }

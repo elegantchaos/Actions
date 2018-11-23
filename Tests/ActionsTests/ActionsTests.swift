@@ -94,7 +94,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        manager.perform(identifier: "test", sender: NormalSender())
+        manager.perform(identifier: "test")
         XCTAssertTrue(action.performed)
     }
 
@@ -103,7 +103,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        XCTAssertTrue(manager.validate(identifier: "test", item:NormalSender()))
+        XCTAssertTrue(manager.validate(identifier: "test"))
         XCTAssertTrue(action.validated)
     }
 
@@ -111,7 +111,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         // test that an action doesn't get performed if it's not registered
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
-        manager.perform(identifier: "test", sender: NormalSender())
+        manager.perform(identifier: "test")
         XCTAssertFalse(action.performed)
     }
 
@@ -121,8 +121,8 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = Action(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        manager.perform(identifier: "test", sender: NormalSender())
-        XCTAssertTrue(manager.validate(identifier: "test", item: self))
+        manager.perform(identifier: "test")
+        XCTAssertTrue(manager.validate(identifier: "test"))
     }
     
     func testOldStyleArguments() {
@@ -130,7 +130,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        manager.perform(identifier: "test.param1.param2", sender: NormalSender())
+        manager.perform(identifier: "test.param1.param2")
         XCTAssertEqual(action.performedContext!.parameters.count, 2)
         XCTAssertEqual(action.performedContext!.parameters[0], "param1")
         XCTAssertEqual(action.performedContext!.parameters[1], "param2")
@@ -141,7 +141,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        manager.perform(identifier: "test(\"key1\": \"value1\", \"key2\": \"value2\")", sender: NormalSender())
+        manager.perform(identifier: "test(\"key1\": \"value1\", \"key2\": \"value2\")")
         XCTAssertEqual(action.performedContext!.parameters.count, 0)
         XCTAssertEqual(action.performedContext!["key1"] as? String, "value1")
         XCTAssertEqual(action.performedContext!["key2"] as? String, "value2")
@@ -152,7 +152,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        manager.perform(identifier: "prefix.test", sender: NormalSender())
+        manager.perform(identifier: "prefix.test")
         XCTAssertTrue(action.performed)
     }
     
@@ -163,7 +163,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManagerWithTestAsResponder(test: self)
         manager.register([action])
-        manager.perform(identifier: "test", sender: NormalSender())
+        manager.perform(identifier: "test")
         XCTAssertEqual(action.performedContext!["valueProvidedByTest"] as? String, "valueProvidedByTest")
     }
     
@@ -174,7 +174,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManagerWithTestAsProvider(test: self)
         manager.register([action])
-        manager.perform(identifier: "test", sender: NormalSender())
+        manager.perform(identifier: "test")
         XCTAssertEqual(action.performedContext!["valueProvidedByTest"] as? String, "valueProvidedByTest")
     }
     
@@ -185,7 +185,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        manager.perform(identifier: "test", sender: sender)
+        manager.perform(identifier: "test", info: ActionInfo(sender: sender))
         XCTAssertEqual(action.performedContext!["valueProvidedByTest"] as? String, "valueProvidedByTest")
         XCTAssertEqual(action.performedContext!["valueProvidedBySender"] as? String, "valueProvidedBySender")
     }
