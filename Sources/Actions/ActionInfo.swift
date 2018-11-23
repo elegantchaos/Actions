@@ -91,7 +91,9 @@ extension ActionInfo {
     public func forObservers<T>(key: String = ActionContext.observerKey, action: (T) throws -> Void) {
         if let items = values[key] as? Set<AnyHashable> {
             for item in items {
-                try? action(item as! T)
+                if let observer = item as? T {
+                    try? action(observer)
+                }
             }
         }
     }
