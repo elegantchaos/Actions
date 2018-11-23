@@ -97,7 +97,9 @@ public class ActionContext {
      treat the action manager itself as the sender.
     */
     
-    var sender: Any { get { return info[ActionContext.senderKey] ?? manager } }
+    public var sender: Any {
+        get { return info[ActionContext.senderKey] ?? manager }        
+    }
 }
 
 /**
