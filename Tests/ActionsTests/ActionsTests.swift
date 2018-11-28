@@ -11,15 +11,15 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         var performed = false
         var validated = false
         var performedContext: ActionContext?
-        
+
         override func perform(context: ActionContext) {
             performed = true
             performedContext = context
         }
-        
-        override func validate(context: ActionContext) -> Bool {
+
+        override func validate(context: ActionContext) -> Validation {
             validated = true
-            return true
+            return Validation()
         }
     }
 
@@ -35,7 +35,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
 
     class ResponderSender: ActionResponder, ActionContextProvider {
         let test: ActionsTests
-        
+
         init(test: ActionsTests) {
             self.test = test
         }
@@ -43,7 +43,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         func next() -> ActionResponder? {
             return test
         }
-        
+
         func provide(context: ActionContext) {
             context["valueProvidedBySender"] = "valueProvidedBySender"
         }
@@ -51,11 +51,11 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
 
     class ActionManagerWithTestAsResponder: ActionManager {
         let test: ActionsTests
-        
+
         init(test: ActionsTests) {
             self.test = test
         }
-        
+
         override func responderChains(for item: Any) -> [ActionResponder] {
             var chains = super.responderChains(for: item)
             chains.append(test)
@@ -65,7 +65,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
 
     class ActionManagerWithTestAsProvider: ActionManager {
         let test: ActionsTests
-        
+
         init(test: ActionsTests) {
             self.test = test
         }
@@ -80,15 +80,15 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
     override func setUp() {
         actionChannel.enabled = true
     }
-    
+
     func next() -> ActionResponder? {
         return nil
     }
-    
+
     func provide(context: ActionContext) {
         context["valueProvidedByTest"] = "valueProvidedByTest"
     }
-    
+
     func testPerform() {
         // test that an action gets performed
         let action = TestAction(identifier: "test")
@@ -103,7 +103,9 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        XCTAssertTrue(manager.validate(identifier: "test"))
+        XCTAssertTrue(manager.validate(identifier: "test").enabled)
+        XCTAssertTrue(manager.validate(identifier: "test").visible)
+        XCTAssertNil(manager.validate(identifier: "test").name)
         XCTAssertTrue(action.validated)
     }
 
@@ -122,9 +124,9 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let manager = ActionManager()
         manager.register([action])
         manager.perform(identifier: "test")
-        XCTAssertTrue(manager.validate(identifier: "test"))
+        XCTAssertTrue(manager.validate(identifier: "test").enabled)
     }
-    
+
     func testOldStyleArguments() {
         // test parsing of arguments from the identifier in a perform call
         let action = TestAction(identifier: "test")
@@ -155,7 +157,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         manager.perform(identifier: "prefix.test")
         XCTAssertTrue(action.performed)
     }
-    
+
     func testCustomResponderChain() {
         // test a custom action manager which supplies responder chains
         // to be searched for context information
@@ -166,7 +168,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         manager.perform(identifier: "test")
         XCTAssertEqual(action.performedContext!["valueProvidedByTest"] as? String, "valueProvidedByTest")
     }
-    
+
     func testCustomProvider() {
         // test a custom action manager which supplies other providers
         // to be searched for context information
@@ -177,7 +179,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         manager.perform(identifier: "test")
         XCTAssertEqual(action.performedContext!["valueProvidedByTest"] as? String, "valueProvidedByTest")
     }
-    
+
     func testSenderIsResponder() {
         // test the sending object being a responder itself
         // (it should be included in the responder chains)
@@ -216,7 +218,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        XCTAssertTrue(manager.validate(IdentifiableSender()))
+        XCTAssertTrue(manager.validate(IdentifiableSender()).enabled)
         XCTAssertTrue(action.validated)
     }
 
@@ -228,7 +230,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         let action = TestAction(identifier: "test")
         let manager = ActionManager()
         manager.register([action])
-        XCTAssertTrue(manager.validate(NormalSender()))
+        XCTAssertTrue(manager.validate(NormalSender()).enabled)
         XCTAssertFalse(action.validated)
     }
 }
