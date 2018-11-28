@@ -10,6 +10,18 @@ import Foundation
  */
 
 open class Action {
+    public struct Validation {
+        public let enabled: Bool
+        public let visible: Bool
+        public let name: String?
+        
+        public init(enabled: Bool = true, visible: Bool = true, name: String? = nil) {
+            self.enabled = enabled
+            self.visible = visible
+            self.name = name
+        }
+    }
+    
     public typealias Completion = () -> Void
     
     /**
@@ -33,7 +45,22 @@ open class Action {
     open func validate(context: ActionContext) -> Bool {
         return true
     }
+
+    /**
+     Validate this action.
+     
+     The validation process gives actions a
+     chance to change their enabled state, their visibility,
+     and their name according to the current context.
+     
+     */
     
+    open func validate(context: ActionContext) -> Validation {
+        // by default we call onto the legacy version of the validation,
+        // which just returns a bool indicating enabled/disabled status
+        return Validation(enabled: self.validate(context: context))
+    }
+
     /**
      Perform the action in the given context.
      

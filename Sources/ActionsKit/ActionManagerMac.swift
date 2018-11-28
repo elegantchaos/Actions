@@ -29,7 +29,16 @@ public class ActionManagerMac: ActionManager {
         
         public func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
             if item.action == #selector(performAction(_:)) {
-                return manager.validate(item)
+                let validation = manager.validate(item)
+                
+                if let menu = item as? NSMenuItem {
+                    menu.isHidden = !validation.visible
+                    if let name = validation.name {
+                        menu.title = name
+                    }
+                }
+                
+                return validation.enabled
             }
             
             return true
