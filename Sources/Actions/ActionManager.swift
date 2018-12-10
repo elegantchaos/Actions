@@ -196,14 +196,14 @@ open class ActionManager {
      
      */
 
-    public func validate(_ item: Any) -> Bool {
+    public func validate(_ item: Any) -> Action.Validation {
         if let identifier = identifier(for: item) {
             return validate(identifier: identifier, info: ActionInfo(sender: item))
         } else {
             actionChannel.log("couldn't identify action for \(item)")
         }
         
-        return true
+        return Action.Validation(enabled: true)
     }
     
     /**
@@ -216,8 +216,9 @@ open class ActionManager {
      
      */
     
-    public func validate(identifier: String, info: ActionInfo = ActionInfo()) -> Bool {
-        var valid = false
+    public func validate(identifier: String, info: ActionInfo = ActionInfo()) -> Action.Validation {
+        var valid = Action.Validation(enabled: true)
+
         let _ = resolving(identifier: identifier, info: info) { (context) in
             actionChannel.log("validating \(context.action)")
             valid = context.action.validate(context: context)
