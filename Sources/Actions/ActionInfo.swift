@@ -133,3 +133,14 @@ extension ActionInfo {
     }
     
 }
+
+
+/**
+ Debugging support.
+ */
+
+extension ActionInfo: CustomStringConvertible {
+    public var description: String {
+        return values.keys.joined(separator:",")
+    }
+}
