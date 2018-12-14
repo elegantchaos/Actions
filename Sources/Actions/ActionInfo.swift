@@ -60,6 +60,72 @@ public class ActionInfo {
 public protocol ActionObserver {
 }
 
+class GenericHashable : Hashable {
+    let item: AnyHashable
+    
+    init(_ item: AnyHashable) {
+        self.item = item
+    }
+
+    static func == (lhs: GenericHashable, rhs: GenericHashable) -> Bool {
+        guard type(of: lhs) == type(of: rhs) else {
+            return false
+        }
+        
+        return lhs.item == rhs.item
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        item.hash(into: &hasher)
+    }
+}
+
+//class GenericSet<T: AnyHashable> {
+//    var set = Set<GenericHashable>()
+////    func insert(_ item: T) {
+//////        set.insert(GenericHashable(item))
+////    }
+//    func iterate() {
+//        for item in set {
+//            print(item.item)
+//        }
+//    }
+//}
+//
+//extension GenericSet {
+//    func insert<I>(_ item: I) where I: Hashable, I: T {
+//        set.insert(GenericHashable(item))
+//    }
+//}
+
+//protocol MyProtocol {
+//    func doStuff()
+//}
+//
+//protocol MyProtocolHashable: MyProtocol, Hashable {
+//    
+//}
+//
+//struct Test1: MyProtocolHashable {
+//    let name: String
+//    func doStuff() { print(name) }
+//}
+//
+//struct Test2: MyProtocolHashable {
+//    let age: Int
+//    func doStuff() { print(age) }
+//}
+//
+//func test() {
+//    var set = GenericSet<MyProtocolHashable>()
+//    set.insert(Test1(name: "Arthur"))
+//    set.insert(Test2(age: 42))
+//    
+//    for item in set {
+//        print(item.item)
+//    }
+//}
+
 extension ActionInfo {
     
     /**
@@ -70,15 +136,14 @@ extension ActionInfo {
      value to it.
      */
     
-    public func addObserver<T>(_ value: T, key: String = ActionContext.observerKey) where T: Hashable, T: ActionObserver {
-        var observers: Set<T>
-        if let items = values[key] as? Set<T> {
+    public func addObserver<T>(_ value: T, key: String = ActionContext.observerKey) where T: ActionObserver, T: Hashable {
+        var observers: Set<GenericHashable>
+        if let items = values[key] as? Set<GenericHashable> {
             observers = items
-            observers.insert(value)
         } else {
-            observers = Set<T>([value])
+            observers = Set<GenericHashable>()
         }
-        
+        observers.insert(GenericHashable(value))
         values[key] = observers
     }
     
@@ -89,9 +154,9 @@ extension ActionInfo {
      */
     
     public func forObservers<T>(key: String = ActionContext.observerKey, action: (T) throws -> Void) {
-        if let items = values[key] as? Set<AnyHashable> {
+        if let items = values[key] as? Set<GenericHashable> {
             for item in items {
-                if let observer = item as? T {
+                if let observer = item.item as? T {
                     try? action(observer)
                 }
             }
