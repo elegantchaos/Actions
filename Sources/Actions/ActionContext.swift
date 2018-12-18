@@ -123,3 +123,14 @@ extension ActionContext {
     
     
 }
+
+/**
+ Debugging support.
+ */
+
+extension ActionContext: CustomStringConvertible {
+    public var description: String {
+        let params = parameters.count == 0 ? "" : " parameters:\(parameters)"
+        return "«context \(action)\(params) keys: \(info)»"
+    }
+}

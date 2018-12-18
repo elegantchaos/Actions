@@ -70,15 +70,14 @@ extension ActionInfo {
      value to it.
      */
     
-    public func addObserver<T>(_ value: T, key: String = ActionContext.observerKey) where T: Hashable, T: ActionObserver {
-        var observers: Set<T>
-        if let items = values[key] as? Set<T> {
+    public func addObserver<T>(_ value: T, key: String = ActionContext.observerKey) where T: ActionObserver, T: Hashable {
+        var observers: Set<AnyHashable>
+        if let items = values[key] as? Set<AnyHashable> {
             observers = items
-            observers.insert(value)
         } else {
-            observers = Set<T>([value])
+            observers = Set<AnyHashable>()
         }
-        
+        observers.insert(AnyHashable(value))
         values[key] = observers
     }
     
@@ -132,4 +131,15 @@ extension ActionInfo {
         append(key: key, value: notification)
     }
     
+}
+
+
+/**
+ Debugging support.
+ */
+
+extension ActionInfo: CustomStringConvertible {
+    public var description: String {
+        return values.keys.joined(separator:",")
+    }
 }
