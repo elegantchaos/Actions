@@ -67,6 +67,7 @@ public class ActionContext {
     public static let rootKey = "root"
     public static let selectionKey = "selection"
     public static let senderKey = "sender"
+    public static let skipValidationKey = "skipValidation"
     public static let targetKey = "target"
     public static let viewModelKey = "viewModel"
     public static let windowKey = "window"
@@ -99,6 +100,24 @@ public class ActionContext {
     
     public var sender: Any {
         get { return info[ActionContext.senderKey] ?? manager }        
+    }
+    
+    /**
+     Look up a key in the info and treat it as a boolean flag.
+    */
+    
+    public func flag(key: String) -> Bool {
+        if let value = info[key] {
+            if let bool = value as? Bool {
+                return bool
+            }
+            
+            if let string = value as? NSString {
+                return string.boolValue
+            }
+        }
+        
+        return false
     }
 }
 

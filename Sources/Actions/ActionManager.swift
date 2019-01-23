@@ -220,8 +220,12 @@ open class ActionManager {
         var valid = Action.Validation(enabled: true)
 
         let _ = resolving(identifier: identifier, info: info) { (context) in
-            actionChannel.log("validating \(context.action)")
-            valid = context.action.validate(context: context)
+            if context.flag(key: ActionContext.skipValidationKey) {
+                actionChannel.log("skipping validation \(context.action)")
+            } else {
+                actionChannel.log("validating \(context.action)")
+                valid = context.action.validate(context: context)
+            }
         }
         
         return valid
