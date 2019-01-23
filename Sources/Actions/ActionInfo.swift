@@ -19,6 +19,29 @@ public class ActionInfo {
         set (value) { values[key] = value }
     }
     
+    
+    /**
+     Look up a key and treat it as a boolean flag.
+     */
+    
+    public func flag(key: String) -> Bool {
+        if let value = values[key] {
+            if let bool = value as? Bool {
+                return bool
+            }
+            
+            if let number = value as? NSNumber {
+                return number.boolValue
+            }
+            
+            if let string = value as? NSString {
+                return string.boolValue
+            }
+        }
+        
+        return false
+    }
+
     /**
      Treat the given context info key as a list, and append a value to it.
      

@@ -107,17 +107,7 @@ public class ActionContext {
     */
     
     public func flag(key: String) -> Bool {
-        if let value = info[key] {
-            if let bool = value as? Bool {
-                return bool
-            }
-            
-            if let string = value as? NSString {
-                return string.boolValue
-            }
-        }
-        
-        return false
+        return info.flag(key:key)
     }
 }
 
