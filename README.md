@@ -96,9 +96,12 @@ In another example, you could set two button identifiers to `MyAction.red` and `
 
 ### Validation
 
-Actions are often only valid in certain situations - for example when some text is selected.
+Actions are often only valid in certain situations - for example when some text is selected - or they want to change
+their name or visibility depending on the context.
 
-To perform validation, override the `validate(context: ActionContext) -> Bool` and examine the context that's passed in.
+To perform validation, override the `validate(context: ActionContext) -> Validation` and examine the context that's passed in.
+
+When using the Mac or iOS action managers, validation is invoked automatically for certain user interface actions. In other situations you can invoke it manually as appropriate.  The automatic validation is almost always appropriate, but if there's a situation where you want to skip it, you can do so by arranging for the context to contain a true value for the `skipValidation`.
 
 ### Action Observers
 

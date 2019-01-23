@@ -39,4 +39,34 @@ class ActionContextTests: XCTestCase {
         let context = ActionContext(manager: manager, action:action, identifier: "Test")
         XCTAssertTrue(context.sender as! ActionManager === manager)
     }
+    
+    func testFlags() {
+        let info = ActionInfo()
+        XCTAssertFalse(info.flag(key: "test"))
+
+        info["test"] = 0
+        XCTAssertFalse(info.flag(key: "test"))
+
+        info["test"] = false
+        XCTAssertFalse(info.flag(key: "test"))
+
+        info["test"] = "false"
+        XCTAssertFalse(info.flag(key: "test"))
+
+        info["test"] = "NO"
+        XCTAssertFalse(info.flag(key: "test"))
+
+        info["test"] = 1
+        XCTAssertTrue(info.flag(key: "test"))
+        
+        info["test"] = true
+        XCTAssertTrue(info.flag(key: "test"))
+        
+        info["test"] = "true"
+        XCTAssertTrue(info.flag(key: "test"))
+
+        info["test"] = "YES"
+        XCTAssertTrue(info.flag(key: "test"))
+
+    }
 }
