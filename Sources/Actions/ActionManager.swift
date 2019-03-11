@@ -10,7 +10,7 @@ import Logger
  Log channel for ActionManager related messages.
  */
 
-let actionChannel = Logger("Actions")
+let actionChannel = Channel("com.elegantchaos.actions")
 
 public protocol ActionResponder {
     func next() -> ActionResponder?

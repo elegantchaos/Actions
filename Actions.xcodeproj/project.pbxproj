@@ -638,9 +638,9 @@
          isa = "PBXGroup";
          children = (
             "Logger::Logger::Product",
+            "Actions::ActionsTests::Product",
             "Actions::Actions::Product",
-            "Actions::ActionsKit::Product",
-            "Actions::ActionsTests::Product"
+            "Actions::ActionsKit::Product"
          );
          name = "Products";
          path = "";

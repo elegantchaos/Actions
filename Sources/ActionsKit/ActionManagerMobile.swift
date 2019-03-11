@@ -9,7 +9,7 @@ import UIKit
 import Logger
 import Actions
 
-let viewControllerChannel = Logger("ViewController")
+let viewControllerChannel = Channel("com.elegantchaos.actions.ViewController")
 
 public class ActionManagerMobile: ActionManager {
     public class Responder: UIResponder {
