@@ -1,0 +1,7 @@
+echo Updating packages
+xcrun swift package resolve
+
+echo Generating Xcode Projects
+xcrun swift package generate-xcodeproj --enable-code-coverage
+
+echo Update Done
