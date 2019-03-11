@@ -77,4 +77,17 @@ class ActionContextTests: XCTestCase {
         context["foo"] = "bar"
         XCTAssertEqual(context.description, "«context Actions.Action keys: foo»")
     }
+    
+    func testPacked() {
+        let manager = ActionManager()
+        let action = Action(identifier: "Test")
+        let context = ActionContext(manager: manager, action: action, identifier: "Test")
+        context["foo"] = "bar"
+        let packed = context.packed
+        XCTAssertEqual(packed[ActionContext.actionKey] as? String, "Test")
+        let info = packed[ActionContext.infoKey] as! [String:Any]
+        XCTAssertEqual(info["foo"] as? String, "bar")
+
+        
+    }
 }

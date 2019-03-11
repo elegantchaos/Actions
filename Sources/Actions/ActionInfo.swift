@@ -74,6 +74,18 @@ public class ActionInfo {
             try? items.forEach(action)
         }
     }
+
+    /**
+     Return a dictionary representation of the info.
+     This is intended to contain enough information to allow the action
+     invocation be recreated at a later date - thus it should contain
+     the action id, and any arguments and parameters.
+     */
+    
+    public var packed: [String:Any] {
+        return values
+    }
+
 }
 
 /**
