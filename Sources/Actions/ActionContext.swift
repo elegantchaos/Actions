@@ -117,17 +117,26 @@ public class ActionContext {
 
 extension ActionContext {
     /**
-     Treat the given context info key as an observer set, and enumerate it performing an action.
+     Send a notification to all handlers that match the action.
+    
+     We fetch the handlers to run from the action info (under the `notificationKey` key
+     by default, but a different key can be used).
      
-     Does nothing if the key is missing or didn't contain a list.
+     We also send the notification to additional handlers that are passed in.
+     
+     Does nothing if the fetched and global handler lists are missing or empty.
      */
     
-    public func notify(stage: ActionNotificationStage, key: String = ActionContext.notificationKey) {
-        info.forEach(key: key) { (notification: ActionNotification) in
+    func notify(stage: ActionNotificationStage, global: [ActionNotification] = [], key: String = ActionContext.notificationKey) {
+        let action = self.action
+        let handler = { (notification: ActionNotification) in
             if (notification.action == "") || (notification.action == action.identifier) {
                 notification.callback(stage, self)
             }
         }
+        
+        global.forEach(handler)
+        info.forEach(key: key, action: handler)
     }
     
     
