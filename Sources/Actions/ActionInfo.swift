@@ -126,19 +126,6 @@ extension ActionInfo {
  Notification support.
  */
 
-public enum ActionNotificationStage {
-    case willPerform
-    case didPerform
-}
-
-public typealias ActionNotificationCallback = (_ stage: ActionNotificationStage, _ context: ActionContext) -> Void
-
-struct ActionNotification {
-    let action: String
-    let callback: ActionNotificationCallback
-}
-
-
 extension ActionInfo {
     
     /**
