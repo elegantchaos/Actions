@@ -16,12 +16,12 @@ matrix:
         - swift test
 
     - os: osx
-      osx_image: xcode10
+      osx_image: xcode10.1
       language: swift
       sudo: required
       install:
-          swift package update
-          sudo gem install xcpretty-travis-formatter
+        - swift package update
+        - sudo gem install xcpretty-travis-formatter
 
       script:
       - .bin/test
