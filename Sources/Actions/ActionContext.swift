@@ -49,6 +49,7 @@ public class ActionContext {
      Any unused components of the identifier that triggered the action.
      */
     
+    @available(*, deprecated, message: "Use arguments added to the identifier, instead of parameters.")
     public var parameters: [String]
     
     /**
@@ -61,6 +62,7 @@ public class ActionContext {
     public static let actionKey = "action"
     public static let actionComponentsKey = "components"
     public static let documentKey = "document"
+    public static let infoKey = "info"
     public static let modelKey = "model"
     public static let notificationKey = "notification"
     public static let observerKey = "observer"
@@ -109,6 +111,20 @@ public class ActionContext {
     public func flag(key: String) -> Bool {
         return info.flag(key:key)
     }
+    
+    /**
+     Return a dictionary representation of the context.
+     This is intended to contain enough information to allow the action
+     invocation be recreated at a later date - thus it should contain
+     the action id, and any arguments and parameters.
+     */
+    
+    public var packed: [String:Any] {
+        return [
+            ActionContext.actionKey: action.identifier,
+            ActionContext.infoKey: info.packed
+        ]
+    }
 }
 
 /**
@@ -117,17 +133,26 @@ public class ActionContext {
 
 extension ActionContext {
     /**
-     Treat the given context info key as an observer set, and enumerate it performing an action.
+     Send a notification to all handlers that match the action.
+    
+     We fetch the handlers to run from the action info (under the `notificationKey` key
+     by default, but a different key can be used).
      
-     Does nothing if the key is missing or didn't contain a list.
+     We also send the notification to additional handlers that are passed in.
+     
+     Does nothing if the fetched and global handler lists are missing or empty.
      */
     
-    public func notify(stage: ActionNotificationStage, key: String = ActionContext.notificationKey) {
-        info.forEach(key: key) { (notification: ActionNotification) in
+    func notify(stage: ActionNotificationStage, global: [ActionNotification] = [], key: String = ActionContext.notificationKey) {
+        let action = self.action
+        let handler = { (notification: ActionNotification) in
             if (notification.action == "") || (notification.action == action.identifier) {
                 notification.callback(stage, self)
             }
         }
+        
+        global.forEach(handler)
+        info.forEach(key: key, action: handler)
     }
     
     

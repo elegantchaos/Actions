@@ -2,12 +2,48 @@
   "object": {
     "pins": [
       {
+        "package": "Arguments",
+        "repositoryURL": "https://github.com/elegantchaos/Arguments.git",
+        "state": {
+          "branch": null,
+          "revision": "3f054899c97edba76749e17bc32517ed04912ac7",
+          "version": "1.0.5"
+        }
+      },
+      {
+        "package": "Coverage",
+        "repositoryURL": "https://github.com/elegantchaos/Coverage",
+        "state": {
+          "branch": null,
+          "revision": "8a96ab523b772faa6e35df8568d436e83f0b74dc",
+          "version": "1.0.2"
+        }
+      },
+      {
+        "package": "Docopt",
+        "repositoryURL": "https://github.com/elegantchaos/docopt.swift",
+        "state": {
+          "branch": null,
+          "revision": "17ecc3e2def1244bd5a872b500b8a9e89a39b78c",
+          "version": "0.6.9"
+        }
+      },
+      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger",
         "state": {
           "branch": null,
-          "revision": "2cc9e50d5725ebe9beed158f9b603cfffbaf67c3",
-          "version": "1.0.11"
+          "revision": "f087f1d2a48cddf27d66b128f45a365eb02e2e43",
+          "version": "1.3.2"
+        }
+      },
+      {
+        "package": "Runner",
+        "repositoryURL": "https://github.com/elegantchaos/Runner.git",
+        "state": {
+          "branch": null,
+          "revision": "1a257b260150b7a7a9771f636a6a373682ad54e5",
+          "version": "1.0.1"
         }
       }
     ]

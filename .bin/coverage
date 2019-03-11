@@ -1,0 +1,16 @@
+xcrun swift build --product coverage
+coverage=.build/debug/coverage
+
+macOutput=`$coverage .build/Mac.xcresult Actions --threshold=0.9`
+macStatus=$?
+echo Mac: $macOutput
+
+mobileOutput=`$coverage .build/Mobile.xcresult Actions --threshold=0.9`
+mobileStatus=$?
+echo Mobile: $mobileOutput
+
+if [[ ($macStatus != 0) || ($mobileStatus != 0) ]]
+then
+    echo "Coverage Failed."
+    exit 1
+fi

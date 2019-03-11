@@ -109,6 +109,26 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         XCTAssertTrue(action.validated)
     }
 
+    func testSkipValidation() {
+        // dummy action which is always invalid
+        class TestInvalid: Action {
+            override func validate(context: ActionContext) -> Action.Validation {
+                return Action.Validation(enabled: false)
+            }
+        }
+        
+        // validation should fail to enable it
+        let action = TestInvalid(identifier: "test")
+        let manager = ActionManager()
+        manager.register([action])
+        XCTAssertFalse(manager.validate(identifier: "test").enabled)
+        
+        // skipping validation should enable it though
+        let info = ActionInfo()
+        info[ActionContext.skipValidationKey] = true
+        XCTAssertTrue(manager.validate(identifier: "test", info: info).enabled)
+    }
+    
     func testUnregistered() {
         // test that an action doesn't get performed if it's not registered
         let action = TestAction(identifier: "test")

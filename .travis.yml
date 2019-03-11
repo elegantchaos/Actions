@@ -5,8 +5,8 @@ matrix:
       dist: trusty
       sudo: required
       install:
-        - SWIFT_BRANCH=swift-4.2-branch
-        - SWIFT_VERSION=swift-4.2-DEVELOPMENT-SNAPSHOT-2018-05-30-a
+        - SWIFT_BRANCH=swift-4.2.3-release
+        - SWIFT_VERSION=swift-4.2.3-RELEASE
         - sudo apt-get install clang libicu-dev
         - mkdir swift
         - curl https://swift.org/builds/$SWIFT_BRANCH/ubuntu1404/$SWIFT_VERSION/$SWIFT_VERSION-ubuntu14.04.tar.gz -s | tar xz -C swift &> /dev/null
@@ -15,16 +15,17 @@ matrix:
       script:
         - swift test
 
+
     - os: osx
-      osx_image: xcode10
+      osx_image: xcode10.1
       language: swift
       sudo: required
-      install: swift package update
+      install:
+        - swift package update
+        - sudo gem install xcpretty-travis-formatter
 
       script:
-      - swift test -Xswiftc -target -Xswiftc x86_64-apple-macosx10.13
-      - swift package generate-xcodeproj
-      - xcodebuild test -scheme Actions-Package -destination='platform=iOS Simulator,name=iPhone 6,OS=12.0'
+      - .bin/test
 
 notifications:
   email: false

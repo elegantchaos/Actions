@@ -71,4 +71,16 @@ final class ActionsNotificationTests: XCTestCase {
         manager.perform(identifier: "TestAction", info: info)
         XCTAssertEqual(notified, .didPerform)
     }
+    
+    func testGlobalNotifications() {
+        var count = 0
+        
+        manager.registerNotification(for: "TestAction") { (stage, context) in
+            count += 1
+        }
+        
+        manager.register([Action(identifier: "TestAction")])
+        manager.perform(identifier: "TestAction")
+        XCTAssertEqual(count, 2)
+    }
 }

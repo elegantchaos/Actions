@@ -10,7 +10,7 @@ import Logger
  Log channel for ActionManager related messages.
  */
 
-let actionChannel = Logger("Actions")
+let actionChannel = Channel("com.elegantchaos.actions")
 
 public protocol ActionResponder {
     func next() -> ActionResponder?
@@ -35,6 +35,7 @@ public protocol ActionResponder {
 open class ActionManager {
     
     var actions = [String:Action]()
+    var notifications = [ActionNotification]()
     
     public init() {
         
@@ -52,6 +53,15 @@ open class ActionManager {
         }
     }
     
+    /**
+     Register a global notification.
+    */
+    
+    public func registerNotification(for action: String = "", key: String = ActionContext.notificationKey, notification: @escaping ActionNotificationCallback) {
+        let notification = ActionNotification(action: action, callback: notification)
+        notifications.append(notification)
+    }
+
     /**
      Responder chains to gather context from.
     */
@@ -159,11 +169,12 @@ open class ActionManager {
      */
     
     public func perform(identifier: String, info: ActionInfo = ActionInfo()) {
+        let notifications = self.notifications
         let performed = resolving(identifier: identifier, info: info) { (context) in
             actionChannel.log("performing \(context.action)")
-            context.notify(stage: .willPerform)
+            context.notify(stage: .willPerform, global: notifications)
             context.action.perform(context: context, completed: {
-                context.notify(stage: .didPerform)
+                context.notify(stage: .didPerform, global: notifications)
             })
         }
         
