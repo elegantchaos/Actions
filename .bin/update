@@ -1,8 +1,8 @@
 echo Updating packages
 xcrun swift package resolve
 
-echo Rebuilding Linux Main
-xcrun swift test --generate-linuxmain
+#echo Rebuilding Linux Main
+#xcrun swift test --generate-linuxmain
 
 echo Generating Xcode Projects
 xcrun swift package generate-xcodeproj --enable-code-coverage
