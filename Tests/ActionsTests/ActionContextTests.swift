@@ -69,4 +69,12 @@ class ActionContextTests: XCTestCase {
         XCTAssertTrue(info.flag(key: "test"))
 
     }
+    
+    func testDescription() {
+        let manager = ActionManager()
+        let action = Action(identifier: "Test")
+        let context = ActionContext(manager: manager, action: action, identifier: "Test")
+        context["foo"] = "bar"
+        XCTAssertEqual(context.description, "«context Actions.Action keys: foo»")
+    }
 }
