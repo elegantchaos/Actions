@@ -112,18 +112,29 @@ public class ActionContext {
         return info.flag(key:key)
     }
     
+}
+
+/**
+ Serialization support.
+ */
+
+extension ActionContext: ActionSerialization {
     /**
      Return a dictionary representation of the context.
      This is intended to contain enough information to allow the action
      invocation be recreated at a later date - thus it should contain
      the action id, and any arguments and parameters.
      */
-    
-    public var packed: [String:Any] {
+
+    public var serializedDictionary: [String:Any] {
         return [
             ActionContext.actionKey: action.identifier,
-            ActionContext.infoKey: info.packed
+            ActionContext.infoKey: info.serialized
         ]
+    }
+    
+    public var serialized: Any {
+        return serializedDictionary
     }
 }
 
