@@ -75,6 +75,14 @@ public class ActionInfo {
         }
     }
 
+
+}
+
+/**
+ Serialization support.
+ */
+
+extension ActionInfo: ActionSerialization {
     /**
      Return a dictionary representation of the info.
      This is intended to contain enough information to allow the action
@@ -82,10 +90,9 @@ public class ActionInfo {
      the action id, and any arguments and parameters.
      */
     
-    public var packed: [String:Any] {
-        return values
+    public var serialized: Any {
+        return values.serialized
     }
-
 }
 
 /**

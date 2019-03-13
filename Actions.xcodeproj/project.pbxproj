@@ -22,6 +22,8 @@
 
 /* Begin PBXBuildFile section */
 		2227200D2236AD9200FA1604 /* ActionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2227200C2236AD9200FA1604 /* ActionNotification.swift */; };
+		22B6AB412239423D00AC4E5E /* ActionSerialisation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B6AB402239423D00AC4E5E /* ActionSerialisation.swift */; };
+		22B6AB432239461700AC4E5E /* ActionSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B6AB422239461700AC4E5E /* ActionSerializationTests.swift */; };
 		OBJ_106 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* Channel.swift */; };
 		OBJ_107 /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* Context.swift */; };
 		OBJ_108 /* Handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* Handler.swift */; };
@@ -100,6 +102,8 @@
 
 /* Begin PBXFileReference section */
 		2227200C2236AD9200FA1604 /* ActionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionNotification.swift; sourceTree = "<group>"; };
+		22B6AB402239423D00AC4E5E /* ActionSerialisation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSerialisation.swift; sourceTree = "<group>"; };
+		22B6AB422239461700AC4E5E /* ActionSerializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSerializationTests.swift; sourceTree = "<group>"; };
 		"Actions::Actions::Product" /* Actions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Actions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Actions::ActionsKit::Product" /* ActionsKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ActionsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Actions::ActionsTests::Product" /* ActionsTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ActionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,6 +178,7 @@
 				OBJ_12 /* Action.swift */,
 				OBJ_13 /* ActionContext.swift */,
 				OBJ_14 /* ActionIdentification.swift */,
+				22B6AB402239423D00AC4E5E /* ActionSerialisation.swift */,
 				OBJ_15 /* ActionInfo.swift */,
 				2227200C2236AD9200FA1604 /* ActionNotification.swift */,
 				OBJ_16 /* ActionManager.swift */,
@@ -197,6 +202,7 @@
 				OBJ_20 /* ActionContextTests.swift */,
 				OBJ_21 /* ActionIdentificationTests.swift */,
 				OBJ_22 /* ActionObserverTests.swift */,
+				22B6AB422239461700AC4E5E /* ActionSerializationTests.swift */,
 				OBJ_23 /* ActionsNotificationTests.swift */,
 				OBJ_24 /* ActionsTests.swift */,
 				OBJ_25 /* DelegatedActionTests.swift */,
@@ -276,7 +282,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -286,7 +292,6 @@
 				OBJ_28 /* Dependencies */,
 				OBJ_42 /* Products */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -424,7 +429,7 @@
 				English,
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_42 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -467,6 +472,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				22B6AB412239423D00AC4E5E /* ActionSerialisation.swift in Sources */,
 				OBJ_52 /* Action.swift in Sources */,
 				OBJ_53 /* ActionContext.swift in Sources */,
 				OBJ_54 /* ActionIdentification.swift in Sources */,
@@ -498,6 +504,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				22B6AB432239461700AC4E5E /* ActionSerializationTests.swift in Sources */,
 				OBJ_90 /* ActionContextTests.swift in Sources */,
 				OBJ_91 /* ActionIdentificationTests.swift in Sources */,
 				OBJ_92 /* ActionObserverTests.swift in Sources */,
