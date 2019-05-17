@@ -7,6 +7,9 @@
 #if os(macOS)
 import AppKit
 import Actions
+import Logger
+
+let validationChannel = Logger("com.elegantchaos.actions.Validation")
 
 public class ActionManagerMac: ActionManager {
     
@@ -117,6 +120,41 @@ public class ActionManagerMac: ActionManager {
         responder.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = responder
     }
+    
+    /**
+     Update all validatable user interface items inside the view.
+    */
+    
+    public func validateControls(of view: NSView) {
+        var items = [NSControl]()
+        view.appendValidatableControls(to: &items)
+        for item in items {
+            if let button = item as? NSButton, let identifier = item.identifier?.rawValue {
+                let validation = validate(identifier: identifier, info: ActionInfo(sender: button))
+                button.isEnabled = validation.enabled
+                button.isHidden = !validation.visible
+                if let name = (validation.shortName ?? validation.name) {
+                    button.title = name
+                }
+            }
+        }
+    }
+    
+    /**
+     Queue up the view for validation.
+     Validation can take a while if there are a lot of items, so deferring it can make sense.
+     */
+    
+    
+    public func scheduleForValidation(view: NSView) {
+        // TODO: a more sophisticated approach would be to manage a set of items to be validated, then process that set
+        //       this would avoid the situation where a view and one of its sub-views are both scheduled for validation,
+        //       causing the contents of the subview to be validated twice
+        OperationQueue.main.addOperation {
+            self.validateControls(of: view)
+        }
+    }
+
 }
 
 /**
@@ -140,6 +178,27 @@ extension NSView: ActionIdentification {
         get { return identifier?.rawValue ?? "" }
         set(value) { identifier = NSUserInterfaceItemIdentifier(rawValue: value) }
     }
+
+    /**
+     Iterate over the controls in the view (and any subviews), and append any
+     that can be validated to the list we were passed.
+    */
+    
+    public func appendValidatableControls(to items: inout [NSControl]) {
+        let selector = ActionManagerMac.Responder.performActionSelector
+        if !isHidden {
+            if let viewItem = self as? NSControl, let identifier = viewItem.identifier?.rawValue {
+                validationChannel.log("\(identifier)")
+                if viewItem.action == selector {
+                    items.append(viewItem)
+                }
+            }
+            for subview in subviews {
+                subview.appendValidatableControls(to: &items)
+            }
+        }
+    }
+    
 }
 
 /**
