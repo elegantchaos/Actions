@@ -14,11 +14,13 @@ open class Action {
         public let enabled: Bool
         public let visible: Bool
         public let name: String?
+        public let shortName: String?
         
-        public init(enabled: Bool = true, visible: Bool = true, name: String? = nil) {
+        public init(enabled: Bool = true, visible: Bool = true, name: String? = nil, shortName: String? = nil) {
             self.enabled = enabled
             self.visible = visible
             self.name = name
+            self.shortName = shortName ?? name
         }
     }
     
