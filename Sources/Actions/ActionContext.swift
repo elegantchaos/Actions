@@ -177,5 +177,19 @@ extension ActionContext: CustomStringConvertible {
     public var description: String {
         let params = parameters.count == 0 ? "" : " parameters:\(parameters)"
         return "«context \(action)\(params) keys: \(info)»"
+
+/**
+ URL support.
+ */
+
+extension ActionContext {
+    
+    /**
+     URLs can be represented in the context as strings or URL objects, so we
+     support automatically coercing the strings.
+     */
+    
+    func url(withKey key: String) -> URL? {
+        return info.url(withKey: key)
     }
 }
