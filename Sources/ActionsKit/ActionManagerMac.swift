@@ -186,7 +186,7 @@ extension NSView: ActionIdentification {
     
     public func appendValidatableControls(to items: inout [NSControl]) {
         let selector = ActionManagerMac.Responder.performActionSelector
-        if !isHidden {
+//        if !isHidden {
             if let viewItem = self as? NSControl, let identifier = viewItem.identifier?.rawValue {
                 validationChannel.log("\(identifier)")
                 if viewItem.action == selector {
@@ -196,7 +196,7 @@ extension NSView: ActionIdentification {
             for subview in subviews {
                 subview.appendValidatableControls(to: &items)
             }
-        }
+//        }
     }
     
 }
