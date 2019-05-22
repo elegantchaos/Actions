@@ -46,13 +46,6 @@ public class ActionContext {
     public let identifier: String
     
     /**
-     Any unused components of the identifier that triggered the action.
-     */
-    
-    @available(*, deprecated, message: "Use arguments added to the identifier, instead of parameters.")
-    public var parameters: [String]
-    
-    /**
      Additional information set by the context providers.
      */
     
@@ -65,6 +58,7 @@ public class ActionContext {
     public static let infoKey = "info"
     public static let modelKey = "model"
     public static let notificationKey = "notification"
+    public static let objectKey = "object"
     public static let observerKey = "observer"
     public static let rootKey = "root"
     public static let selectionKey = "selection"
@@ -82,7 +76,6 @@ public class ActionContext {
         self.manager = manager
         self.action = action
         self.identifier = identifier
-        self.parameters = parameters
         self.info = info
     }
     
@@ -175,7 +168,22 @@ extension ActionContext {
 
 extension ActionContext: CustomStringConvertible {
     public var description: String {
-        let params = parameters.count == 0 ? "" : " parameters:\(parameters)"
-        return "«context \(action)\(params) keys: \(info)»"
+        return "«context \(action) keys: \(info)»"
+    }
+}
+
+/**
+ URL support.
+ */
+
+extension ActionContext {
+    
+    /**
+     URLs can be represented in the context as strings or URL objects, so we
+     support automatically coercing the strings.
+     */
+    
+    func url(withKey key: String) -> URL? {
+        return info.url(withKey: key)
     }
 }

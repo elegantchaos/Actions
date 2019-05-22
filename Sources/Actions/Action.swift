@@ -14,11 +14,13 @@ open class Action {
         public let enabled: Bool
         public let visible: Bool
         public let name: String?
+        public let shortName: String?
         
-        public init(enabled: Bool = true, visible: Bool = true, name: String? = nil) {
+        public init(enabled: Bool = true, visible: Bool = true, name: String? = nil, shortName: String? = nil) {
             self.enabled = enabled
             self.visible = visible
             self.name = name
+            self.shortName = shortName ?? name
         }
     }
     
@@ -32,10 +34,20 @@ open class Action {
     
     /**
      Create an action.
+     If an explicit identifier isn't provided, we use the name of the action class, stripping off the trailing "Action" if it's present.
+     So if the class is called "DoStuffAction", the default identifier will be "DoStuff".
      */
     
-    public init(identifier: String) {
-        self.identifier = identifier
+    public init(identifier: String? = nil) {
+        if let identifier = identifier {
+            self.identifier = identifier
+        } else {
+            var name = String(describing:type(of: self))
+            if let range = name.range(of: "Action", options: .backwards) {
+               name.removeSubrange(range)
+            }
+            self.identifier = name
+        }
     }
     
     /**

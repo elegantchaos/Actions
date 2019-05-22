@@ -16,10 +16,9 @@ Actions are registered with the ActionManager, using an identifier. They are the
 
 Actions are decoupled from each other, and from everything that they don't need to perform their specific task.
 
-
 When an action is performed, it is passed a context. This contains all the information that it needs to perform its action, and is the main mechanism for ensuring that coupling is loose and dynamic.
 
-The context supplied to the action is filled in by items in the responder chain. In this way, it is literally dependent on the user interface context - which window is at the front, which item is selected, and so on. The same action can be invoked in many different situations, as long as something in the responder chain supplies the correct context. Swift's type safety helps here, making it easy to extract the relevant parameters from the context ensuring that they are of the right type. 
+The context supplied to the action is filled in by items in the responder chain. In this way, it is literally dependent on the user interface context - which window is at the front, which item has focus, and so on. The same action can be invoked in many different situations, as long as something in the responder chain supplies the correct context. Swift's type safety helps here, making it easy to extract the relevant parameters from the context ensuring that they are of the right type. 
 
 ## UI Integration
 
@@ -80,19 +79,18 @@ It also contains a dictionary of other information. Items in the responder chain
 
 This lets a view controller or window controller pass essential information to actions whilst keeping them fully decoupled.
 
-The context also contains a parameters array. Parameters are parsed out of the identifier that was used to invoke the action.
+The action to invoke can be passed explicitly, or parsed out of the identifier of a user interface item.
 
-The algorithm for parsing the identifier is:
+User interface identifiers can take the form: `{prefix.}action{("key": "value", "key2": "value2")}`.
 
-- split it into a list of strings separated by '.'
-- pop items from the left of the list until we find one that matches a registered action
-- everything unused to the right of the list becomes the context parameters
+The optional prefix, which is discarded, can be any string, and can contain full stops.
 
-This allows you to bind multiple user interface items to the same action, in a parameterised way.
+This allows you to bind multiple user interface items to the same action, without giving them exactly the same identifier string (Xcode complains if they aren't unique). All of the following identifiers would invoke the `MyAction` action: `MyAction`, `button.MyAction`, `menu.MyAction`, `some.other.thing.MyAction`. 
 
-For example you can set a button's identifier to `button.MyAction` and a menu item's to `menu.MyAction`. Both will have unique identifiers - which Xcode insists on - but both will be resolved to the `MyAction` action.
+If brackets are present after the action, their contents is interpreted as a list of key,value pairs to be added to the context. For example, two buttons might have identifiers to `MyAction("color": "red")` and `MyAction("color": "blue")`. Both will invoke the `MyAction` action, but the value of `context["color"]` will be set to `red` or `blue` respectively.
 
-In another example, you could set two button identifiers to `MyAction.red` and `MyAction.blue`. Both will invoke `MyAction`, but the `context.parameters` array will contain `["red"]` for the first one, and `["blue"]` for the second. The action can read this parameter and behave differently in either case. 
+Currently these arguments are parsed as if they were a JSON dictionary, so both the key and the value need to be quoted. Xcode actually complains about the presence of the `"`  and `:` characters in identifiers, so a future version may remove this restriction and allow you to specify simply `(key: value, key2: value2)`.
+
 
 ### Validation
 

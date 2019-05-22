@@ -172,3 +172,25 @@ extension ActionInfo: CustomStringConvertible {
         return values.keys.joined(separator:",")
     }
 }
+
+/**
+ URL support.
+ */
+
+extension ActionInfo {
+    
+    /**
+     URLs can be represented in the context as strings or URL objects, so we
+     support automatically coercing the strings.
+    */
+    
+    func url(withKey key: String) -> URL? {
+        let value = values[key]
+        if let url = value as? URL {
+            return url
+        } else if let string = value as? String {
+            return URL(fileURLWithPath: string)
+        }
+        return nil
+    }
+}

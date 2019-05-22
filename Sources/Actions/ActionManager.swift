@@ -48,8 +48,12 @@ open class ActionManager {
      */
     
     public func register(_ actionsToRegister: [Action]) {
-        actionsToRegister.forEach {
-            actions[$0.identifier] = $0
+        for action in actionsToRegister {
+            let id = action.identifier
+            if let existing = actions[id] {
+                actionChannel.log("Multiple actions being registered with the id \(id): \(existing) \(action)")
+            }
+            actions[id] = action
         }
     }
     
@@ -80,6 +84,9 @@ open class ActionManager {
     
     open func providers(for item: Any) -> [ActionContextProvider] {
         var result = [ActionContextProvider]()
+        if let provider = item as? ActionContextProvider {
+            result.append(provider)
+        }
         
         for chain in responderChains(for: item) {
             var responder: ActionResponder? = chain
