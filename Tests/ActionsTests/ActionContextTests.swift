@@ -77,4 +77,29 @@ class ActionContextTests: XCTestCase {
         context["foo"] = "bar"
         XCTAssertEqual(context.description, "«context Actions.Action keys: foo»")
     }
- }
+    
+    func testDefaultIdentifierTrailingAction() {
+        class DoStuffAction: Action {
+        }
+        
+        let action = DoStuffAction()
+        XCTAssertEqual(action.identifier, "DoStuff")
+    }
+
+    func testDefaultIdentifierMultipleActions() {
+        class DoActionStuffAction: Action {
+        }
+        
+        let action = DoActionStuffAction()
+        XCTAssertEqual(action.identifier, "DoActionStuff")
+    }
+
+    func testDefaultIdentifierNoTrailingAction() {
+        class DoStuff: Action {
+        }
+        
+        let action = DoStuff()
+        XCTAssertEqual(action.identifier, "DoStuff")
+    }
+
+}
