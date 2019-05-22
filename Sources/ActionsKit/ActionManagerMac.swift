@@ -182,21 +182,28 @@ extension NSView: ActionIdentification {
     /**
      Iterate over the controls in the view (and any subviews), and append any
      that can be validated to the list we were passed.
+     
+     It would be good here if we could skip any hidden items (and their children).
+     Unfortunately, the process of validation can change the hidden/visible status of items.
+     This means that we can't skip hidden items when validating - if we did then validation might
+     hide them, and then leave them permanently hidden because it never ran on them again.
+     
+     There may be room for some sort of optimisation here which keeps a list of items that have been
+     hidden due to validation, and explicitly validates this list. That would allow other hidden items to
+     be skipped.
     */
     
     public func appendValidatableControls(to items: inout [NSControl]) {
         let selector = ActionManagerMac.Responder.performActionSelector
-//        if !isHidden {
-            if let viewItem = self as? NSControl, let identifier = viewItem.identifier?.rawValue {
-                validationChannel.log("\(identifier)")
-                if viewItem.action == selector {
-                    items.append(viewItem)
-                }
+        if let viewItem = self as? NSControl, let identifier = viewItem.identifier?.rawValue {
+            validationChannel.log("\(identifier)")
+            if viewItem.action == selector {
+                items.append(viewItem)
             }
-            for subview in subviews {
-                subview.appendValidatableControls(to: &items)
-            }
-//        }
+        }
+        for subview in subviews {
+            subview.appendValidatableControls(to: &items)
+        }
     }
     
 }
@@ -212,6 +219,10 @@ extension NSToolbarItem: ActionIdentification {
     }
 }
 
+/**
+ Toolbar items use their identifier for the actionID.
+ */
+
 extension NSMenuItem: ActionIdentification {
     @objc public var actionID: String {
         get { return identifier?.rawValue ?? "" }
@@ -219,4 +230,13 @@ extension NSMenuItem: ActionIdentification {
     }
 }
 
+/**
+ If menu items have a representedObject, they supply it as the "object" key in the context.
+ */
+
+extension NSMenuItem: ActionContextProvider {
+    public func provide(context: ActionContext) {
+        context[ActionContext.objectKey] = representedObject
+    }
+}
 #endif
