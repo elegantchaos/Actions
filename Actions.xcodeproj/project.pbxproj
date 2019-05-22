@@ -680,10 +680,10 @@
       "OBJ_44" = {
          isa = "PBXGroup";
          children = (
-            "Actions::ActionsTests::Product",
+            "Logger::Logger::Product",
             "Actions::Actions::Product",
-            "Actions::ActionsKit::Product",
-            "Logger::Logger::Product"
+            "Actions::ActionsTests::Product",
+            "Actions::ActionsKit::Product"
          );
          name = "Products";
          path = "";
