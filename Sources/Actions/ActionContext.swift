@@ -58,6 +58,7 @@ public class ActionContext {
     public static let infoKey = "info"
     public static let modelKey = "model"
     public static let notificationKey = "notification"
+    public static let objectKey = "object"
     public static let observerKey = "observer"
     public static let rootKey = "root"
     public static let selectionKey = "selection"
