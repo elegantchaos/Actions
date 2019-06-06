@@ -15,7 +15,7 @@ let package = Package(
             targets: ["ActionsKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/elegantchaos/Logger", .branch("bookish")),
+        .package(url: "https://github.com/elegantchaos/Logger", from: "1.3.5"),
         .package(url: "https://github.com/elegantchaos/Coverage", from: "1.0.2"),
     ],
     targets: [
