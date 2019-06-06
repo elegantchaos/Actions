@@ -38,7 +38,7 @@ open class DelegatedAction: Action {
     public typealias ActionDeterminer = (ActionContext) -> String
     let determiner: ActionDeterminer
     
-    public init(identifier: String, determiner: @escaping ActionDeterminer) {
+    public init(identifier: String? = nil, determiner: @escaping ActionDeterminer) {
         self.determiner = determiner
         super.init(identifier: identifier)
     }

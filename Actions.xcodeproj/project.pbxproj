@@ -127,7 +127,7 @@
          };
          buildConfigurationList = "OBJ_2";
          compatibilityVersion = "Xcode 3.2";
-         developmentRegion = "English";
+         developmentRegion = "en";
          hasScannedForEncodings = "0";
          knownRegions = (
             "en"
@@ -348,7 +348,7 @@
                "-target",
                "x86_64-apple-macosx10.10",
                "-sdk",
-               "/Applications/Xcode10.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk"
+               "/Applications/Xcode11b1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk"
             );
             SWIFT_VERSION = "4.2";
          };
@@ -366,7 +366,7 @@
                "-target",
                "x86_64-apple-macosx10.10",
                "-sdk",
-               "/Applications/Xcode10.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk"
+               "/Applications/Xcode11b1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk"
             );
             SWIFT_VERSION = "4.2";
          };
@@ -555,7 +555,7 @@
             "OBJ_42",
             "OBJ_43"
          );
-         name = "Logger 1.3.4";
+         name = "Logger 1.3.5";
          path = "";
          sourceTree = "SOURCE_ROOT";
       };
@@ -674,16 +674,16 @@
          isa = "PBXFileReference";
          explicitFileType = "sourcecode.swift";
          name = "Package.swift";
-         path = "/Users/sam/Projects/Bookish/Dependencies/BookishModel/Packages/Actions/.build/checkouts/Logger/Package.swift";
+         path = "/Users/developer/Projects/BookishCore/Packages/Actions/.build/checkouts/Logger/Package.swift";
          sourceTree = "<group>";
       };
       "OBJ_44" = {
          isa = "PBXGroup";
          children = (
-            "Logger::Logger::Product",
-            "Actions::Actions::Product",
             "Actions::ActionsTests::Product",
-            "Actions::ActionsKit::Product"
+            "Actions::ActionsKit::Product",
+            "Logger::Logger::Product",
+            "Actions::Actions::Product"
          );
          name = "Products";
          path = "";
@@ -1029,7 +1029,7 @@
                "-target",
                "x86_64-apple-macosx10.10",
                "-sdk",
-               "/Applications/Xcode10.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk"
+               "/Applications/Xcode11b1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk"
             );
             SWIFT_VERSION = "4.2";
          };
@@ -1047,7 +1047,7 @@
                "-target",
                "x86_64-apple-macosx10.10",
                "-sdk",
-               "/Applications/Xcode10.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk"
+               "/Applications/Xcode11b1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk"
             );
             SWIFT_VERSION = "4.2";
          };
