@@ -12,7 +12,7 @@
       },
       {
         "package": "Coverage",
-        "repositoryURL": "https://github.com/elegantchaos/Coverage",
+        "repositoryURL": "https://github.com/elegantchaos/Coverage.git",
         "state": {
           "branch": null,
           "revision": "fea0b8640a30b22cdf87ae9a722c6bbbf4e608a6",
@@ -30,7 +30,7 @@
       },
       {
         "package": "Logger",
-        "repositoryURL": "https://github.com/elegantchaos/Logger",
+        "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
           "branch": null,
           "revision": "32a977f56b93e2fdd73d431f4ce95b4a1023ca9b",
