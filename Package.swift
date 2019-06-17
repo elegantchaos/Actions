@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/elegantchaos/Logger.git", from: "1.3.5"),
-        .package(url: "https://github.com/elegantchaos/Coverage.git", from: "1.0.2"),
+        .package(url: "https://github.com/elegantchaos/Coverage.git", from: "1.0.4"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

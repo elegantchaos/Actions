@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/elegantchaos/Arguments.git",
         "state": {
           "branch": null,
-          "revision": "781c924c16e9e4cbad65db8a5ed510fb711de3da",
-          "version": "1.0.7"
+          "revision": "18fbecce70cdad8677aac45d73d80af6eee4e839",
+          "version": "1.0.8"
         }
       },
       {
@@ -21,7 +21,7 @@
       },
       {
         "package": "Docopt",
-        "repositoryURL": "https://github.com/elegantchaos/docopt.swift",
+        "repositoryURL": "https://github.com/elegantchaos/docopt.swift.git",
         "state": {
           "branch": null,
           "revision": "a236953ec13b4c2c54a4450110973d9ff9db7711",
