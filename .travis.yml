@@ -5,8 +5,8 @@ matrix:
       dist: trusty
       sudo: required
       install:
-        - SWIFT_BRANCH=swift-4.2.3-release
-        - SWIFT_VERSION=swift-4.2.3-RELEASE
+        - SWIFT_BRANCH=swift-5.0.1-release
+        - SWIFT_VERSION=swift-5.0.1-RELEASE
         - sudo apt-get install clang libicu-dev
         - mkdir swift
         - curl https://swift.org/builds/$SWIFT_BRANCH/ubuntu1404/$SWIFT_VERSION/$SWIFT_VERSION-ubuntu14.04.tar.gz -s | tar xz -C swift &> /dev/null
@@ -17,7 +17,7 @@ matrix:
 
 
     - os: osx
-      osx_image: xcode10.1
+      osx_image: xcode10.2
       language: swift
       sudo: required
       install:
