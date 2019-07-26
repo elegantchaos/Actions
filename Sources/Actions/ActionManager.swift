@@ -10,7 +10,8 @@ import Logger
  Log channel for ActionManager related messages.
  */
 
-let actionChannel = Channel("com.elegantchaos.actions")
+public let actionChannel = Channel("com.elegantchaos.actions")
+public let providerChannel = Channel("com.elegantchaos.actions.providers")
 
 public protocol ActionResponder {
     func next() -> ActionResponder?
@@ -71,7 +72,10 @@ open class ActionManager {
     */
     
     open func responderChains(for item: Any) -> [ActionResponder] {
+        providerChannel.log("Getting responder chains for \(item):")
+
         if let responder = item as? ActionResponder {
+            providerChannel.log("Item is a responder itself")
             return [responder]
         }
         
@@ -83,20 +87,31 @@ open class ActionManager {
      */
     
     open func providers(for item: Any) -> [ActionContextProvider] {
+        providerChannel.log("\n\nGetting providers for \(item):")
+
         var result = [ActionContextProvider]()
         if let provider = item as? ActionContextProvider {
+            providerChannel.log("Item is a provider itself")
             result.append(provider)
         }
         
-        for chain in responderChains(for: item) {
+        let chains = responderChains(for: item)
+        providerChannel.log("\(chains.count) chains found.")
+        for chain in chains {
+            providerChannel.log("Searching responder chain \(chain)")
             var responder: ActionResponder? = chain
             while (responder != nil) {
                 if let provider = responder as? ActionContextProvider {
-                    result.append(provider)
+                    if result.filter({ $0.identicalTo(other: provider) }).count == 0 {
+                        providerChannel.log("Found provider \(provider)")
+                        result.append(provider)
+                    }
                 }
                 responder = responder?.next()
             }
         }
+
+        providerChannel.log("\(result.count) providers found.\n\(result)\n\n")
 
         return result
     }

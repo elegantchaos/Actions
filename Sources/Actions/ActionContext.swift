@@ -16,8 +16,15 @@ import Foundation
  and/or how it should perform.
  */
 
-public protocol ActionContextProvider {
+public protocol ActionContextProvider: AnyObject {
     func provide(context: ActionContext)
+    func identicalTo(other: ActionContextProvider) -> Bool  // TODO: it would be better if we could require conformance to Equatable/Hashable here
+}
+
+public extension ActionContextProvider {
+    func identicalTo(other: ActionContextProvider) -> Bool {
+        return self === other
+    }
 }
 
 /**
