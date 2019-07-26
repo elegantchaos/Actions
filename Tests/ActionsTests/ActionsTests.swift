@@ -12,14 +12,14 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         var validated = false
         var performedContext: ActionContext?
 
+        override func validate(context: ActionContext) -> Validation {
+            validated = true
+            return super.validate(context: context)
+        }
+        
         override func perform(context: ActionContext) {
             performed = true
             performedContext = context
-        }
-
-        override func validate(context: ActionContext) -> Validation {
-            validated = true
-            return Validation()
         }
     }
 
@@ -105,7 +105,9 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         manager.register([action])
         XCTAssertTrue(manager.validate(identifier: "test").enabled)
         XCTAssertTrue(manager.validate(identifier: "test").visible)
-        XCTAssertNil(manager.validate(identifier: "test").name)
+        XCTAssertFalse(manager.validate(identifier: "test").fullName.isEmpty)
+        XCTAssertFalse(manager.validate(identifier: "test").shortName.isEmpty)
+        XCTAssertFalse(manager.validate(identifier: "test").iconName.isEmpty)
         XCTAssertTrue(action.validated)
     }
 
@@ -113,7 +115,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         // dummy action which is always invalid
         class TestInvalid: Action {
             override func validate(context: ActionContext) -> Action.Validation {
-                return Action.Validation(enabled: false)
+                return Action.Validation(identifier: identifier, state: .inactive)
             }
         }
         

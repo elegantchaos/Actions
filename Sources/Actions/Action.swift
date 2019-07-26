@@ -41,9 +41,9 @@ open class Action {
             get { return state != .ineligable }
         }
         
-        public init(identifier: String, enabled: Bool = true, visible: Bool = true, fullName: String? = nil, shortName: String? = nil, iconName: String? = nil) {
+        public init(identifier: String, state: State = .active, fullName: String? = nil, shortName: String? = nil, iconName: String? = nil) {
             self.identifier = identifier
-            self.state = .active
+            self.state = state
             self.fullName = fullName ?? Validation.defaultFullName(for: identifier)
             self.shortName = shortName ?? Validation.defaultShortName(for: identifier)
             self.iconName = iconName ?? Validation.defaultIconName(for: identifier)
