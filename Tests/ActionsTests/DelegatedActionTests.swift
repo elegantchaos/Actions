@@ -42,7 +42,7 @@ final class DelegatedActionTests: XCTestCase {
 
         override func validate(context: ActionContext) -> Validation {
             test.validated = true
-            return Validation()
+            return super.validate(context: context)
         }
     }
 

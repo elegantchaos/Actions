@@ -1,0 +1,41 @@
+.bin/update
+
+PROJECT=Actions.xcodeproj
+SCHEME=Actions-Package
+
+echo
+echo "Generating project"
+swift package generate-xcodeproj
+
+echo
+echo "Testing Mac"
+rm -rf .build/Mac.xcresult .build/Mac.log
+set -o pipefail && xcodebuild clean test -project $PROJECT -scheme $SCHEME -enableCodeCoverage YES -resultBundlePath .build/Mac.xcresult | tee .build/Mac.log | xcpretty -f `xcpretty-travis-formatter`
+MAC_RESULT=$?
+
+echo
+echo "Testing Mobile"
+
+rm -rf .build/Mobile.xcresult .build/Mobile.log
+set -o pipefail && xcodebuild clean test -project $PROJECT -scheme $SCHEME -destination "name=iPhone Xs" -enableCodeCoverage YES -resultBundlePath .build/Mobile.xcresult | tee .build/Mobile.log | xcpretty -f `xcpretty-travis-formatter`
+MOBILE_RESULT=$?
+
+#echo
+#echo "Coverage"
+#
+#.bin/coverage
+#COVERAGE_RESULT=$?
+COVERAGE_RESULT=0
+
+echo
+echo Removing Package
+rm -rf Actions.xcodeproj
+
+echo
+echo Done
+
+if [[ ($MAC_RESULT != 0) || ($MOBILE_RESULT != 0) || ($COVERAGE_RESULT != 0) ]]
+then
+    echo "Tests failed."
+    exit 1
+fi

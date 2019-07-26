@@ -10,17 +10,43 @@ import Foundation
  */
 
 open class Action {
+    public enum State {
+        case ineligable
+        case inactive
+        case active
+    }
+    
     public struct Validation {
-        public let enabled: Bool
-        public let visible: Bool
-        public let name: String?
-        public let shortName: String?
+        public let identifier: String
+        public var state: State
+        public var fullName: String
+        public var shortName: String
+        public var iconName: String
+        public var localizationInfo: [String:Any] = [:]
         
-        public init(enabled: Bool = true, visible: Bool = true, name: String? = nil, shortName: String? = nil) {
-            self.enabled = enabled
-            self.visible = visible
-            self.name = name
-            self.shortName = shortName ?? name
+        public static func defaultFullName(for identifier: String) -> String { return "action.\(identifier).title" }
+        public static func defaultShortName(for identifier: String) -> String { return "action.\(identifier).short" }
+        public static func defaultIconName(for identifier: String) -> String { return "action.\(identifier).icon" }
+
+        public var defaultFullName: String { return Validation.defaultFullName(for: identifier) }
+        public var defaultShortName: String { return Validation.defaultShortName(for: identifier) }
+        public var defaultIconName: String { return Validation.defaultIconName(for: identifier) }
+
+        public var enabled: Bool {
+            get { return state == .active }
+            set { state = newValue ? .active : .inactive }
+        }
+        
+        public var visible: Bool {
+            get { return state != .ineligable }
+        }
+        
+        public init(identifier: String, state: State = .active, fullName: String? = nil, shortName: String? = nil, iconName: String? = nil) {
+            self.identifier = identifier
+            self.state = state
+            self.fullName = fullName ?? Validation.defaultFullName(for: identifier)
+            self.shortName = shortName ?? Validation.defaultShortName(for: identifier)
+            self.iconName = iconName ?? Validation.defaultIconName(for: identifier)
         }
     }
     
@@ -49,14 +75,6 @@ open class Action {
             self.identifier = name
         }
     }
-    
-    /**
-     Is this action valid for the given context?
-     */
-    
-    open func validate(context: ActionContext) -> Bool {
-        return true
-    }
 
     /**
      Validate this action.
@@ -70,7 +88,7 @@ open class Action {
     open func validate(context: ActionContext) -> Validation {
         // by default we call onto the legacy version of the validation,
         // which just returns a bool indicating enabled/disabled status
-        return Validation(enabled: self.validate(context: context))
+        return Validation(identifier: identifier)
     }
 
     /**

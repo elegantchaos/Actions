@@ -221,7 +221,7 @@ open class ActionManager {
             actionChannel.log("couldn't identify action for \(item)")
         }
         
-        return Action.Validation(enabled: true)
+        return Action.Validation(identifier: "<unknown>")
     }
     
     /**
@@ -235,18 +235,19 @@ open class ActionManager {
      */
     
     public func validate(identifier: String, info: ActionInfo = ActionInfo()) -> Action.Validation {
-        var valid = Action.Validation(enabled: true)
-
+        var validation = Action.Validation(identifier: identifier, state: .ineligable)
+        
         let _ = resolving(identifier: identifier, info: info) { (context) in
             if context.flag(key: ActionContext.skipValidationKey) {
                 actionChannel.log("skipping validation \(context.action)")
+                validation = Action.Validation(identifier: identifier)
             } else {
                 actionChannel.log("validating \(context.action)")
-                valid = context.action.validate(context: context)
+                validation = context.action.validate(context: context)
             }
         }
         
-        return valid
+        return validation
     }
     
 }
