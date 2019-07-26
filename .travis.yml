@@ -25,7 +25,7 @@ matrix:
         - sudo gem install xcpretty-travis-formatter
 
       script:
-      - .bin/test
+      - .bin/tests
 
 notifications:
   email: false
