@@ -28,6 +28,10 @@ extension String: ActionSerialization {
     public var serialized: Any { return self }
 }
 
+extension NSString: ActionSerialization {
+    public var serialized: Any { return self as String }
+}
+
 extension Dictionary: ActionSerialization {
     public var serialized: Any {
         var valid: [Key:Any] = [:]
@@ -49,5 +53,16 @@ extension Array: ActionSerialization {
             }
         }
         return valid
+    }
+}
+
+extension Optional: ActionSerialization where Wrapped: ActionSerialization {
+    public var serialized: Any {
+        switch self {
+        case .some(let value):
+            return value.serialized
+        default:
+            return ""
+        }
     }
 }
