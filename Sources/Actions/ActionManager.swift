@@ -265,4 +265,21 @@ open class ActionManager {
         return validation
     }
     
+    /// Given a list of action identifiers, and some action info, perform validation on each one then
+    /// call some sort of builder task for it. Returns a list of the results of all the builder calls.
+    ///
+    /// Typically this is used to build a user interface element, such as a UIMenuItem, for each action.
+    ///
+    /// - Parameter actions: the action identifiers to iterate over
+    /// - Parameter withInfo: info containing the sender, and other parameters that the validation might need
+    /// - Parameter builder: the builder closure to run
+    public func buildItems<T>(forActions actions: [String], withInfo info: ActionInfo, builder: (String, Action.Validation) -> T) -> [T] {
+        var items: [T] = []
+        for id in actions {
+            let state = validate(identifier: id, info: info)
+            let item = builder(id, state)
+            items.append(item)
+        }
+        return items
+    }
 }
