@@ -16,6 +16,8 @@ open class Action {
         case active
     }
     
+    public typealias Result = Swift.Result<Void, Error>
+
     public struct Validation {
         public let identifier: String
         public var state: State
@@ -50,7 +52,7 @@ open class Action {
         }
     }
     
-    public typealias Completion = () -> Void
+    public typealias Completion = (Result) -> Void
     
     /**
      Identifier used to locate this action.
@@ -92,28 +94,18 @@ open class Action {
     }
 
     /**
-     Perform the action in the given context.
-     
-     Synchronous actions should override this method.
-     */
-    
-    open func perform(context: ActionContext) {
-        actionChannel.log("generic action fired - perfom needs to be overridden")
-    }
-
-    /**
      Perform the action in the given context, then call the provided completion routine.
      
-     Asynchronous actions should override this method, and ensure that they only call
-     the completion routine when they are completely finished.
+     Actions should override this method, and ensure that they only call
+     the completion routine when they are completely finished (or when
+     an irrecoverable error occurs).
      
-     Failure to call the completion will result in the .didPerform notification not
-     getting sent.
+     Failure to call the completion will result in the .didPerform/.didFail notifications
+     not getting sent, which could confuse clients.
      */
     
     open func perform(context: ActionContext, completed: @escaping Completion) {
-        perform(context: context)
-        completed()
+        completed(.success(()))
     }
 
 }

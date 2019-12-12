@@ -190,13 +190,21 @@ open class ActionManager {
      any remaining components to it as parameters.
      */
     
-    public func perform(identifier: String, info: ActionInfo = ActionInfo()) {
+    public func perform(identifier: String, info: ActionInfo = ActionInfo(), completion: Action.Completion? = nil) {
         let notifications = self.notifications
         let performed = resolving(identifier: identifier, info: info) { (context) in
             actionChannel.log("performing \(context.action)")
             context.notify(stage: .willPerform, global: notifications)
-            context.action.perform(context: context, completed: {
-                context.notify(stage: .didPerform, global: notifications)
+            context.action.perform(context: context, completed: { result in
+                let stage: ActionNotificationStage
+                switch result {
+                    case .success():
+                        stage = .didPerform
+                    case .failure(let error):
+                        stage = .didFail(error)
+                }
+                context.notify(stage: stage, global: notifications)
+                completion?(result)
             })
         }
         

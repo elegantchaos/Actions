@@ -17,7 +17,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
             return super.validate(context: context)
         }
         
-        override func perform(context: ActionContext) {
+        override func perform(context: ActionContext, completed: @escaping Action.Completion) {
             performed = true
             performedContext = context
         }

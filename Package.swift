@@ -12,6 +12,9 @@ let package = Package(
         .library(
             name: "Actions",
             targets: ["Actions"]),
+        .library(
+            name: "ActionsTestSupport",
+            targets: ["ActionsTestSupport"]),
     ],
     dependencies: [
         .package(url: "https://github.com/elegantchaos/Logger.git", from: "1.3.6"),
@@ -21,8 +24,11 @@ let package = Package(
         .target(
             name: "Actions",
             dependencies: ["Logger"]),
+        .target(
+            name: "ActionsTestSupport",
+            dependencies: ["Actions"]),
         .testTarget(
             name: "ActionsTests",
-            dependencies: ["Actions"]),
+            dependencies: ["Actions", "ActionsTestSupport"]),
     ]
 )

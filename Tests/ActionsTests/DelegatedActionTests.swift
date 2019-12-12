@@ -4,9 +4,10 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import XCTest
+import ActionsTestSupport
 @testable import Actions
 
-final class DelegatedActionTests: XCTestCase {
+final class DelegatedActionTests: ActionsTestCase {
     enum Performed {
         case nothing
         case action1
@@ -15,17 +16,16 @@ final class DelegatedActionTests: XCTestCase {
 
     var validated = false
     var performed: Performed = .nothing
-    var manager: ActionManager!
-
+    
     override func setUp() {
+        super.setUp()
         let action1 = TestAction(identifier: "test1", perform: .action1, test:self)
         let action2 = TestAction(identifier: "test2", perform: .action2, test:self)
-        manager = ActionManager()
         manager.register([action1, action2])
-        actionChannel.enabled = true
         XCTAssertTrue(performed == .nothing)
     }
-
+    
+    
     class TestAction: Action {
         let test: DelegatedActionTests
         let perform: Performed
@@ -36,8 +36,9 @@ final class DelegatedActionTests: XCTestCase {
             super.init(identifier: identifier)
         }
 
-        override func perform(context: ActionContext) {
+        override func perform(context: ActionContext, completed: @escaping Action.Completion) {
             test.performed = perform
+            completed(.success(()))
         }
 
         override func validate(context: ActionContext) -> Validation {
@@ -47,12 +48,12 @@ final class DelegatedActionTests: XCTestCase {
     }
 
     func testAction1() {
-        manager.perform(identifier: "test1")
+        performAndWaitFor(action: "test1")
         XCTAssertTrue(performed == .action1)
     }
 
     func testAction2() {
-        manager.perform(identifier: "test2")
+        performAndWaitFor(action: "test2")
         XCTAssertTrue(performed == .action2)
     }
 
@@ -61,7 +62,7 @@ final class DelegatedActionTests: XCTestCase {
             return "test1"
         }
         manager.register([delegated])
-        manager.perform(identifier: "delegated")
+        performAndWaitFor(action: "delegated", notifications: 2)
         XCTAssertTrue(performed == .action1)
         XCTAssertTrue(manager.validate(identifier: "delegated").enabled)
         XCTAssertTrue(validated)

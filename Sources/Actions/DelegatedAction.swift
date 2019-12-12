@@ -3,6 +3,8 @@
 //  All code (c) 2018 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Foundation
+
 /**
  Action which delegates to another action.
 
@@ -35,6 +37,18 @@
  */
 
 open class DelegatedAction: Action {
+    public enum Error: LocalizedError, Swift.Error {
+        case missingDelegate(String)
+        
+        public var errorDescription: String? {
+            switch self {
+            case .missingDelegate(let id):
+                return "Couldn't find delegate with identifier \(id)"
+            }
+        }
+    }
+
+    
     public typealias ActionDeterminer = (ActionContext) -> String
     let determiner: ActionDeterminer
     
@@ -49,11 +63,13 @@ open class DelegatedAction: Action {
         return identifier != "" ? manager.validate(identifier: identifier, info: context.info) : Validation(identifier: identifier, state: .ineligable)
     }
     
-    open override func perform(context: ActionContext) {
+    open override func perform(context: ActionContext, completed: @escaping Completion) {
         let manager = context.manager
         let identifier = determiner(context)
         if identifier != "" {
-            manager.perform(identifier: identifier, info: context.info)
+            manager.perform(identifier: identifier, info: context.info, completion: completed)
+        } else {
+            completed(Action.Result.failure(Error.missingDelegate(identifier)))
         }
     }
 }
