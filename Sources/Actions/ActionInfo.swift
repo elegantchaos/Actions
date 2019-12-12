@@ -177,7 +177,7 @@ extension ActionInfo: CustomStringConvertible {
  URL support.
  */
 
-extension ActionInfo {
+public extension ActionInfo {
     
     /**
      URLs can be represented in the context as strings or URL objects, so we

@@ -165,7 +165,7 @@ extension ActionContext: CustomStringConvertible {
  URL support.
  */
 
-extension ActionContext {
+public extension ActionContext {
     
     /**
      URLs can be represented in the context as strings or URL objects, so we
