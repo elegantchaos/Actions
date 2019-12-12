@@ -6,15 +6,15 @@
 import Foundation
 
 public class ActionInfo {
-    private var values: [String:Any] = [:]
+    private var values: [ActionKey:Any] = [:]
     
     public init(sender: Any? = nil) {
         if sender != nil {
-            values[ActionContext.senderKey] = sender
+            values[.senderKey] = sender
         }
     }
     
-    public subscript(key: String) -> Any? {
+    public subscript(key: ActionKey) -> Any? {
         get { return values[key] }
         set (value) { values[key] = value }
     }
@@ -24,7 +24,7 @@ public class ActionInfo {
      Look up a key and treat it as a boolean flag.
      */
     
-    public func flag(key: String) -> Bool {
+    public func flag(key: ActionKey) -> Bool {
         if let value = values[key] {
             if let bool = value as? Bool {
                 return bool
@@ -50,7 +50,7 @@ public class ActionInfo {
      If the info already contains a list entry, we append the value to it.
      */
     
-    public func append(key: String, value: Any) {
+    public func append(key: ActionKey, value: Any) {
         var list: [Any]
         if let items = values[key] as? [Any] {
             list = items
@@ -69,7 +69,7 @@ public class ActionInfo {
      Does nothing if the key is missing or didn't contain a list.
      */
     
-    public func forEach<T>(key: String, action: (T) throws -> Void) {
+    public func forEach<T>(key: ActionKey, action: (T) throws -> Void) {
         if let items = values[key] as? [T] {
             try? items.forEach(action)
         }
@@ -112,7 +112,7 @@ extension ActionInfo {
      value to it.
      */
     
-    public func addObserver<T>(_ value: T, key: String = ActionContext.observerKey) where T: ActionObserver, T: Hashable {
+    public func addObserver<T>(_ value: T, key: ActionKey = .observerKey) where T: ActionObserver, T: Hashable {
         var observers: Set<AnyHashable>
         if let items = values[key] as? Set<AnyHashable> {
             observers = items
@@ -129,7 +129,7 @@ extension ActionInfo {
      Does nothing if the key is missing or didn't contain a list.
      */
     
-    public func forObservers<T>(key: String = ActionContext.observerKey, action: (T) throws -> Void) {
+    public func forObservers<T>(key: ActionKey = .observerKey, action: (T) throws -> Void) {
         if let items = values[key] as? Set<AnyHashable> {
             for item in items {
                 if let observer = item as? T {
@@ -155,7 +155,7 @@ extension ActionInfo {
      value to it.
      */
     
-    public func registerNotification(for action: String = "", key: String = ActionContext.notificationKey, notification: @escaping ActionNotificationCallback) {
+    public func registerNotification(for action: String = "", key: ActionKey = .notificationKey, notification: @escaping ActionNotificationCallback) {
         let notification = ActionNotification(action: action, callback: notification)
         append(key: key, value: notification)
     }
@@ -169,7 +169,7 @@ extension ActionInfo {
 
 extension ActionInfo: CustomStringConvertible {
     public var description: String {
-        return values.keys.joined(separator:",")
+        return values.keys.map({ $0.value }).joined(separator:",")
     }
 }
 
@@ -184,7 +184,7 @@ extension ActionInfo {
      support automatically coercing the strings.
     */
     
-    func url(withKey key: String) -> URL? {
+    func url(withKey key: ActionKey) -> URL? {
         let value = values[key]
         if let url = value as? URL {
             return url

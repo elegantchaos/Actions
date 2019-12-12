@@ -62,7 +62,7 @@ open class ActionManager {
      Register a global notification.
     */
     
-    public func registerNotification(for action: String = "", key: String = ActionContext.notificationKey, notification: @escaping ActionNotificationCallback) {
+    public func registerNotification(for action: String = "", key: ActionKey = .notificationKey, notification: @escaping ActionNotificationCallback) {
         let notification = ActionNotification(action: action, callback: notification)
         notifications.append(notification)
     }
@@ -171,7 +171,7 @@ open class ActionManager {
             if let action = actions[actionID] {
                 let context = ActionContext(manager: self, action: action, identifier: identifier, parameters: Array(components), info: info) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
                 for param in params {
-                    context[param.key] = param.value
+                    context[ActionKey(param.key)] = param.value
                 }
                 gather(context: context, for:context.sender)
                 block(context)
@@ -261,7 +261,7 @@ open class ActionManager {
         var validation = Action.Validation(identifier: identifier, state: .ineligable)
         
         let _ = resolving(identifier: identifier, info: info) { (context) in
-            if context.flag(key: ActionContext.skipValidationKey) {
+            if context.flag(key: .skipValidationKey) {
                 actionChannel.log("skipping validation \(context.action)")
                 validation = Action.Validation(identifier: identifier)
             } else {
