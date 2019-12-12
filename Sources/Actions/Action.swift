@@ -58,7 +58,7 @@ open class Action {
      Identifier used to locate this action.
      */
     
-    let identifier: String
+    public let identifier: String
     
     /**
      Create an action.
@@ -105,7 +105,11 @@ open class Action {
      */
     
     open func perform(context: ActionContext, completed: @escaping Completion) {
-        completed(.success(()))
+        completed(.ok)
     }
 
+}
+
+public extension Action.Result {
+    static let ok = Action.Result.success(())
 }
