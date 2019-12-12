@@ -62,7 +62,7 @@ open class ActionManager {
      Register a global notification.
     */
     
-    public func registerNotification(for action: String = "", key: ActionKey = .notificationKey, notification: @escaping ActionNotificationCallback) {
+    public func registerNotification(for action: String = "", key: ActionKey = .notification, notification: @escaping ActionNotificationCallback) {
         let notification = ActionNotification(action: action, callback: notification)
         notifications.append(notification)
     }
@@ -261,7 +261,7 @@ open class ActionManager {
         var validation = Action.Validation(identifier: identifier, state: .ineligable)
         
         let _ = resolving(identifier: identifier, info: info) { (context) in
-            if context.flag(key: .skipValidationKey) {
+            if context.flag(key: .skipValidation) {
                 actionChannel.log("skipping validation \(context.action)")
                 validation = Action.Validation(identifier: identifier)
             } else {

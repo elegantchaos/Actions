@@ -127,7 +127,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         
         // skipping validation should enable it though
         let info = ActionInfo()
-        info[.skipValidationKey] = true
+        info[.skipValidation] = true
         XCTAssertTrue(manager.validate(identifier: "test", info: info).enabled)
     }
     

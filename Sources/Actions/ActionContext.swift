@@ -83,7 +83,7 @@ public class ActionContext {
     */
     
     public var sender: Any {
-        get { return info[.senderKey] ?? manager }
+        get { return info[.sender] ?? manager }
     }
     
     /**
@@ -110,8 +110,8 @@ extension ActionContext: ActionSerialization {
 
     public var serializedDictionary: [String:Any] {
         return [
-            ActionKey.actionKey.value: action.identifier,
-            ActionKey.infoKey.value: info.serialized
+            ActionKey.action.value: action.identifier,
+            ActionKey.info.value: info.serialized
         ]
     }
     
@@ -136,7 +136,7 @@ extension ActionContext {
      Does nothing if the fetched and global handler lists are missing or empty.
      */
     
-    func notify(stage: ActionNotificationStage, global: [ActionNotification] = [], key: ActionKey = .notificationKey) {
+    func notify(stage: ActionNotificationStage, global: [ActionNotification] = [], key: ActionKey = .notification) {
         let action = self.action
         let handler = { (notification: ActionNotification) in
             if (notification.action == "") || (notification.action == action.identifier) {

@@ -10,7 +10,7 @@ public class ActionInfo {
     
     public init(sender: Any? = nil) {
         if sender != nil {
-            values[.senderKey] = sender
+            values[.sender] = sender
         }
     }
     
@@ -112,7 +112,7 @@ extension ActionInfo {
      value to it.
      */
     
-    public func addObserver<T>(_ value: T, key: ActionKey = .observerKey) where T: ActionObserver, T: Hashable {
+    public func addObserver<T>(_ value: T, key: ActionKey = .observer) where T: ActionObserver, T: Hashable {
         var observers: Set<AnyHashable>
         if let items = values[key] as? Set<AnyHashable> {
             observers = items
@@ -129,7 +129,7 @@ extension ActionInfo {
      Does nothing if the key is missing or didn't contain a list.
      */
     
-    public func forObservers<T>(key: ActionKey = .observerKey, action: (T) throws -> Void) {
+    public func forObservers<T>(key: ActionKey = .observer, action: (T) throws -> Void) {
         if let items = values[key] as? Set<AnyHashable> {
             for item in items {
                 if let observer = item as? T {
@@ -155,7 +155,7 @@ extension ActionInfo {
      value to it.
      */
     
-    public func registerNotification(for action: String = "", key: ActionKey = .notificationKey, notification: @escaping ActionNotificationCallback) {
+    public func registerNotification(for action: String = "", key: ActionKey = .notification, notification: @escaping ActionNotificationCallback) {
         let notification = ActionNotification(action: action, callback: notification)
         append(key: key, value: notification)
     }
