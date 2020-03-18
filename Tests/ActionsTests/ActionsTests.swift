@@ -17,7 +17,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
             return super.validate(context: context)
         }
         
-        override func perform(context: ActionContext) {
+        override func perform(context: ActionContext, completed: @escaping Action.Completion) {
             performed = true
             performedContext = context
         }
@@ -127,7 +127,7 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         
         // skipping validation should enable it though
         let info = ActionInfo()
-        info[ActionContext.skipValidationKey] = true
+        info[.skipValidation] = true
         XCTAssertTrue(manager.validate(identifier: "test", info: info).enabled)
     }
     

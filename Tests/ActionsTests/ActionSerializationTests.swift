@@ -34,8 +34,8 @@ class ActionSerializationTests: XCTestCase {
         let context = ActionContext(manager: manager, action: action, identifier: "Test")
         context["foo"] = "bar"
         let packed = context.serializedDictionary
-        XCTAssertEqual(packed[ActionContext.actionKey] as? String, "Test")
-        let info = packed[ActionContext.infoKey] as! [String:Any]
+        XCTAssertEqual(packed[ActionKey.action.value] as? String, "Test")
+        let info = packed[ActionKey.info.value] as! [String:Any]
         XCTAssertEqual(info["foo"] as? String, "bar")
         
         

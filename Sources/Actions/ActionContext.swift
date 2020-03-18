@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
-
 /**
  Something that can provide contextual information for use by actions.
  
@@ -16,8 +15,15 @@ import Foundation
  and/or how it should perform.
  */
 
-public protocol ActionContextProvider {
+public protocol ActionContextProvider: AnyObject {
     func provide(context: ActionContext)
+    func identicalTo(other: ActionContextProvider) -> Bool  // TODO: it would be better if we could require conformance to Equatable/Hashable here
+}
+
+public extension ActionContextProvider {
+    func identicalTo(other: ActionContextProvider) -> Bool {
+        return self === other
+    }
 }
 
 /**
@@ -50,24 +56,7 @@ public class ActionContext {
      */
     
     public var info: ActionInfo
-    
-    // Some standard info keys, provided for convenience.
-    public static let actionKey = "action"
-    public static let actionComponentsKey = "components"
-    public static let documentKey = "document"
-    public static let infoKey = "info"
-    public static let modelKey = "model"
-    public static let notificationKey = "notification"
-    public static let objectKey = "object"
-    public static let observerKey = "observer"
-    public static let rootKey = "root"
-    public static let selectionKey = "selection"
-    public static let senderKey = "sender"
-    public static let skipValidationKey = "skipValidation"
-    public static let targetKey = "target"
-    public static let viewModelKey = "viewModel"
-    public static let windowKey = "window"
-    
+
     /**
      Create a context for a given action, id, parameters and info.
      */
@@ -83,7 +72,7 @@ public class ActionContext {
      Support subscripting directly into the info, by subscripting the context.
     */
     
-    public subscript(key: String) -> Any? {
+    public subscript(key: ActionKey) -> Any? {
         get { return info[key] }
         set (value) { info[key] = value }
     }
@@ -94,14 +83,14 @@ public class ActionContext {
     */
     
     public var sender: Any {
-        get { return info[ActionContext.senderKey] ?? manager }        
+        get { return info[.sender] ?? manager }
     }
     
     /**
      Look up a key in the info and treat it as a boolean flag.
     */
     
-    public func flag(key: String) -> Bool {
+    public func flag(key: ActionKey) -> Bool {
         return info.flag(key:key)
     }
     
@@ -121,8 +110,8 @@ extension ActionContext: ActionSerialization {
 
     public var serializedDictionary: [String:Any] {
         return [
-            ActionContext.actionKey: action.identifier,
-            ActionContext.infoKey: info.serialized
+            ActionKey.action.value: action.identifier,
+            ActionKey.info.value: info.serialized
         ]
     }
     
@@ -147,7 +136,7 @@ extension ActionContext {
      Does nothing if the fetched and global handler lists are missing or empty.
      */
     
-    func notify(stage: ActionNotificationStage, global: [ActionNotification] = [], key: String = ActionContext.notificationKey) {
+    func notify(stage: ActionNotificationStage, global: [ActionNotification] = [], key: ActionKey = .notification) {
         let action = self.action
         let handler = { (notification: ActionNotification) in
             if (notification.action == "") || (notification.action == action.identifier) {
@@ -176,14 +165,14 @@ extension ActionContext: CustomStringConvertible {
  URL support.
  */
 
-extension ActionContext {
+public extension ActionContext {
     
     /**
      URLs can be represented in the context as strings or URL objects, so we
      support automatically coercing the strings.
      */
     
-    func url(withKey key: String) -> URL? {
+    func url(withKey key: ActionKey) -> URL? {
         return info.url(withKey: key)
     }
 }

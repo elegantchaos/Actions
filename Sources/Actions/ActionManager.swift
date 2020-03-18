@@ -10,7 +10,8 @@ import Logger
  Log channel for ActionManager related messages.
  */
 
-let actionChannel = Channel("com.elegantchaos.actions")
+public let actionChannel = Channel("com.elegantchaos.actions")
+public let providerChannel = Channel("com.elegantchaos.actions.providers")
 
 public protocol ActionResponder {
     func next() -> ActionResponder?
@@ -61,7 +62,7 @@ open class ActionManager {
      Register a global notification.
     */
     
-    public func registerNotification(for action: String = "", key: String = ActionContext.notificationKey, notification: @escaping ActionNotificationCallback) {
+    public func registerNotification(for action: String = "", key: ActionKey = .notification, notification: @escaping ActionNotificationCallback) {
         let notification = ActionNotification(action: action, callback: notification)
         notifications.append(notification)
     }
@@ -71,7 +72,10 @@ open class ActionManager {
     */
     
     open func responderChains(for item: Any) -> [ActionResponder] {
+        providerChannel.log("Getting responder chains for \(item):")
+
         if let responder = item as? ActionResponder {
+            providerChannel.log("Item is a responder itself")
             return [responder]
         }
         
@@ -83,20 +87,31 @@ open class ActionManager {
      */
     
     open func providers(for item: Any) -> [ActionContextProvider] {
+        providerChannel.log("\n\nGetting providers for \(item):")
+
         var result = [ActionContextProvider]()
         if let provider = item as? ActionContextProvider {
+            providerChannel.log("Item is a provider itself")
             result.append(provider)
         }
         
-        for chain in responderChains(for: item) {
+        let chains = responderChains(for: item)
+        providerChannel.log("\(chains.count) chains found.")
+        for chain in chains {
+            providerChannel.log("Searching responder chain \(chain)")
             var responder: ActionResponder? = chain
             while (responder != nil) {
                 if let provider = responder as? ActionContextProvider {
-                    result.append(provider)
+                    if result.filter({ $0.identicalTo(other: provider) }).count == 0 {
+                        providerChannel.log("Found provider \(provider)")
+                        result.append(provider)
+                    }
                 }
                 responder = responder?.next()
             }
         }
+
+        providerChannel.log("\(result.count) providers found.\n\(result)\n\n")
 
         return result
     }
@@ -156,7 +171,7 @@ open class ActionManager {
             if let action = actions[actionID] {
                 let context = ActionContext(manager: self, action: action, identifier: identifier, parameters: Array(components), info: info) // TODO: cache the context for the duration of any given user interface event, to avoid pointless recalculation
                 for param in params {
-                    context[param.key] = param.value
+                    context[ActionKey(param.key)] = param.value
                 }
                 gather(context: context, for:context.sender)
                 block(context)
@@ -175,13 +190,21 @@ open class ActionManager {
      any remaining components to it as parameters.
      */
     
-    public func perform(identifier: String, info: ActionInfo = ActionInfo()) {
+    public func perform(identifier: String, info: ActionInfo = ActionInfo(), completion: Action.Completion? = nil) {
         let notifications = self.notifications
         let performed = resolving(identifier: identifier, info: info) { (context) in
             actionChannel.log("performing \(context.action)")
             context.notify(stage: .willPerform, global: notifications)
-            context.action.perform(context: context, completed: {
-                context.notify(stage: .didPerform, global: notifications)
+            context.action.perform(context: context, completed: { result in
+                let stage: ActionNotificationStage
+                switch result {
+                    case .success():
+                        stage = .didPerform
+                    case .failure(let error):
+                        stage = .didFail(error)
+                }
+                context.notify(stage: stage, global: notifications)
+                completion?(result)
             })
         }
         
@@ -238,7 +261,7 @@ open class ActionManager {
         var validation = Action.Validation(identifier: identifier, state: .ineligable)
         
         let _ = resolving(identifier: identifier, info: info) { (context) in
-            if context.flag(key: ActionContext.skipValidationKey) {
+            if context.flag(key: .skipValidation) {
                 actionChannel.log("skipping validation \(context.action)")
                 validation = Action.Validation(identifier: identifier)
             } else {
@@ -250,4 +273,21 @@ open class ActionManager {
         return validation
     }
     
+    /// Given a list of action identifiers, and some action info, perform validation on each one then
+    /// call some sort of builder task for it. Returns a list of the results of all the builder calls.
+    ///
+    /// Typically this is used to build a user interface element, such as a UIMenuItem, for each action.
+    ///
+    /// - Parameter actions: the action identifiers to iterate over
+    /// - Parameter withInfo: info containing the sender, and other parameters that the validation might need
+    /// - Parameter builder: the builder closure to run
+    public func buildItems<T>(forActions actions: [String], withInfo info: ActionInfo, builder: (String, Action.Validation) -> T) -> [T] {
+        var items: [T] = []
+        for id in actions {
+            let state = validate(identifier: id, info: info)
+            let item = builder(id, state)
+            items.append(item)
+        }
+        return items
+    }
 }

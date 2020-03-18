@@ -10,9 +10,23 @@ import Foundation
  Notifications get sent before and after the actions are performed.
  */
 
-public enum ActionNotificationStage {
+public enum ActionNotificationStage: Equatable {
+    public static func == (lhs: ActionNotificationStage, rhs: ActionNotificationStage) -> Bool {
+        switch (lhs, rhs) {
+            case (.willPerform, .willPerform):
+                return true
+            case (.didPerform, .didPerform):
+                return true
+            case (.didFail(let error1), .didFail(let error2)):
+                return error1.localizedDescription == error2.localizedDescription
+            default:
+                return false
+        }
+    }
+    
     case willPerform
     case didPerform
+    case didFail(Error)
 }
 
 /**
