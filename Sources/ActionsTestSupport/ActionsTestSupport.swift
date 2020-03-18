@@ -3,6 +3,7 @@
 //  All code (c) 2019 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if !os(watchOS)
 import XCTest
 import Actions
 
@@ -36,3 +37,4 @@ open class ActionsTestCase: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 }
+#endif

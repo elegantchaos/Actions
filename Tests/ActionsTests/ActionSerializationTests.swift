@@ -3,6 +3,7 @@
 //  All code (c) 2019 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if !os(watchOS)
 import XCTest
 @testable import Actions
 
@@ -42,3 +43,4 @@ class ActionSerializationTests: XCTestCase {
     }
 
 }
+#endif

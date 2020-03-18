@@ -3,6 +3,7 @@
 //  All code (c) 2018 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if !os(watchOS)
 import XCTest
 @testable import Actions
 
@@ -244,3 +245,4 @@ final class ActionsTests: XCTestCase, ActionResponder, ActionContextProvider {
         XCTAssertFalse(action.validated)
     }
 }
+#endif
